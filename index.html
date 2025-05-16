@@ -29,7 +29,6 @@
       background: white;
       border-radius: 15px;
       box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-      position: relative;
     }
     
     #welcome-screen {
@@ -170,74 +169,6 @@
       border-color: var(--primary);
     }
     
-    .option.correct {
-      background: #d4edda;
-      border-color: var(--correct);
-    }
-    
-    .option.incorrect {
-      background: #f8d7da;
-      border-color: var(--wrong);
-    }
-    
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-      flex-wrap: wrap;
-    }
-    
-    .nav-buttons {
-      display: flex;
-      gap: 10px;
-    }
-    
-    .nav-btn {
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-    }
-    
-    .question-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 20px;
-      justify-content: center;
-    }
-    
-    .q-nav-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .q-nav-btn.unattempted {
-      background: var(--unattempted);
-      color: #333;
-    }
-    
-    .q-nav-btn.answered {
-      background: var(--answered);
-      color: white;
-    }
-    
-    .q-nav-btn.correct {
-      background: var(--correct);
-      color: white;
-    }
-    
-    .q-nav-btn.incorrect {
-      background: var(--wrong);
-      color: white;
-    }
-    
     .explanation {
       margin-top: 20px;
       padding: 15px;
@@ -306,18 +237,80 @@
       flex-wrap: wrap;
     }
     
-    .jump-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
+    .question-nav-container {
       margin-top: 20px;
+      text-align: center;
+    }
+    
+    .toggle-nav-btn {
+      padding: 8px 15px;
+      border-radius: 20px;
+      background: #6c757d;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    
+    .question-nav {
+      display: none;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    
+    .question-nav.active {
+      display: flex;
+    }
+    
+    .q-nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .q-nav-btn.unattempted {
+      background: var(--unattempted);
+      color: #333;
+    }
+    
+    .q-nav-btn.answered {
+      background: var(--answered);
+      color: white;
+    }
+    
+    .q-nav-btn.correct {
+      background: var(--correct);
+      color: white;
+    }
+    
+    .q-nav-btn.incorrect {
+      background: var(--wrong);
+      color: white;
+    }
+    
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
       flex-wrap: wrap;
     }
     
-    .jump-btn {
-      padding: 8px 15px;
-      border-radius: 20px;
-      font-size: 0.9rem;
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .nav-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
     }
     
     @media (max-width: 600px) {
@@ -354,7 +347,7 @@
         font-size: 0.9rem;
       }
       
-      .review-controls, .jump-buttons {
+      .review-controls {
         flex-direction: column;
         align-items: center;
       }
@@ -397,13 +390,10 @@
         <button class="btn" onclick="confirmSubmit()">End Test</button>
       </div>
       
-      <div class="jump-buttons">
-        <button class="nav-btn jump-btn" onclick="jumpTo('correct')">Correct Answers</button>
-        <button class="nav-btn jump-btn" onclick="jumpTo('wrong')">Wrong Answers</button>
-        <button class="nav-btn jump-btn" onclick="jumpTo('unattempted')">Unattempted</button>
+      <div class="question-nav-container">
+        <button class="toggle-nav-btn" onclick="toggleQuestionNav()">Jump to Question</button>
+        <div class="question-nav" id="question-nav"></div>
       </div>
-      
-      <div class="question-nav" id="question-nav"></div>
     </div>
 
     <div id="summary">
@@ -518,14 +508,6 @@
           optionElement.classList.add("selected");
         }
         
-        if (testSubmitted) {
-          if (index === question.answer) {
-            optionElement.classList.add("correct");
-          } else if (userResponses[currentQuestion] === index && userResponses[currentQuestion] !== question.answer) {
-            optionElement.classList.add("incorrect");
-          }
-        }
-        
         optionElement.onclick = () => {
           if (!testSubmitted) selectOption(index);
         };
@@ -533,8 +515,8 @@
       });
       
       const explanationEl = document.getElementById("explanation");
-      explanationEl.style.display = testSubmitted ? "block" : "none";
-      explanationEl.textContent = testSubmitted ? question.explanation : "";
+      explanationEl.style.display = "none";
+      explanationEl.textContent = "";
     }
 
     function selectOption(optionIndex) {
@@ -572,23 +554,9 @@
       });
     }
 
-    function jumpTo(type) {
-      let index;
-      
-      if (type === 'correct') {
-        index = quiz.findIndex((q, i) => userResponses[i] === q.answer);
-      } else if (type === 'wrong') {
-        index = quiz.findIndex((q, i) => userResponses[i] !== null && userResponses[i] !== q.answer);
-      } else if (type === 'unattempted') {
-        index = quiz.findIndex((_, i) => userResponses[i] === null);
-      }
-      
-      if (index !== -1) {
-        currentQuestion = index;
-        renderQuestion();
-      } else {
-        alert(`No ${type} questions found!`);
-      }
+    function toggleQuestionNav() {
+      const nav = document.getElementById("question-nav");
+      nav.classList.toggle("active");
     }
 
     function prevQuestion() {
@@ -639,8 +607,30 @@
       currentQuestion = 0;
       document.getElementById("summary").style.display = "none";
       document.getElementById("quiz-box").style.display = "block";
-      document.querySelector(".jump-buttons").style.display = "flex";
-      renderQuestion();
+      
+      // Update options to show correct/incorrect in review mode
+      const question = quiz[currentQuestion];
+      const optionsContainer = document.getElementById("options");
+      optionsContainer.innerHTML = "";
+      
+      question.options.forEach((option, index) => {
+        const optionElement = document.createElement("div");
+        optionElement.className = "option";
+        optionElement.textContent = option;
+        
+        if (index === question.answer) {
+          optionElement.classList.add("correct");
+        } else if (userResponses[currentQuestion] === index && userResponses[currentQuestion] !== question.answer) {
+          optionElement.classList.add("incorrect");
+        }
+        
+        optionsContainer.appendChild(optionElement);
+      });
+      
+      document.getElementById("explanation").style.display = "block";
+      document.getElementById("explanation").textContent = question.explanation;
+      
+      renderQuestionNav();
     }
   </script>
 </body>
