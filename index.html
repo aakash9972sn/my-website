@@ -169,6 +169,16 @@
       border-color: var(--primary);
     }
     
+    .option.correct {
+      background: #d4edda;
+      border-color: var(--correct);
+    }
+    
+    .option.incorrect {
+      background: #f8d7da;
+      border-color: var(--wrong);
+    }
+    
     .explanation {
       margin-top: 20px;
       padding: 15px;
@@ -313,6 +323,34 @@
       font-weight: 600;
     }
     
+    .confirmation-dialog {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .confirmation-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      text-align: center;
+    }
+    
+    .confirmation-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
     @media (max-width: 600px) {
       .container {
         padding: 20px;
@@ -351,6 +389,11 @@
         flex-direction: column;
         align-items: center;
       }
+      
+      .confirmation-box {
+        width: 90%;
+        padding: 20px;
+      }
     }
   </style>
 </head>
@@ -358,6 +401,17 @@
   <div id="welcome-screen">
     <h1>All the Best</h1>
     <p>Sana!</p>
+  </div>
+
+  <div class="confirmation-dialog" id="confirmation-dialog">
+    <div class="confirmation-box">
+      <h3>Confirm Your Answer</h3>
+      <p>Are you sure about your selection?</p>
+      <div class="confirmation-buttons">
+        <button class="nav-btn" onclick="confirmSelection()">Yes, Submit</button>
+        <button class="nav-btn" onclick="cancelSelection()">No, Change</button>
+      </div>
+    </div>
   </div>
 
   <div class="container">
@@ -450,11 +504,48 @@
     let testStarted = false;
     let timeLeft = 5 * 60; // 5 minutes in seconds
     let timerInterval;
+    let selectedOptionIndex = null;
+    let quizState = JSON.parse(localStorage.getItem('quizState')) || null;
+
+    // Check for saved state on page load
+    window.onload = function() {
+      if (quizState) {
+        if (confirm("We found an unfinished test. Do you want to continue where you left off?")) {
+          loadSavedState();
+        } else {
+          localStorage.removeItem('quizState');
+        }
+      }
+    };
 
     // Hide welcome screen after 5 seconds
     setTimeout(() => {
       document.getElementById('welcome-screen').style.display = 'none';
     }, 5000);
+
+    function loadSavedState() {
+      currentQuestion = quizState.currentQuestion;
+      userResponses = quizState.userResponses;
+      timeLeft = quizState.timeLeft;
+      testStarted = true;
+      
+      document.getElementById("intro-screen").style.display = "none";
+      document.querySelector(".timer").style.display = "flex";
+      document.getElementById("quiz-box").style.display = "block";
+      startTimer();
+      renderQuestion();
+      renderQuestionNav();
+    }
+
+    function saveState() {
+      const state = {
+        currentQuestion,
+        userResponses,
+        timeLeft,
+        testStarted: true
+      };
+      localStorage.setItem('quizState', JSON.stringify(state));
+    }
 
     function startQuiz() {
       document.getElementById("intro-screen").style.display = "none";
@@ -464,6 +555,7 @@
       renderQuestion();
       renderQuestionNav();
       testStarted = true;
+      saveState();
     }
 
     function startTimer() {
@@ -473,6 +565,7 @@
       timerInterval = setInterval(() => {
         timeLeft--;
         updateTimerDisplay(timerDisplay);
+        saveState();
         
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
@@ -509,20 +602,36 @@
         }
         
         optionElement.onclick = () => {
-          if (!testSubmitted) selectOption(index);
+          if (!testSubmitted) {
+            selectedOptionIndex = index;
+            document.getElementById('confirmation-dialog').style.display = 'flex';
+          }
         };
         optionsContainer.appendChild(optionElement);
       });
       
+      // Show explanation only in review mode for current question
       const explanationEl = document.getElementById("explanation");
-      explanationEl.style.display = "none";
-      explanationEl.textContent = "";
+      if (testSubmitted) {
+        explanationEl.style.display = "block";
+        explanationEl.textContent = quiz[currentQuestion].explanation;
+      } else {
+        explanationEl.style.display = "none";
+        explanationEl.textContent = "";
+      }
     }
 
-    function selectOption(optionIndex) {
-      userResponses[currentQuestion] = optionIndex;
+    function confirmSelection() {
+      userResponses[currentQuestion] = selectedOptionIndex;
+      document.getElementById('confirmation-dialog').style.display = 'none';
       renderQuestion();
       renderQuestionNav();
+      saveState();
+    }
+
+    function cancelSelection() {
+      document.getElementById('confirmation-dialog').style.display = 'none';
+      selectedOptionIndex = null;
     }
 
     function renderQuestionNav() {
@@ -582,6 +691,7 @@
     function submitTest() {
       clearInterval(timerInterval);
       testSubmitted = true;
+      localStorage.removeItem('quizState');
       
       let correct = 0, wrong = 0, unattempted = 0;
       
@@ -604,11 +714,10 @@
     }
 
     function reviewTest() {
-      currentQuestion = 0;
       document.getElementById("summary").style.display = "none";
       document.getElementById("quiz-box").style.display = "block";
       
-      // Update options to show correct/incorrect in review mode
+      // Render current question with correct/incorrect highlights
       const question = quiz[currentQuestion];
       const optionsContainer = document.getElementById("options");
       optionsContainer.innerHTML = "";
@@ -627,9 +736,11 @@
         optionsContainer.appendChild(optionElement);
       });
       
+      // Show explanation
       document.getElementById("explanation").style.display = "block";
       document.getElementById("explanation").textContent = question.explanation;
       
+      // Update navigation buttons
       renderQuestionNav();
     }
   </script>
