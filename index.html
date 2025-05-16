@@ -357,6 +357,8 @@
   </div>
 
   <script>
+    // Replace the entire script section with this corrected version
+
     const quiz = [
       {
         question: "Which gas is most soluble in blood?",
@@ -393,9 +395,6 @@
       renderQuestion();
       renderQuestionNav();
       testStarted = true;
-      
-      // Send test started notification to creator
-      sendDataToCreator('Test Started');
     }
 
     function startTimer() {
@@ -418,7 +417,7 @@
       const seconds = timeLeft % 60;
       timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       
-      if (timeLeft <= 30) { // Last 30 seconds
+      if (timeLeft <= 30) {
         timerDisplay.parentElement.style.background = "#ffdddd";
         timerDisplay.parentElement.style.color = "#dc3545";
       }
@@ -436,10 +435,12 @@
         optionElement.className = "option";
         optionElement.textContent = option;
         
+        // During test, only show selected option
         if (userResponses[currentQuestion] === index) {
           optionElement.classList.add("selected");
         }
         
+        // After submission, show correct/incorrect
         if (testSubmitted) {
           if (index === question.answer) {
             optionElement.classList.add("correct");
@@ -448,20 +449,22 @@
           }
         }
         
-        optionElement.onclick = () => selectOption(index);
+        optionElement.onclick = () => {
+          if (!testSubmitted) selectOption(index);
+        };
         optionsContainer.appendChild(optionElement);
       });
       
-      document.getElementById("explanation").style.display = testSubmitted ? "block" : "none";
-      document.getElementById("explanation").textContent = testSubmitted ? question.explanation : "";
+      // Only show explanation after submission
+      const explanationEl = document.getElementById("explanation");
+      explanationEl.style.display = testSubmitted ? "block" : "none";
+      explanationEl.textContent = testSubmitted ? question.explanation : "";
     }
 
     function selectOption(optionIndex) {
-      if (!testSubmitted) {
-        userResponses[currentQuestion] = optionIndex;
-        renderQuestion();
-        renderQuestionNav();
-      }
+      userResponses[currentQuestion] = optionIndex;
+      renderQuestion();
+      renderQuestionNav();
     }
 
     function renderQuestionNav() {
@@ -474,6 +477,7 @@
         navButton.textContent = index + 1;
         
         if (testSubmitted) {
+          // After submission - show correct/wrong/unattempted
           if (userResponses[index] === quiz[index].answer) {
             navButton.classList.add("correct");
           } else if (userResponses[index] !== null) {
@@ -482,17 +486,16 @@
             navButton.classList.add("unattempted");
           }
         } else {
+          // During test - only show answered/unanswered
           navButton.classList.add(userResponses[index] === null ? "unattempted" : "answered");
         }
         
-        navButton.onclick = () => navigateToQuestion(index);
+        navButton.onclick = () => {
+          currentQuestion = index;
+          renderQuestion();
+        };
         navContainer.appendChild(navButton);
       });
-    }
-
-    function navigateToQuestion(index) {
-      currentQuestion = index;
-      renderQuestion();
     }
 
     function prevQuestion() {
@@ -518,8 +521,6 @@
     function submitTest() {
       clearInterval(timerInterval);
       testSubmitted = true;
-      document.getElementById("quiz-box").style.display = "none";
-      document.querySelector(".timer").style.display = "none";
       
       // Calculate results
       let correct = 0, wrong = 0, unattempted = 0;
@@ -534,14 +535,13 @@
         }
       });
       
-      // Display results
+      // Show results screen
+      document.getElementById("quiz-box").style.display = "none";
+      document.querySelector(".timer").style.display = "none";
       document.getElementById("correct-count").textContent = correct;
       document.getElementById("wrong-count").textContent = wrong;
       document.getElementById("unattempted-count").textContent = unattempted;
       document.getElementById("summary").style.display = "block";
-      
-      // Send results to creator
-      sendDataToCreator('Test Completed', { correct, wrong, unattempted });
     }
 
     function reviewTest() {
@@ -549,12 +549,6 @@
       document.getElementById("summary").style.display = "none";
       document.getElementById("quiz-box").style.display = "block";
       renderQuestion();
-    }
-
-    function sendDataToCreator(event, data = null) {
-      // In a real app, this would send data to your backend
-      console.log(`Event: ${event}`, data);
-      // Example: fetch('/api/quiz-results', { method: 'POST', body: JSON.stringify(data) });
     }
   </script>
 </body>
