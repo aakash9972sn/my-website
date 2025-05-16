@@ -1,20 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>my name is aakash who is from DTU ECE</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCQ Quiz - Henry's Law</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #333;
+    }
+    .option {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .option.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+    }
+    .option.wrong {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+    }
+    #explanation {
+      display: none;
+      margin-top: 20px;
+      padding: 10px;
+      background: #e9ecef;
+      border-left: 5px solid #17a2b8;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .navigation {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
 </head>
-<script src="script.js"></script>
 <body>
-   Kaash ye zamana komal jaisaa sundar dikhta
-Agar vo make up me chudail na dikhti
-to uske liye aur likhta 😂🤣
-Arre agar aise hii log zyada sundar dikhte hain to humare yahan ek pagal rehta hai kapde bhi kuchh aise hii bas make up ki jagah grees lagaye ghumta hai vo to  ms. Universe hona chahiye tha 🤣
-"भैया, थोड़ा ग्रीस भी लगा लो... बैलेंस हो जाएगा!" 🤣 
-Ye comment dekhne ke baad tumhari soch : -
-Rehne do chhodo bhi jaane do yaar 
-Make up naa karenge agli baar 😂🤣
+  <div class="container">
+    <h2 id="question">Loading...</h2>
+    <div id="options"></div>
+    <button onclick="submitAnswer()">Show Answer</button>
+    <div id="explanation"></div>
+    <div class="navigation">
+      <button onclick="prevQuestion()">Previous</button>
+      <button onclick="nextQuestion()">Next</button>
+    </div>
+  </div>
+
+  <script>
+    const quiz = [
+      {
+        question: "Which gas is most soluble in blood?",
+        options: ["O₂", "CO₂", "N₂", "He"],
+        correct: 1,
+        explanation: "CO₂ forms H₂CO₃ in blood, critical for respiration."
+      },
+      {
+        question: "Henry’s law constant (Kₕ) for O₂ is 1.3 × 10⁻³ mol/L-atm. Solubility at 0.8 atm is:",
+        options: ["1.04 × 10⁻³ M", "2.6 × 10⁻⁴ M", "5.2 × 10⁻⁴ M", "3.1 × 10⁻³ M"],
+        correct: 0,
+        explanation: "C = Kₕ × P = 1.3 × 10⁻³ × 0.8 = 1.04 × 10⁻³ M."
+      },
+      {
+        question: "Which gas shows negative deviation from Henry’s law?",
+        options: ["N₂", "O₂", "CO₂", "He"],
+        correct: 2,
+        explanation: "CO₂ reacts with solvent, increasing solubility beyond Henry’s prediction."
+      },
+      {
+        question: "Solubility of gas in liquid decreases with:",
+        options: ["Increase in temperature", "Decrease in pressure", "Both (a) & (b)", "None"],
+        correct: 2,
+        explanation: "Henry’s law: C ∝ P, and solubility ∝ 1/T."
+      }
+    ];
+
+    let current = 0;
+    let userAnswers = Array(quiz.length).fill(null);
+
+    function loadQuestion(index) {
+      const q = quiz[index];
+      document.getElementById("question").innerText = `${index + 1}. ${q.question}`;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.innerHTML = `<input type='radio' name='opt' value='${i}' id='opt${i}'> <label for='opt${i}'>${opt}</label>`;
+        optionsDiv.appendChild(div);
+      });
+      document.getElementById("explanation").style.display = "none";
+    }
+
+    function submitAnswer() {
+      const selected = document.querySelector('input[name="opt"]:checked');
+      if (!selected) return;
+      const val = parseInt(selected.value);
+      userAnswers[current] = val;
+      const correct = quiz[current].correct;
+      const options = document.querySelectorAll(".option");
+      options.forEach((opt, i) => {
+        opt.classList.remove("correct", "wrong");
+        if (i === correct) opt.classList.add("correct");
+        else if (i === val) opt.classList.add("wrong");
+      });
+      document.getElementById("explanation").innerText = "Explanation: " + quiz[current].explanation;
+      document.getElementById("explanation").style.display = "block";
+    }
+
+    function nextQuestion() {
+      if (current < quiz.length - 1) {
+        current++;
+        loadQuestion(current);
+      }
+    }
+
+    function prevQuestion() {
+      if (current > 0) {
+        current--;
+        loadQuestion(current);
+      }
+    }
+
+    loadQuestion(current);
+  </script>
 </body>
 </html>
