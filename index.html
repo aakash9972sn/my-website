@@ -71,6 +71,20 @@
     #quiz-box, .timer, .nav-buttons, .submit-controls {
       display: none;
     }
+    .question-nav {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .question-nav button {
+      margin: 2px;
+      width: 30px;
+    }
+    .question-nav button.answered {
+      background: #28a745;
+    }
+    .question-nav button.unanswered {
+      background: #dc3545;
+    }
   </style>
 </head>
 <body>
@@ -103,6 +117,8 @@
       <button onclick="jumpTo('wrong')">Jump to Wrong</button>
       <button onclick="jumpTo('unattempted')">Jump to Unattempted</button>
     </div>
+
+    <div class="question-nav" id="question-nav"></div>
 
     <div class="summary" id="summary" style="display:none;"></div>
   </div>
@@ -141,6 +157,8 @@
       document.getElementById("quiz-box").style.display = "block";
       document.querySelector(".nav-buttons").style.display = "block";
       document.querySelector(".submit-controls").style.display = "block";
+      document.getElementById("question-nav").style.display = "block";
+      renderNav();
       renderQuestion();
       startTimer();
     }
@@ -172,12 +190,28 @@
           if (!submitted) {
             responses[current] = i;
             renderQuestion();
+            renderNav();
           }
         };
         optionsDiv.appendChild(optBtn);
       });
       document.getElementById("explanation").style.display = submitted ? "block" : "none";
       document.getElementById("explanation").textContent = submitted ? q.explanation : "";
+    }
+
+    function renderNav() {
+      const nav = document.getElementById("question-nav");
+      nav.innerHTML = "";
+      quiz.forEach((q, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = i + 1;
+        btn.className = responses[i] === null ? "unanswered" : "answered";
+        btn.onclick = () => {
+          current = i;
+          renderQuestion();
+        };
+        nav.appendChild(btn);
+      });
     }
 
     function nextQuestion() {
