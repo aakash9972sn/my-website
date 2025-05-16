@@ -62,11 +62,30 @@
       border-radius: 5px;
       display: none;
     }
+    #intro-screen {
+      text-align: center;
+    }
+    #intro-screen h2 {
+      margin-bottom: 10px;
+    }
+    #quiz-box, .timer, .nav-buttons, .submit-controls {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <div id="intro-screen">
+      <h2>Welcome to the Henry's Law & Solubility Quiz</h2>
+      <p><strong>Syllabus:</strong> Henry's Law, Gas Solubility, Constants, Deviations</p>
+      <p><strong>Total Questions:</strong> 3</p>
+      <p><strong>Time Limit:</strong> 5 minutes</p>
+      <h3>All the Best, Sana!</h3>
+      <button onclick="startQuiz()">Start Test</button>
+    </div>
+
     <div class="timer"><strong>Time Left:</strong> <span id="timer"></span></div>
+
     <div id="quiz-box">
       <h2 id="question-text"></h2>
       <div id="options"></div>
@@ -98,7 +117,7 @@
       },
       {
         question: "Henry’s law constant (Kₕ) for O₂ is 1.3 × 10⁻³ mol/L-atm. Solubility at 0.8 atm is:",
-        options: ["1.04 × 10⁻³ M", "2.6 × 10⁻⁴ M", "5.2 × 10⁻⁴ M", "3.1 × 10⁻³ M"],
+        options: ["1.04 × 10⁻³ M", "2.6 × 10⁴ M", "5.2 × 10⁴ M", "3.1 × 10⁻³ M"],
         answer: 0,
         explanation: "(a) 1.04 × 10⁻³ M (C = Kₕ × P = 1.3 × 10⁻³ × 0.8)"
       },
@@ -114,15 +133,26 @@
     let responses = Array(quiz.length).fill(null);
     let submitted = false;
     let timerDuration = 5 * 60;
+    let timerInterval;
+
+    function startQuiz() {
+      document.getElementById("intro-screen").style.display = "none";
+      document.querySelector(".timer").style.display = "block";
+      document.getElementById("quiz-box").style.display = "block";
+      document.querySelector(".nav-buttons").style.display = "block";
+      document.querySelector(".submit-controls").style.display = "block";
+      renderQuestion();
+      startTimer();
+    }
 
     function startTimer() {
       const display = document.getElementById("timer");
-      const interval = setInterval(() => {
+      timerInterval = setInterval(() => {
         const min = Math.floor(timerDuration / 60);
         const sec = timerDuration % 60;
         display.textContent = `${min}:${sec < 10 ? '0' + sec : sec}`;
         if (--timerDuration < 0) {
-          clearInterval(interval);
+          clearInterval(timerInterval);
           submitQuiz();
         }
       }, 1000);
@@ -162,6 +192,7 @@
 
     function submitQuiz() {
       submitted = true;
+      clearInterval(timerInterval);
       renderQuestion();
       let correct = 0, wrong = 0, unattempted = 0;
       quiz.forEach((q, i) => {
@@ -190,11 +221,6 @@
         alert("No such questions found.");
       }
     }
-
-    window.onload = () => {
-      renderQuestion();
-      startTimer();
-    };
   </script>
 </body>
 </html>
