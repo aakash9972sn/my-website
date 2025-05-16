@@ -29,6 +29,43 @@
       background: white;
       border-radius: 15px;
       box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    
+    #welcome-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      color: white;
+      font-size: 3rem;
+      font-weight: 700;
+      animation: fadeOut 5s forwards;
+    }
+    
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+    
+    #welcome-screen h1 {
+      margin: 0;
+      font-size: 4rem;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    #welcome-screen p {
+      font-size: 2rem;
+      margin-top: 20px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
     
     #intro-screen {
@@ -266,12 +303,35 @@
       justify-content: center;
       gap: 15px;
       margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .jump-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .jump-btn {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
     }
     
     @media (max-width: 600px) {
       .container {
         padding: 20px;
         margin: 10px;
+      }
+      
+      #welcome-screen h1 {
+        font-size: 3rem;
+      }
+      
+      #welcome-screen p {
+        font-size: 1.5rem;
       }
       
       .title {
@@ -293,10 +353,20 @@
         height: 35px;
         font-size: 0.9rem;
       }
+      
+      .review-controls, .jump-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
     }
   </style>
 </head>
 <body>
+  <div id="welcome-screen">
+    <h1>All the Best</h1>
+    <p>Sana!</p>
+  </div>
+
   <div class="container">
     <div id="intro-screen">
       <div class="title">Aakash Sab Kar Lega</div>
@@ -325,6 +395,12 @@
           <button class="nav-btn" onclick="nextQuestion()">Next</button>
         </div>
         <button class="btn" onclick="confirmSubmit()">End Test</button>
+      </div>
+      
+      <div class="jump-buttons">
+        <button class="nav-btn jump-btn" onclick="jumpTo('correct')">Correct Answers</button>
+        <button class="nav-btn jump-btn" onclick="jumpTo('wrong')">Wrong Answers</button>
+        <button class="nav-btn jump-btn" onclick="jumpTo('unattempted')">Unattempted</button>
       </div>
       
       <div class="question-nav" id="question-nav"></div>
@@ -357,8 +433,6 @@
   </div>
 
   <script>
-    // Replace the entire script section with this corrected version
-
     const quiz = [
       {
         question: "Which gas is most soluble in blood?",
@@ -386,6 +460,11 @@
     let testStarted = false;
     let timeLeft = 5 * 60; // 5 minutes in seconds
     let timerInterval;
+
+    // Hide welcome screen after 5 seconds
+    setTimeout(() => {
+      document.getElementById('welcome-screen').style.display = 'none';
+    }, 5000);
 
     function startQuiz() {
       document.getElementById("intro-screen").style.display = "none";
@@ -435,12 +514,10 @@
         optionElement.className = "option";
         optionElement.textContent = option;
         
-        // During test, only show selected option
         if (userResponses[currentQuestion] === index) {
           optionElement.classList.add("selected");
         }
         
-        // After submission, show correct/incorrect
         if (testSubmitted) {
           if (index === question.answer) {
             optionElement.classList.add("correct");
@@ -455,7 +532,6 @@
         optionsContainer.appendChild(optionElement);
       });
       
-      // Only show explanation after submission
       const explanationEl = document.getElementById("explanation");
       explanationEl.style.display = testSubmitted ? "block" : "none";
       explanationEl.textContent = testSubmitted ? question.explanation : "";
@@ -477,7 +553,6 @@
         navButton.textContent = index + 1;
         
         if (testSubmitted) {
-          // After submission - show correct/wrong/unattempted
           if (userResponses[index] === quiz[index].answer) {
             navButton.classList.add("correct");
           } else if (userResponses[index] !== null) {
@@ -486,7 +561,6 @@
             navButton.classList.add("unattempted");
           }
         } else {
-          // During test - only show answered/unanswered
           navButton.classList.add(userResponses[index] === null ? "unattempted" : "answered");
         }
         
@@ -496,6 +570,25 @@
         };
         navContainer.appendChild(navButton);
       });
+    }
+
+    function jumpTo(type) {
+      let index;
+      
+      if (type === 'correct') {
+        index = quiz.findIndex((q, i) => userResponses[i] === q.answer);
+      } else if (type === 'wrong') {
+        index = quiz.findIndex((q, i) => userResponses[i] !== null && userResponses[i] !== q.answer);
+      } else if (type === 'unattempted') {
+        index = quiz.findIndex((_, i) => userResponses[i] === null);
+      }
+      
+      if (index !== -1) {
+        currentQuestion = index;
+        renderQuestion();
+      } else {
+        alert(`No ${type} questions found!`);
+      }
     }
 
     function prevQuestion() {
@@ -522,7 +615,6 @@
       clearInterval(timerInterval);
       testSubmitted = true;
       
-      // Calculate results
       let correct = 0, wrong = 0, unattempted = 0;
       
       quiz.forEach((question, index) => {
@@ -535,7 +627,6 @@
         }
       });
       
-      // Show results screen
       document.getElementById("quiz-box").style.display = "none";
       document.querySelector(".timer").style.display = "none";
       document.getElementById("correct-count").textContent = correct;
@@ -548,6 +639,7 @@
       currentQuestion = 0;
       document.getElementById("summary").style.display = "none";
       document.getElementById("quiz-box").style.display = "block";
+      document.querySelector(".jump-buttons").style.display = "flex";
       renderQuestion();
     }
   </script>
