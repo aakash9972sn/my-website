@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Henry's Law Quiz</title>
+  <title>Chemistry-Physics Quiz</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -337,6 +337,11 @@
       background: #fff3cd;
     }
     
+    .stat-marks {
+      background: #e7f5ff;
+      border: 2px solid var(--primary);
+    }
+    
     .stat-value {
       font-size: 2rem;
       font-weight: 700;
@@ -353,6 +358,10 @@
     
     .stat-unattempted .stat-value {
       color: var(--unattempted);
+    }
+    
+    .stat-marks .stat-value {
+      color: var(--primary);
     }
     
     .review-controls {
@@ -639,7 +648,7 @@
 <body>
   <div id="welcome-screen">
     <h1>All the Best</h1>
-    <p><i class="fas fa-heart icon"></i> Dear Learner!</p>
+    <p><i class="fas fa-heart icon"></i> Dear Students!</p>
   </div>
 
   <div class="confirmation-dialog" id="confirmation-dialog">
@@ -659,13 +668,14 @@
 
   <div class="container">
     <div id="intro-screen">
-      <div class="title">Aakash Sab Kar Lega</div>
+      <div class="title">Sana Sab Kar Legi</div>
       <div class="test-details">
-        <p><i class="fas fa-book"></i> <strong>Subject:</strong> Henry's Law & Solubility</p>
-        <p><i class="fas fa-tags"></i> <strong>Topics:</strong> Henry's Law, Gas Solubility, Constants, Deviations</p>
-        <p><i class="fas fa-question-circle"></i> <strong>Total Questions:</strong> 3</p>
-        <p><i class="fas fa-clock"></i> <strong>Time Limit:</strong> 5 minutes</p>
+        <p><i class="fas fa-book"></i> <strong>Subjects:</strong> Chemistry & Physics</p>
+        <p><i class="fas fa-tags"></i> <strong>Topics:</strong> Solutions, Electrochemistry, Electromagnetic Induction, Alternating Current</p>
+        <p><i class="fas fa-question-circle"></i> <strong>Total Questions:</strong> 100</p>
+        <p><i class="fas fa-clock"></i> <strong>Time Limit:</strong> 100 minutes</p>
         <p><i class="fas fa-graduation-cap"></i> <strong>Test Type:</strong> Practice Quiz</p>
+        <p><i class="fas fa-star"></i> <strong>Marks:</strong> 4 marks per question (Total 400)</p>
       </div>
       <button class="btn" onclick="startQuiz()">
         <i class="fas fa-play"></i> Start Test
@@ -673,7 +683,7 @@
     </div>
 
     <div class="timer" style="display: none;">
-      <i class="fas fa-clock"></i> <span id="timer">05:00</span>
+      <i class="fas fa-clock"></i> <span id="timer">100:00</span>
     </div>
 
     <div id="quiz-box">
@@ -726,6 +736,14 @@
             <div class="stat-value" id="unattempted-count">0</div>
             <div>Unattempted</div>
           </div>
+          <div class="stat stat-marks">
+            <div class="stat-value" id="obtained-marks">0</div>
+            <div>Marks Obtained</div>
+          </div>
+          <div class="stat stat-marks">
+            <div class="stat-value">400</div>
+            <div>Total Marks</div>
+          </div>
         </div>
         
         <div class="review-controls">
@@ -743,22 +761,604 @@
   <script>
     const quiz = [
       {
-        question: "Which gas is most soluble in blood?",
-        options: ["O₂", "CO₂", "N₂", "He"],
+        question: "Which of the following is NOT a colligative property?",
+        options: ["Lowering of vapour pressure", "Elevation of boiling point", "Osmotic pressure", "Refractive index"],
+        answer: 3,
+        explanation: "(d) Refractive index - Colligative properties depend on the number of solute particles, not their nature. Refractive index is an intrinsic property that varies with the chemical identity of the substance."
+      },
+      {
+        question: "Raoult's law is applicable to:",
+        options: ["Non-ideal solutions", "Ideal solutions", "All liquid mixtures", "Only gaseous solutions"],
         answer: 1,
-        explanation: "(b) CO₂ (Forms H₂CO₃ in blood, critical for respiration)"
+        explanation: "(b) Ideal solutions - Raoult's law strictly applies to ideal solutions where intermolecular forces between different components are similar to those between pure components (e.g., benzene-toluene mixtures)."
       },
       {
-        question: "Henry's law constant (Kₕ) for O₂ is 1.3 × 10⁻³ mol/L-atm. Solubility at 0.8 atm is:",
-        options: ["1.04 × 10⁻³ M", "2.6 × 10⁴ M", "5.2 × 10⁴ M", "3.1 × 10⁻³ M"],
-        answer: 0,
-        explanation: "(a) 1.04 × 10⁻³ M (C = Kₕ × P = 1.3 × 10⁻³ × 0.8)"
-      },
-      {
-        question: "Which gas shows negative deviation from Henry's law?",
-        options: ["N₂", "O₂", "CO₂", "He"],
+        question: "The van't Hoff factor (i) for K₂SO₄ in dilute solution is:",
+        options: ["1", "2", "3", "4"],
         answer: 2,
-        explanation: "(c) CO₂ (Reacts with solvent, increasing solubility beyond Henry's prediction)"
+        explanation: "(c) 3 - K₂SO₄ dissociates completely in dilute solutions to give 2K⁺ + SO₄²⁻ (total 3 ions), hence i ≈ 3."
+      },
+      {
+        question: "Which solution will have the highest boiling point?",
+        options: ["0.1 M glucose", "0.1 M NaCl", "0.1 M BaCl₂", "0.1 M urea"],
+        answer: 2,
+        explanation: "(c) 0.1 M BaCl₂ - BaCl₂ dissociates to give maximum particles (Ba²⁺ + 2Cl⁻ → i=3), resulting in greatest boiling point elevation (ΔTb ∝ i×m)."
+      },
+      {
+        question: "The mole fraction of water in a solution containing 36g H₂O and 46g C₂H₅OH is:",
+        options: ["0.4", "0.6", "0.8", "0.2"],
+        answer: 1,
+        explanation: "(b) 0.6 - Calculation: Moles of H₂O = 36/18 = 2 mol; Moles of C₂H₅OH = 46/46 = 1 mol; χH₂O = 2/(2+1) = 0.666 ≈ 0.6"
+      },
+      {
+        question: "Azeotropic mixtures:",
+        options: ["Follow Raoult's law perfectly", "Have constant boiling composition", "Can be separated easily by distillation", "Are always ideal solutions"],
+        answer: 1,
+        explanation: "(b) Have constant boiling composition - Azeotropes boil at constant temperature with unchanged composition (e.g., ethanol-water at 95.6% ethanol)."
+      },
+      {
+        question: "The solubility of gas in liquid increases with:",
+        options: ["Decreasing temperature", "Increasing pressure", "Increasing volume of solvent", "Decreasing KH value"],
+        answer: 1,
+        explanation: "(b) Increasing pressure - According to Henry's law (C = KH×P), gas solubility is directly proportional to pressure above the solution."
+      },
+      {
+        question: "Which mixture shows negative deviation from Raoult's law?",
+        options: ["Ethanol-water", "Acetone-chloroform", "n-Hexane-n-Heptane", "Benzene-toluene"],
+        answer: 1,
+        explanation: "(b) Acetone-chloroform - Strong hydrogen bonding between acetone and chloroform reduces vapour pressure below that predicted by Raoult's law."
+      },
+      {
+        question: "Osmotic pressure (π) depends on:",
+        options: ["Molality", "Molarity", "Mole fraction", "% w/w"],
+        answer: 1,
+        explanation: "(b) Molarity - Formula: π = iCRT, where C is molar concentration (mol/L)."
+      },
+      {
+        question: "The unit of cryoscopic constant (Kf) is:",
+        options: ["K mol⁻¹ kg", "K kg mol⁻¹", "kg K⁻¹ mol⁻¹", "mol K⁻¹ kg⁻¹"],
+        answer: 1,
+        explanation: "(b) K kg mol⁻¹ - Kf is defined as the freezing point depression produced by 1 molal solution."
+      },
+      {
+        question: "The boiling point elevation constant (Kb) depends on:",
+        options: ["Nature of solute", "Nature of solvent", "Pressure", "Temperature"],
+        answer: 1,
+        explanation: "(b) Nature of solvent - Kb is a solvent-specific constant (e.g., for water, Kb = 0.52 K kg/mol). It is independent of the solute."
+      },
+      {
+        question: "For a 0.5 molal aqueous glucose solution, the boiling point elevation is: (Kb = 0.52 K kg/mol)",
+        options: ["0.26°C", "0.52°C", "1.04°C", "0.13°C"],
+        answer: 0,
+        explanation: "(a) 0.26°C - Calculation: ΔTb = Kb × m = 0.52 × 0.5 = 0.26°C"
+      },
+      {
+        question: "Which of the following is an example of a solid solution?",
+        options: ["Saltwater", "Brass (Cu-Zn alloy)", "Air", "Ethanol-water"],
+        answer: 1,
+        explanation: "(b) Brass (Cu-Zn alloy) - Brass is a homogeneous mixture of metals (solid in solid), making it a solid solution."
+      },
+      {
+        question: "The van't Hoff factor (i) for AlCl₃ in dilute solution is:",
+        options: ["1", "2", "3", "4"],
+        answer: 3,
+        explanation: "(d) 4 - AlCl₃ dissociates into Al³⁺ + 3Cl⁻ (total 4 ions), so i ≈ 4."
+      },
+      {
+        question: "Henry's law constant (KH) for CO₂ is 1.67 × 10⁸ Pa. At 2.5 atm, its solubility is:",
+        options: ["0.0015 M", "0.0025 M", "0.0035 M", "0.0045 M"],
+        answer: 0,
+        explanation: "(a) 0.0015 M - Calculation: Convert pressure: 2.5 atm = 2.5 × 1.01 × 10⁵ Pa = 2.53 × 10⁵ Pa; Solubility (C) = P/KH = 2.53 × 10⁵ / 1.67 × 10⁸ ≈ 0.0015 M"
+      },
+      {
+        question: "Which solution has the highest osmotic pressure at the same temperature?",
+        options: ["0.1 M glucose", "0.1 M NaCl", "0.1 M urea", "0.1 M sucrose"],
+        answer: 1,
+        explanation: "(b) 0.1 M NaCl - NaCl dissociates into Na⁺ + Cl⁻ (i=2), contributing more particles than glucose/urea (i=1). π = iCRT is higher for NaCl."
+      },
+      {
+        question: "The depression in freezing point (ΔTf) is given by:",
+        options: ["ΔTf = Kf × m", "ΔTf = i × Kf × m", "ΔTf = Kb × m", "ΔTf = KH × P"],
+        answer: 1,
+        explanation: "(b) ΔTf = i × Kf × m - For electrolytes, ΔTf = iKfm, where i = van't Hoff factor."
+      },
+      {
+        question: "Which pair forms an ideal solution?",
+        options: ["Acetone-chloroform", "Ethanol-water", "Benzene-toluene", "HCl-water"],
+        answer: 2,
+        explanation: "(c) Benzene-toluene - Benzene and toluene have similar molecular sizes and intermolecular forces, obeying Raoult's law perfectly."
+      },
+      {
+        question: "The molality of a solution with 18g glucose in 500g water is:",
+        options: ["0.1 m", "0.2 m", "0.3 m", "0.4 m"],
+        answer: 1,
+        explanation: "(b) 0.2 m - Calculation: Moles of glucose = 18/180 = 0.1 mol; Molality = 0.1 mol / 0.5 kg = 0.2 m"
+      },
+      {
+        question: "Which condition is NOT true for ideal solutions?",
+        options: ["ΔHmix = 0", "ΔVmix = 0", "Ptotal = PA + PB", "Obey Henry's law"],
+        answer: 3,
+        explanation: "(d) Obey Henry's law - Ideal solutions obey Raoult's law, not Henry's law (which applies to gas solubility)."
+      },
+      {
+        question: "The osmotic pressure of 0.1 M urea at 300 K is: (R = 0.0821 L atm K⁻¹ mol⁻¹)",
+        options: ["1.23 atm", "2.46 atm", "3.69 atm", "4.92 atm"],
+        answer: 1,
+        explanation: "(b) 2.46 atm - Calculation: π = CRT = 0.1 × 0.0821 × 300 = 2.46 atm"
+      },
+      {
+        question: "Which shows positive deviation from Raoult's law?",
+        options: ["Acetone-chloroform", "Ethanol-water", "Benzene-toluene", "HCl-water"],
+        answer: 1,
+        explanation: "(b) Ethanol-water - Weaker intermolecular forces in the mixture lead to higher vapour pressure than predicted."
+      },
+      {
+        question: "The solubility of gas in liquid decreases with:",
+        options: ["Increase in pressure", "Decrease in temperature", "Increase in temperature", "Decrease in volume"],
+        answer: 2,
+        explanation: "(c) Increase in temperature - Gas dissolution is exothermic. Le Chatelier's principle predicts lower solubility at higher temps."
+      },
+      {
+        question: "Which is a minimum-boiling azeotrope?",
+        options: ["68% HNO₃ + 32% H₂O", "95.6% ethanol + 4.4% water", "20% HCl + 80% H₂O", "98% H₂SO₄ + 2% H₂O"],
+        answer: 1,
+        explanation: "(b) 95.6% ethanol + 4.4% water - Ethanol-water boils at 78.13°C (lower than pure ethanol's 78.5°C)."
+      },
+      {
+        question: "For a 0.01 M KCl solution, the van't Hoff factor (i) is approximately:",
+        options: ["1", "1.5", "1.8", "2"],
+        answer: 2,
+        explanation: "(c) 1.8 - KCl shows incomplete dissociation in solution (not 100% ions). i ≈ 1.8 for dilute KCl."
+      },
+      {
+        question: "The standard electrode potential of Standard Hydrogen Electrode (SHE) is:",
+        options: ["0.1 V", "0.0 V", "1.0 V", "2.0 V"],
+        answer: 1,
+        explanation: "(b) 0.0 V - By definition, the potential of SHE is 0.0 V at all temperatures, serving as the reference electrode."
+      },
+      {
+        question: "In a galvanic cell, oxidation occurs at the:",
+        options: ["Cathode", "Salt bridge", "Anode", "Electrolyte"],
+        answer: 2,
+        explanation: "(c) Anode - Anode is where oxidation occurs (loss of electrons), while reduction happens at the cathode."
+      },
+      {
+        question: "The relationship between ΔG° and E°cell is given by:",
+        options: ["ΔG° = -nFE°cell", "ΔG° = nFE°cell", "ΔG° = -RTlnK", "ΔG° = E°cell/nF"],
+        answer: 0,
+        explanation: "(a) ΔG° = -nFE°cell - This equation links thermodynamics (ΔG°) and electrochemistry (E°cell), where n = moles of electrons, F = Faraday constant."
+      },
+      {
+        question: "The unit of specific conductivity (κ) is:",
+        options: ["Ω⁻¹ cm⁻¹", "Ω⁻¹ cm⁻²", "S cm", "S cm⁻²"],
+        answer: 0,
+        explanation: "(a) Ω⁻¹ cm⁻¹ - κ = Conductivity (S) × cell constant (cm⁻¹). 1 S = 1 Ω⁻¹."
+      },
+      {
+        question: "Faraday's first law of electrolysis states:",
+        options: ["E°cell = E°cathode - E°anode", "The amount of substance deposited ∝ current passed", "Λm = κ/C", "Ecell = E°cell - (RT/nF)lnQ"],
+        answer: 1,
+        explanation: "(b) The amount of substance deposited ∝ current passed - Faraday's 1st Law: m = ZIt, where Z = electrochemical equivalent."
+      },
+      {
+        question: "The Nernst equation at 298 K is:",
+        options: ["Ecell = E°cell - (0.0591/n)logQ", "Ecell = E°cell + (0.0591/n)logQ", "Ecell = E°cell - (0.0257/n)lnQ", "Ecell = E°cell - (RT/nF)logQ"],
+        answer: 0,
+        explanation: "(a) Ecell = E°cell - (0.0591/n)logQ - At 298 K, (RT/F)lnQ = 0.0591 logQ."
+      },
+      {
+        question: "Which is a secondary cell?",
+        options: ["Leclanché cell", "Daniell cell", "Lead-acid battery", "Dry cell"],
+        answer: 2,
+        explanation: "(c) Lead-acid battery - Secondary cells are rechargeable (e.g., lead-acid, Li-ion), while primary cells (dry cell, Daniell cell) are not."
+      },
+      {
+        question: "The molar conductivity (Λm) of a weak electrolyte:",
+        options: ["Increases linearly with concentration", "Decreases with dilution", "Increases sharply with dilution", "Remains constant"],
+        answer: 2,
+        explanation: "(c) Increases sharply with dilution - Weak electrolytes dissociate more on dilution, causing Λm to rise non-linearly."
+      },
+      {
+        question: "In the electrolysis of aqueous NaCl, the product at the anode is:",
+        options: ["Na metal", "H₂ gas", "Cl₂ gas", "O₂ gas"],
+        answer: 2,
+        explanation: "(c) Cl₂ gas - Anode reaction: 2Cl⁻ → Cl₂ + 2e⁻ (Cl⁻ has lower oxidation potential than H₂O)."
+      },
+      {
+        question: "The standard reduction potential of Zn²⁺/Zn is -0.76 V. For the oxidation of Zn, E° will be:",
+        options: ["-0.76 V", "+0.76 V", "-1.52 V", "+1.52 V"],
+        answer: 1,
+        explanation: "(b) +0.76 V - Oxidation potential = -Reduction potential. So, E°Zn/Zn²⁺ = +0.76V."
+      },
+      {
+        question: "Kohlrausch's law is used to calculate:",
+        options: ["E°cell", "Solubility of sparingly soluble salts", "ΔG°", "Overpotential"],
+        answer: 1,
+        explanation: "(b) Solubility of sparingly soluble salts - Λm⁰ values help find solubility via κ = Λm⁰ × C."
+      },
+      {
+        question: "The charge required to reduce 1 mole of MnO₄⁻ to Mn²⁺ is:",
+        options: ["1 F", "3 F", "5 F", "7 F"],
+        answer: 2,
+        explanation: "(c) 5 F - MnO₄⁻ + 8H⁺ + 5e⁻ → Mn²⁺ + 4H₂O. 5 moles of e⁻ = 5 F."
+      },
+      {
+        question: "The cell notation for Daniell cell is:",
+        options: ["Zn | Zn²⁺ || Cu²⁺ | Cu", "Cu | Cu²⁺ || Zn²⁺ | Zn", "Zn²⁺ | Zn || Cu | Cu²⁺", "Pt | H₂ | H⁺ || Zn²⁺ | Zn"],
+        answer: 0,
+        explanation: "(a) Zn | Zn²⁺ || Cu²⁺ | Cu - Anode (Zn) is written first, followed by cathode (Cu)."
+      },
+      {
+        question: "The limiting molar conductivity (Λ°m) of CH₃COOH is given by:",
+        options: ["Λ°m(CH₃COOH) = Λ°m(HCl) + Λ°m(CH₃COONa) - Λ°m(NaCl)", "Λ°m(CH₃COOH) = Λ°m(CH₃COONa) + Λ°m(NaOH) - Λ°m(NaCl)", "Λ°m(CH₃COOH) = Λ°m(CH₃COOK) + Λ°m(HCl) - Λ°m(KCl)", "Λ°m(CH₃COOH) = Λ°m(CH₃COO⁻) + Λ°m(H⁺)"],
+        answer: 2,
+        explanation: "(c) Λ°m(CH₃COOH) = Λ°m(CH₃COOK) + Λ°m(HCl) - Λ°m(KCl) - Kohlrausch's law for weak electrolytes: Λ°CH₃COOH = λ°CH₃COO⁻ + λ°H⁺."
+      },
+      {
+        question: "The time required to deposit 1.5 g of Ag from AgNO₃ solution using 2A current is: (Ag = 108 g/mol)",
+        options: ["670 s", "1340 s", "2010 s", "4020 s"],
+        answer: 0,
+        explanation: "(a) 670 s - Calculation: t = (1.5 × 96500 × 1)/(108 × 2) ≈ 670 s"
+      },
+      {
+        question: "The corrosion of iron is prevented by:",
+        options: ["Galvanization", "Alloying with chromium", "Both (a) and (b)", "Using oxidizing agents"],
+        answer: 2,
+        explanation: "(c) Both (a) and (b) - Galvanization coats iron with zinc. Alloying (e.g., stainless steel) prevents rusting."
+      },
+      {
+        question: "The standard EMF of a cell is 1.1 V. If ΔG° = -212.3 kJ, the number of electrons transferred (n) is: (F = 96500 C/mol)",
+        options: ["1", "2", "3", "4"],
+        answer: 1,
+        explanation: "(b) 2 - Calculation: ΔG° = -nFE° ⇒ n = 212300/(1.1 × 96500) ≈ 2"
+      },
+      {
+        question: "The molar conductivity (Λm) of 0.01 M acetic acid is 16 Ω⁻¹ cm² mol⁻¹. Its degree of dissociation (α) is: (Λ°m = 390 Ω⁻¹ cm² mol⁻¹)",
+        options: ["0.02", "0.04", "0.06", "0.08"],
+        answer: 1,
+        explanation: "(b) 0.04 - Calculation: α = Λm/Λ°m = 16/390 ≈ 0.04"
+      },
+      {
+        question: "In the electrolysis of CuSO₄ using Cu electrodes, the mass of anode decreases by 3.2 g. The mass of cathode will:",
+        options: ["Decrease by 3.2 g", "Increase by 3.2 g", "Remain unchanged", "Increase by 6.4 g"],
+        answer: 1,
+        explanation: "(b) Increase by 3.2 g - Copper dissolves from anode (loss) and deposits on cathode (gain) in 1:1 ratio."
+      },
+      {
+        question: "The cell potential for: Zn | Zn²⁺ (0.1 M) || Ag⁺ (0.01 M) | Ag (E°Zn²⁺/Zn = -0.76 V, E°Ag⁺/Ag = 0.80 V) is:",
+        options: ["1.47 V", "1.53 V", "1.59 V", "1.65 V"],
+        answer: 1,
+        explanation: "(b) 1.53 V - Calculation: E°cell = 0.80 - (-0.76) = 1.56 V; Q = [Zn²⁺]/[Ag⁺]² = 0.1/(0.01)² = 1000; Ecell = 1.56 - (0.0591/2)log1000 = 1.53 V"
+      },
+      {
+        question: "The specific conductivity (κ) of 0.1 M KCl is 0.0129 Ω⁻¹ cm⁻¹. If resistance is 85 Ω, the cell constant is:",
+        options: ["0.5 cm⁻¹", "1.1 cm⁻¹", "2.5 cm⁻¹", "3.8 cm⁻¹"],
+        answer: 1,
+        explanation: "(b) 1.1 cm⁻¹ - Calculation: Cell constant = κ × R = 0.0129 × 85 ≈ 1.1 cm⁻¹"
+      },
+      {
+        question: "The oxidation state of Mn in MnO₄⁻ is:",
+        options: ["+2", "+4", "+6", "+7"],
+        answer: 3,
+        explanation: "(d) +7 - Calculation: x + 4(-2) = -1 ⇒ x = +7"
+      },
+      {
+        question: "The time (in s) to produce 2.7 g Al from Al₂O₃ using 5A current is: (Al = 27 g/mol)",
+        options: ["9650", "19300", "28950", "38600"],
+        answer: 3,
+        explanation: "(d) 38600 - Calculation: Al³⁺ + 3e⁻ → Al; t = (2.7 × 96500 × 3)/(27 × 5) = 38600 s"
+      },
+      {
+        question: "The E° for the reaction: 2Fe³⁺ + 2I⁻ → 2Fe²⁺ + I₂ is: (E°Fe³⁺/Fe²⁺ = 0.77 V, E°I₂/I⁻ = 0.54 V)",
+        options: ["-0.23 V", "+0.23 V", "-1.31 V", "+1.31 V"],
+        answer: 1,
+        explanation: "(b) +0.23 V - Calculation: E°cell = E°cathode - E°anode = 0.77 - 0.54 = +0.23 V"
+      },
+      {
+        question: "The primary battery among these is:",
+        options: ["Lead-acid battery", "Nickel-Cd battery", "Lithium-ion battery", "Zinc-carbon battery"],
+        answer: 3,
+        explanation: "(d) Zinc-carbon battery - Primary batteries are non-rechargeable (e.g., zinc-carbon, dry cells)."
+      },
+      {
+        question: "The phenomenon of electromagnetic induction was discovered by:",
+        options: ["Faraday", "Lenz", "Maxwell", "Oersted"],
+        answer: 0,
+        explanation: "(a) Faraday - Michael Faraday discovered electromagnetic induction in 1831, demonstrating that a changing magnetic field induces an EMF."
+      },
+      {
+        question: "The SI unit of magnetic flux is:",
+        options: ["Tesla", "Weber", "Henry", "Gauss"],
+        answer: 1,
+        explanation: "(b) Weber - Magnetic flux (Φ) = B × A × cosθ. SI unit: Weber (Wb) = T·m²."
+      },
+      {
+        question: "Lenz's law is a consequence of the conservation of:",
+        options: ["Charge", "Energy", "Momentum", "Current"],
+        answer: 1,
+        explanation: "(b) Energy - Lenz's law ensures the induced current opposes the change in flux, conserving energy."
+      },
+      {
+        question: "A coil of resistance 10 Ω and 100 turns is placed in a varying magnetic field. If the rate of change of flux is 0.1 Wb/s, the induced current is:",
+        options: ["0.1 A", "1 A", "10 A", "100 A"],
+        answer: 1,
+        explanation: "(b) 1 A - Calculation: Induced EMF (ε) = -N dΦ/dt = -100 × 0.1 = -10 V; Current (I) = ε/R = 10/10 = 1 A (ignore sign)."
+      },
+      {
+        question: "The eddy currents are minimized in transformers by using:",
+        options: ["Solid iron core", "Laminated core", "Copper core", "Air core"],
+        answer: 1,
+        explanation: "(b) Laminated core - Laminations reduce eddy currents by increasing resistance in the core."
+      },
+      {
+        question: "A straight conductor of length 0.5 m moves at 2 m/s perpendicular to a magnetic field of 0.1 T. The induced EMF is:",
+        options: ["0.01 V", "0.1 V", "1 V", "10 V"],
+        answer: 1,
+        explanation: "(b) 0.1 V - Calculation: ε = B l v = 0.1 × 0.5 × 2 = 0.1 V."
+      },
+      {
+        question: "The self-inductance of a solenoid depends on:",
+        options: ["Current", "Voltage", "Number of turns per unit length", "Resistance"],
+        answer: 2,
+        explanation: "(c) Number of turns per unit length - Formula: L = μ₀n²Al, where n = turns per unit length."
+      },
+      {
+        question: "In an AC generator, the maximum induced EMF depends on:",
+        options: ["Number of turns (N)", "Angular velocity (ω)", "Magnetic field (B)", "All of the above"],
+        answer: 3,
+        explanation: "(d) All of the above - Formula: εmax = NBAω."
+      },
+      {
+        question: "The mutual inductance between two coils is 1 H. If the current in one coil changes at 1 A/s, the induced EMF in the other coil is:",
+        options: ["1 V", "2 V", "3 V", "4 V"],
+        answer: 0,
+        explanation: "(a) 1 V - Calculation: ε = -M dI/dt = -1 × 1 = -1 V (magnitude = 1 V)."
+      },
+      {
+        question: "The core of a transformer is laminated to reduce:",
+        options: ["Hysteresis loss", "Eddy current loss", "Copper loss", "Flux leakage"],
+        answer: 1,
+        explanation: "(b) Eddy current loss - Laminations increase resistance, minimizing energy loss due to eddy currents."
+      },
+      {
+        question: "A bar magnet is dropped through a copper ring. The acceleration of the magnet will be:",
+        options: ["Equal to g", "Greater than g", "Less than g", "Zero"],
+        answer: 2,
+        explanation: "(c) Less than g - The induced current opposes the motion (Lenz's law), reducing acceleration."
+      },
+      {
+        question: "The phase difference between voltage and current in a purely inductive AC circuit is:",
+        options: ["0°", "45°", "90°", "180°"],
+        answer: 2,
+        explanation: "(c) 90° - In inductors, voltage leads current by 90°."
+      },
+      {
+        question: "The energy stored in an inductor (L) carrying current (I) is:",
+        options: ["½ LI²", "LI²", "½ L²I", "½ I²/L"],
+        answer: 0,
+        explanation: "(a) ½ LI² - Formula: Magnetic energy = ½ LI²."
+      },
+      {
+        question: "A metal rod of length l rotates about one end perpendicular to a magnetic field B. The induced EMF is maximum when the angular velocity (ω) is:",
+        options: ["Parallel to B", "Antiparallel to B", "Perpendicular to B", "At 45° to B"],
+        answer: 2,
+        explanation: "(c) Perpendicular to B - Maximum EMF when motion is perpendicular to the field (ε = ½ Bωl²)."
+      },
+      {
+        question: "The dimensional formula of self-inductance (L) is:",
+        options: ["[ML²T⁻²A⁻²]", "[ML²T⁻³A⁻¹]", "[MLT⁻²A⁻²]", "[ML²T⁻¹A⁻²]"],
+        answer: 0,
+        explanation: "(a) [ML²T⁻²A⁻²] - From U = ½ LI², dimensions of L = Energy/Current²."
+      },
+      {
+        question: "The induced EMF in a coil rotating in a magnetic field is maximum when the angle between the magnetic field and the plane of the coil is:",
+        options: ["0°", "45°", "90°", "180°"],
+        answer: 0,
+        explanation: "(a) 0° - EMF is maximized when the plane of the coil is parallel to the magnetic field (θ = 0°), as the rate of change of flux is highest."
+      },
+      {
+        question: "A transformer has 100 turns in the primary and 200 turns in the secondary. If the input voltage is 50 V AC, the output voltage is:",
+        options: ["25 V", "50 V", "100 V", "200 V"],
+        answer: 2,
+        explanation: "(c) 100 V - Calculation: Vs/Vp = Ns/Np ⇒ Vs = (200/100) × 50 = 100 V"
+      },
+      {
+        question: "The self-inductance of a solenoid of length 10 cm, area 5 cm², and 1000 turns is: (μ₀ = 4π × 10⁻⁷ H/m)",
+        options: ["6.28 × 10⁻⁴ H", "6.28 × 10⁻³ H", "6.28 × 10⁻² H", "6.28 × 10⁻¹ H"],
+        answer: 0,
+        explanation: "(a) 6.28 × 10⁻⁴ H - Calculation: n = 1000/0.1 = 10⁴ turns/m; L = 4π × 10⁻⁷ × (10⁴)² × 5 × 10⁻⁴ × 0.1 = 6.28 × 10⁻⁴ H"
+      },
+      {
+        question: "A metal ring is placed in a uniform magnetic field. If the field is suddenly switched off, the induced current in the ring will:",
+        options: ["Be zero", "Flow clockwise", "Flow anticlockwise", "Alternate rapidly"],
+        answer: 2,
+        explanation: "(c) Flow anticlockwise - Lenz's Law: The induced current opposes the decrease in flux (anticlockwise to try to restore the field)."
+      },
+      {
+        question: "The time constant (τ) of an LR circuit is 2 ms. If L = 4 mH, the resistance R is:",
+        options: ["0.5 Ω", "1 Ω", "2 Ω", "4 Ω"],
+        answer: 2,
+        explanation: "(c) 2 Ω - Calculation: τ = L/R ⇒ R = 4 × 10⁻³ / 2 × 10⁻³ = 2 Ω"
+      },
+      {
+        question: "The back EMF in a DC motor is 12 V when running at 1200 rpm. If the speed increases to 1500 rpm, the back EMF becomes:",
+        options: ["9.6 V", "12 V", "15 V", "18 V"],
+        answer: 2,
+        explanation: "(c) 15 V - Back EMF ∝ speed. ε2/12 = 1500/1200 ⇒ ε2 = 15 V"
+      },
+      {
+        question: "A circular loop of radius 0.1 m is placed in a magnetic field of 0.5 T. If the loop is rotated about its diameter at 60 rad/s, the maximum induced EMF is:",
+        options: ["0.1π V", "0.3π V", "0.5π V", "0.6π V"],
+        answer: 1,
+        explanation: "(b) 0.3π V - Calculation: A = πr² = π × (0.1)² = 0.01π m²; εmax = 1 × 0.5 × 0.01π × 60 = 0.3π V"
+      },
+      {
+        question: "The mutual inductance between two coils is 0.5 H. If the current in one coil changes from 2 A to 4 A in 0.1 s, the induced EMF in the other coil is:",
+        options: ["5 V", "10 V", "15 V", "20 V"],
+        answer: 1,
+        explanation: "(b) 10 V - Calculation: ε = -M dI/dt = -0.5 × (4-2)/0.1 = -10 V (magnitude = 10 V)"
+      },
+      {
+        question: "A 50-turn coil has a cross-sectional area of 0.02 m². If the magnetic field through the coil changes from 0.1 T to 0.5 T in 2 s, the average induced EMF is:",
+        options: ["0.1 V", "0.2 V", "0.4 V", "0.8 V"],
+        answer: 1,
+        explanation: "(b) 0.2 V - Calculation: ε = -N ΔΦ/Δt = -50 × (0.5-0.1) × 0.02 / 2 = -0.2 V (magnitude = 0.2 V)"
+      },
+      {
+        question: "The core of an electromagnet is made of soft iron instead of steel because soft iron has:",
+        options: ["High retentivity", "Low coercivity", "High permeability", "Both (b) and (c)"],
+        answer: 3,
+        explanation: "(d) Both (b) and (c) - Soft iron has low coercivity (easily demagnetized) and high permeability (conducts magnetic flux efficiently)."
+      },
+      {
+        question: "The peak value of an AC voltage is 220√2 V. Its RMS value is:",
+        options: ["110 V", "220 V", "330 V", "440 V"],
+        answer: 1,
+        explanation: "(b) 220 V - Calculation: VRMS = V₀/√2 = 220√2/√2 = 220 V"
+      },
+      {
+        question: "In a purely resistive AC circuit, the phase difference between voltage and current is:",
+        options: ["0°", "45°", "90°", "180°"],
+        answer: 0,
+        explanation: "(a) 0° - In resistors, voltage and current are in phase."
+      },
+      {
+        question: "The inductive reactance (XL) of a coil for 50 Hz AC is 100 Ω. Its value for 100 Hz AC will be:",
+        options: ["50 Ω", "100 Ω", "200 Ω", "400 Ω"],
+        answer: 2,
+        explanation: "(c) 200 Ω - XL = 2πfL ⇒ XL ∝ f. Doubling frequency doubles XL."
+      },
+      {
+        question: "The power factor of an AC circuit is 0.8. If the impedance is 10 Ω, the resistance is:",
+        options: ["2 Ω", "4 Ω", "6 Ω", "8 Ω"],
+        answer: 3,
+        explanation: "(d) 8 Ω - Calculation: Power factor = R/Z ⇒ R = Z cosϕ = 10 × 0.8 = 8 Ω"
+      },
+      {
+        question: "In an LCR series circuit at resonance, the impedance is:",
+        options: ["Maximum", "Minimum", "Zero", "Infinite"],
+        answer: 1,
+        explanation: "(b) Minimum - At resonance, XL = XC, so Z = √(R² + (XL - XC)²) = R (minimum)."
+      },
+      {
+        question: "The average power dissipated in an AC circuit is given by:",
+        options: ["VRMS IRMS", "VRMS IRMS cosϕ", "V₀I₀/2", "V₀I₀/√2"],
+        answer: 1,
+        explanation: "(b) VRMS IRMS cosϕ - cosϕ is the power factor."
+      },
+      {
+        question: "The resonant frequency (fr) of an LCR circuit with L = 1 mH and C = 1 μF is:",
+        options: ["1 kHz", "5 kHz", "10 kHz", "50 kHz"],
+        answer: 1,
+        explanation: "(b) 5 kHz - Calculation: fr = 1/(2π√(LC)) = 1/(2π√(10⁻³ × 10⁻⁶)) ≈ 5 kHz"
+      },
+      {
+        question: "A capacitor blocks DC but allows AC because:",
+        options: ["DC has zero frequency", "Capacitive reactance is infinite for DC", "Both (a) and (b)", "None of these"],
+        answer: 2,
+        explanation: "(c) Both (a) and (b) - XC = 1/(2πfC). For DC (f=0), XC → ∞."
+      },
+      {
+        question: "The phase difference between current and voltage in a purely capacitive AC circuit is:",
+        options: ["0°", "45°", "90°", "180°"],
+        answer: 2,
+        explanation: "(c) 90° - In capacitors, current leads voltage by 90°."
+      },
+      {
+        question: "The Q-factor of an LCR circuit is given by:",
+        options: ["R√(L/C)", "(1/R)√(L/C)", "XL/R", "Both (b) and (c)"],
+        answer: 3,
+        explanation: "(d) Both (b) and (c) - Formula: Q = ωrL/R = (1/R)√(L/C)."
+      },
+      {
+        question: "The impedance of an LCR series circuit at resonance is:",
+        options: ["R", "XL", "XC", "√(R² + (XL - XC)²)"],
+        answer: 0,
+        explanation: "(a) R - At resonance, XL = XC, so Z = R."
+      },
+      {
+        question: "The time taken for AC to complete one cycle is 0.02 s. Its frequency is:",
+        options: ["20 Hz", "50 Hz", "100 Hz", "200 Hz"],
+        answer: 1,
+        explanation: "(b) 50 Hz - Calculation: f = 1/T = 1/0.02 = 50 Hz"
+      },
+      {
+        question: "The power factor of an AC circuit is maximum when it is:",
+        options: ["Purely resistive", "Purely inductive", "Purely capacitive", "Contains L and C"],
+        answer: 0,
+        explanation: "(a) Purely resistive - For resistors, cosϕ = 1 (maximum)."
+      },
+      {
+        question: "The RMS current in an AC circuit is 5 A. The peak current is:",
+        options: ["5 A", "5√2 A", "10 A", "10√2 A"],
+        answer: 1,
+        explanation: "(b) 5√2 A - Formula: I₀ = IRMS × √2 = 5√2 A"
+      },
+      {
+        question: "In an AC circuit, the wattless current is due to:",
+        options: ["Resistance", "Inductance", "Capacitance", "Both (b) and (c)"],
+        answer: 3,
+        explanation: "(d) Both (b) and (c) - Inductors and capacitors cause phase shifts, leading to wattless (reactive) current."
+      },
+      {
+        question: "In an AC circuit with R = 4Ω, XL = 3Ω, and XC = 6Ω, the impedance is:",
+        options: ["5Ω", "7Ω", "10Ω", "13Ω"],
+        answer: 0,
+        explanation: "(a) 5Ω - Calculation: Z = √(R² + (XL - XC)²) = √(4² + (3-6)²) = √(16+9) = 5Ω"
+      },
+      {
+        question: "The Q-factor of a series LCR circuit with R = 10Ω, L = 1H, and C = 1μF is:",
+        options: ["1", "10", "100", "1000"],
+        answer: 1,
+        explanation: "(b) 10 - Formula: Q = (1/R)√(L/C) = (1/10)√(1/10⁻⁶) = 10"
+      },
+      {
+        question: "A transformer steps down 220V to 22V. If the secondary has 100 turns, the primary turns are:",
+        options: ["10", "100", "1000", "10000"],
+        answer: 2,
+        explanation: "(c) 1000 - Calculation: Np/Ns = Vp/Vs ⇒ Np = (220/22) × 100 = 1000"
+      },
+      {
+        question: "The power dissipated in an AC circuit with VRMS = 100V, IRMS = 2A, and power factor 0.5 is:",
+        options: ["50W", "100W", "200W", "400W"],
+        answer: 1,
+        explanation: "(b) 100W - Formula: P = VRMS IRMS cosϕ = 100 × 2 × 0.5 = 100W"
+      },
+      {
+        question: "In an LC oscillation circuit, the frequency depends on:",
+        options: ["Only L", "Only C", "Both L and C", "Neither L nor C"],
+        answer: 2,
+        explanation: "(c) Both L and C - Formula: f = 1/(2π√(LC))"
+      },
+      {
+        question: "The phase difference between voltage and current in an LCR circuit at resonance is:",
+        options: ["0°", "45°", "90°", "180°"],
+        answer: 0,
+        explanation: "(a) 0° - At resonance, the circuit behaves as purely resistive, so voltage and current are in phase."
+      },
+      {
+        question: "The capacitive reactance (XC) of a 10μF capacitor for 50Hz AC is approximately:",
+        options: ["318Ω", "159Ω", "31.8Ω", "15.9Ω"],
+        answer: 0,
+        explanation: "(a) 318Ω - Calculation: XC = 1/(2πfC) = 1/(2π×50×10×10⁻⁶) ≈ 318Ω"
+      },
+      {
+        question: "The time constant of an LR circuit with L = 2H and R = 4Ω is:",
+        options: ["0.5s", "1s", "2s", "4s"],
+        answer: 0,
+        explanation: "(a) 0.5s - Formula: τ = L/R = 2/4 = 0.5s"
+      },
+      {
+        question: "In an AC generator, the instantaneous EMF is zero when the coil is:",
+        options: ["Parallel to the magnetic field", "Perpendicular to the magnetic field", "At 45° to the magnetic field", "Rotating at maximum speed"],
+        answer: 1,
+        explanation: "(b) Perpendicular to the magnetic field - EMF ϵ = NBAωsinθ. When θ = 0° (parallel), EMF is maximum; when θ = 90° (perpendicular), EMF is zero."
+      },
+      {
+        question: "The skin effect in AC circuits becomes more pronounced at:",
+        options: ["Lower frequencies", "Higher frequencies", "Constant frequency", "DC current"],
+        answer: 1,
+        explanation: "(b) Higher frequencies - At high frequencies, current tends to flow near the conductor's surface due to self-inductance."
       }
     ];
 
@@ -766,7 +1366,7 @@
     let userResponses = Array(quiz.length).fill(null);
     let testSubmitted = false;
     let testStarted = false;
-    let timeLeft = 5 * 60; // 5 minutes in seconds
+    let timeLeft = 100 * 60; // 100 minutes in seconds
     let timerInterval;
     let selectedOptionIndex = null;
     let quizState = JSON.parse(localStorage.getItem('quizState')) || null;
@@ -843,7 +1443,7 @@
       const seconds = timeLeft % 60;
       timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       
-      if (timeLeft <= 30) {
+      if (timeLeft <= 300) { // 5 minutes or less
         timerDisplay.parentElement.style.background = "#ffdddd";
         timerDisplay.parentElement.style.color = "#dc3545";
       }
@@ -988,11 +1588,15 @@
         }
       });
       
+      // Calculate marks (4 marks per correct answer)
+      const obtainedMarks = correct * 4;
+      
       document.getElementById("quiz-box").style.display = "none";
       document.querySelector(".timer").style.display = "none";
       document.getElementById("correct-count").textContent = correct;
       document.getElementById("wrong-count").textContent = wrong;
       document.getElementById("unattempted-count").textContent = unattempted;
+      document.getElementById("obtained-marks").textContent = obtainedMarks;
       document.getElementById("summary").style.display = "block";
     }
 
