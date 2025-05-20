@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chemistry-Physics Test for AIIMS Nursing</title>
+  <title>Chemistry Test for AIIMS</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -670,12 +670,12 @@
     <div id="intro-screen">
       <div class="title">Sana Sab Kar Legi</div>
       <div class="test-details">
-        <p><i class="fas fa-book"></i> <strong>Subjects:</strong> Chemistry & Physics</p>
-        <p><i class="fas fa-tags"></i> <strong>Topics:</strong> Solutions, Electrochemistry, Electromagnetic Induction, Alternating Current</p>
-        <p><i class="fas fa-question-circle"></i> <strong>Total Questions:</strong> 100</p>
-        <p><i class="fas fa-clock"></i> <strong>Time Limit:</strong> 100 minutes</p>
+        <p><i class="fas fa-book"></i> <strong>Subject:</strong> 12th Chemistry</p>
+        <p><i class="fas fa-tags"></i> <strong>Topics:</strong> Solutions, Electrochemistry, Chemical Kinetics, d- and f-Block Elements, Coordination Compounds, Haloalkanes and Haloarenes, Alcohols, Phenols and Ethers, Aldehydes, Ketones and Carboxylic Acids, Amines</p>
+        <p><i class="fas fa-question-circle"></i> <strong>Total Questions:</strong> 110</p>
+        <p><i class="fas fa-clock"></i> <strong>Time Limit:</strong> 110 minutes</p>
         <p><i class="fas fa-graduation-cap"></i> <strong>Test Type:</strong> Practice Quiz</p>
-        <p><i class="fas fa-star"></i> <strong>Marks:</strong> 4 marks per question (Total 400)</p>
+        <p><i class="fas fa-star"></i> <strong>Marks:</strong> +4 for correct, -1 for wrong, 0 for unattempted</p>
       </div>
       <button class="btn" onclick="startQuiz()">
         <i class="fas fa-play"></i> Start Test
@@ -683,7 +683,7 @@
     </div>
 
     <div class="timer" style="display: none;">
-      <i class="fas fa-clock"></i> <span id="timer">100:00</span>
+      <i class="fas fa-clock"></i> <span id="timer">110:00</span>
     </div>
 
     <div id="quiz-box">
@@ -741,7 +741,7 @@
             <div>Marks Obtained</div>
           </div>
           <div class="stat stat-marks">
-            <div class="stat-value">400</div>
+            <div class="stat-value">440</div>
             <div>Total Marks</div>
           </div>
         </div>
@@ -761,604 +761,664 @@
   <script>
     const quiz = [
       {
-        question: "Which of the following is NOT a colligative property?",
-        options: ["Lowering of vapour pressure", "Elevation of boiling point", "Osmotic pressure", "Refractive index"],
+        question: "The van't Hoff factor (i) for a 0.2 M K₄[Fe(CN)₆] solution (75% dissociated) is:",
+        options: ["1.75", "3.25", "4.0", "2.5"],
+        answer: 1,
+        explanation: "Correct Option: b) 3.25<br><br>Dissociation: K₄[Fe(CN)₆] → 4K⁺ + [Fe(CN)₆]⁴⁻ (Total ions = 5).<br>i = 1 + (n−1)α = 1 + (5−1)(0.75) = 3.25.<br>Trap: Many forget to count all ions (e.g., ignore [Fe(CN)₆]⁴⁻)."
+      },
+      {
+        question: "Which graph represents an ideal solution?",
+        options: ["P vs X (Linear for both solute & solvent)", "P vs X (Non-linear with positive deviation)", "P vs X (Non-linear with negative deviation)", "P vs X (Only solvent is linear)"],
+        answer: 0,
+        explanation: "Correct Option: a) Linear for both (Follows Raoult's law).<br><br>Ideal solutions show straight-line P vs X plots for both components.<br>Non-linear graphs indicate non-ideal behavior (e.g., ethanol-water)."
+      },
+      {
+        question: "Which is NOT true for a 2 molal aqueous NaCl solution?",
+        options: ["ΔT_b = 2.08°C (K_b = 0.52°C/m)", "Freezing point = -7.44°C (K_f = 1.86°C/m)", "Osmotic pressure ≈ 100 atm at 300K", "Mole fraction of NaCl ≈ 0.03"],
         answer: 3,
-        explanation: "(d) Refractive index - Colligative properties depend on the number of solute particles, not their nature. Refractive index is an intrinsic property that varies with the chemical identity of the substance."
+        explanation: "Correct Option: d) Mole fraction ≈ 0.03 (Actual ≈ 0.0347)<br><br>i=2 for NaCl → ΔT_b = i×K_b×m = 2×0.52×2 = 2.08°C (Option a ✅).<br>ΔT_f = i×K_f×m = 2×1.86×2 = 7.44°C → FP = -7.44°C (Option b ✅).<br>π = iCRT ≈ 2×2×0.0821×300 ≈ 100 atm (Option c ✅).<br>Mole fraction (X₂):<br>Moles NaCl = 2, Moles H₂O = 1000/18 ≈ 55.5 → X₂ = 2/(2+55.5) ≈ 0.0347 (Option d ❌)."
       },
       {
-        question: "Raoult's law is applicable to:",
-        options: ["Non-ideal solutions", "Ideal solutions", "All liquid mixtures", "Only gaseous solutions"],
-        answer: 1,
-        explanation: "(b) Ideal solutions - Raoult's law strictly applies to ideal solutions where intermolecular forces between different components are similar to those between pure components (e.g., benzene-toluene mixtures)."
-      },
-      {
-        question: "The van't Hoff factor (i) for K₂SO₄ in dilute solution is:",
-        options: ["1", "2", "3", "4"],
-        answer: 2,
-        explanation: "(c) 3 - K₂SO₄ dissociates completely in dilute solutions to give 2K⁺ + SO₄²⁻ (total 3 ions), hence i ≈ 3."
-      },
-      {
-        question: "Which solution will have the highest boiling point?",
-        options: ["0.1 M glucose", "0.1 M NaCl", "0.1 M BaCl₂", "0.1 M urea"],
-        answer: 2,
-        explanation: "(c) 0.1 M BaCl₂ - BaCl₂ dissociates to give maximum particles (Ba²⁺ + 2Cl⁻ → i=3), resulting in greatest boiling point elevation (ΔTb ∝ i×m)."
-      },
-      {
-        question: "The mole fraction of water in a solution containing 36g H₂O and 46g C₂H₅OH is:",
-        options: ["0.4", "0.6", "0.8", "0.2"],
-        answer: 1,
-        explanation: "(b) 0.6 - Calculation: Moles of H₂O = 36/18 = 2 mol; Moles of C₂H₅OH = 46/46 = 1 mol; χH₂O = 2/(2+1) = 0.666 ≈ 0.6"
-      },
-      {
-        question: "Azeotropic mixtures:",
-        options: ["Follow Raoult's law perfectly", "Have constant boiling composition", "Can be separated easily by distillation", "Are always ideal solutions"],
-        answer: 1,
-        explanation: "(b) Have constant boiling composition - Azeotropes boil at constant temperature with unchanged composition (e.g., ethanol-water at 95.6% ethanol)."
-      },
-      {
-        question: "The solubility of gas in liquid increases with:",
-        options: ["Decreasing temperature", "Increasing pressure", "Increasing volume of solvent", "Decreasing KH value"],
-        answer: 1,
-        explanation: "(b) Increasing pressure - According to Henry's law (C = KH×P), gas solubility is directly proportional to pressure above the solution."
-      },
-      {
-        question: "Which mixture shows negative deviation from Raoult's law?",
-        options: ["Ethanol-water", "Acetone-chloroform", "n-Hexane-n-Heptane", "Benzene-toluene"],
-        answer: 1,
-        explanation: "(b) Acetone-chloroform - Strong hydrogen bonding between acetone and chloroform reduces vapour pressure below that predicted by Raoult's law."
-      },
-      {
-        question: "Osmotic pressure (π) depends on:",
-        options: ["Molality", "Molarity", "Mole fraction", "% w/w"],
-        answer: 1,
-        explanation: "(b) Molarity - Formula: π = iCRT, where C is molar concentration (mol/L)."
-      },
-      {
-        question: "The unit of cryoscopic constant (Kf) is:",
-        options: ["K mol⁻¹ kg^-1", "K kg mol⁻¹", "kg K⁻¹ mol⁻¹", "mol K⁻¹ kg⁻¹"],
-        answer: 1,
-        explanation: "(b) K kg mol⁻¹ - Kf is defined as the freezing point depression produced by 1 molal solution."
-      },
-      {
-        question: "The boiling point elevation constant (Kb) depends on:",
-        options: ["Nature of solute", "Nature of solvent", "Pressure", "Temperature"],
-        answer: 1,
-        explanation: "(b) Nature of solvent - Kb is a solvent-specific constant (e.g., for water, Kb = 0.52 K kg/mol). It is independent of the solute."
-      },
-      {
-        question: "For a 0.5 molal aqueous glucose solution, the boiling point elevation is: (Kb = 0.52 K kg/mol)",
-        options: ["0.26°C", "0.52°C", "1.04°C", "0.13°C"],
+        question: "A 5% w/v urea (MW=60) solution is isotonic with:",
+        options: ["1.5% w/v glucose (MW=180)", "2.5% w/v sucrose (MW=342)", "0.9% w/v NaCl (MW=58.5, i≈1.8)", "1.8% w/v KCl (MW=74.5, i≈1.9)"],
         answer: 0,
-        explanation: "(a) 0.26°C - Calculation: ΔTb = Kb × m = 0.52 × 0.5 = 0.26°C"
+        explanation: "Correct Option: a) 1.5% w/v glucose<br><br>Isotonic ⇒ Same osmotic pressure (π).<br>Urea (i=1): Molarity = (5/60) × (1000/100) = 0.833 M.<br>Glucose (i=1): (1.5/180) × 10 = 0.833 M (✅).<br>Trap: NaCl/KCl seem close but their i values change molarity."
       },
       {
-        question: "Which of the following is an example of a solid solution?",
-        options: ["Saltwater", "Brass (Cu-Zn alloy)", "Air", "Ethanol-water"],
-        answer: 1,
-        explanation: "(b) Brass (Cu-Zn alloy) - Brass is a homogeneous mixture of metals (solid in solid), making it a solid solution."
-      },
-      {
-        question: "The van't Hoff factor (i) for AlCl₃ in dilute solution is:",
-        options: ["1", "2", "3", "4"],
+        question: "Which pair shows positive deviation from Raoult's law?",
+        options: ["Acetone-Chloroform (H-bonding)", "Benzene-Toluene (Ideal)", "Ethanol-Water (H-bonding)", "Acetone-CS₂ (Weak interactions)"],
         answer: 3,
-        explanation: "(d) 4 - AlCl₃ dissociates into Al³⁺ + 3Cl⁻ (total 4 ions), so i ≈ 4."
+        explanation: "Correct Option: d) Acetone-CS₂<br><br>Positive deviation:<br>A-B interactions < A-A or B-B (e.g., acetone-CS₂).<br>Vapor pressure > ideal, ΔH > 0, ΔV > 0.<br>Traps: Ethanol-water is non-ideal but H-bonded (not always positive deviation)."
       },
       {
-        question: "Henry's law constant (KH) for CO₂ is 1.67 × 10⁸ Pa. At 2.5 atm, its solubility is:",
-        options: ["0.0015 M", "0.0025 M", "0.0035 M", "0.0045 M"],
-        answer: 0,
-        explanation: "(a) 0.0015 M - Calculation: Convert pressure: 2.5 atm = 2.5 × 1.01 × 10⁵ Pa = 2.53 × 10⁵ Pa; Solubility (C) = P/KH = 2.53 × 10⁵ / 1.67 × 10⁸ ≈ 0.0015 M"
-      },
-      {
-        question: "Which solution has the highest osmotic pressure at the same temperature?",
-        options: ["0.1 M glucose", "0.1 M NaCl", "0.1 M urea", "0.1 M sucrose"],
-        answer: 1,
-        explanation: "(b) 0.1 M NaCl - NaCl dissociates into Na⁺ + Cl⁻ (i=2), contributing more particles than glucose/urea (i=1). π = iCRT is higher for NaCl."
-      },
-      {
-        question: "The depression in freezing point (ΔTf) is given by:",
-        options: ["ΔTf = Kf × m", "ΔTf = i × Kf × m", "ΔTf = Kb × m", "ΔTf = KH × P"],
-        answer: 1,
-        explanation: "(b) ΔTf = i × Kf × m - For electrolytes, ΔTf = iKfm, where i = van't Hoff factor."
-      },
-      {
-        question: "Which pair forms an ideal solution?",
-        options: ["Acetone-chloroform", "Ethanol-water", "Benzene-toluene", "HCl-water"],
+        question: "The solubility of a gas in water at 2 atm is 0.5 g/L. What's its solubility at 8 atm (T constant)?",
+        options: ["0.5 g/L", "1.0 g/L", "2.0 g/L", "4.0 g/L"],
         answer: 2,
-        explanation: "(c) Benzene-toluene - Benzene and toluene have similar molecular sizes and intermolecular forces, obeying Raoult's law perfectly."
+        explanation: "Correct Option: c) 2.0 g/L<br><br>Henry's law: C ∝ P → C₂ = C₁ × (P₂/P₁) = 0.5 × (8/2) = 2.0 g/L.<br>Trap: Units must match (g/L or M)."
       },
       {
-        question: "The molality of a solution with 18g glucose in 500g water is:",
-        options: ["0.1 m", "0.2 m", "0.3 m", "0.4 m"],
-        answer: 1,
-        explanation: "(b) 0.2 m - Calculation: Moles of glucose = 18/180 = 0.1 mol; Molality = 0.1 mol / 0.5 kg = 0.2 m"
+        question: "Which colligative property is used to determine molar mass of polymers?",
+        options: ["Boiling point elevation", "Freezing point depression", "Osmotic pressure", "Relative lowering of vapor pressure"],
+        answer: 2,
+        explanation: "Correct Option: c) Osmotic pressure<br><br>Osmotic pressure (π) is sensitive for high MW substances (e.g., polymers).<br>Formula: π = (n₂/V)RT → MW = (w₂RT)/(πV).<br>Why not others? ΔT_b/ΔT_f are too small for large MW."
       },
       {
-        question: "Which condition is NOT true for ideal solutions?",
-        options: ["ΔHmix = 0", "ΔVmix = 0", "Ptotal = PA + PB", "Obey Henry's law"],
+        question: "A 0.1 M MgCl₂ solution (α=80%) has a freezing point of -0.744°C. What is K_f for the solvent?",
+        options: ["1.86°C/m", "3.72°C/m", "0.93°C/m", "5.58°C/m"],
+        answer: 0,
+        explanation: "Correct Option: a) 1.86°C/m<br><br>MgCl₂ → Mg²⁺ + 2Cl⁻ (i = 1 + (3−1)×0.8 = 2.6).<br>ΔT_f = i×K_f×m → 0.744 = 2.6 × K_f × 0.1 → K_f = 1.86°C/m (Water's value)."
+      },
+      {
+        question: "Which is TRUE for a 0.01 M Al₂(SO₄)₃ solution?",
+        options: ["Total ion concentration = 0.05 M", "Osmotic pressure = 0.01 RT", "Conductivity ≈ 0.01 S/cm", "Freezing point = -0.0186°C"],
+        answer: 0,
+        explanation: "Correct Option: a) Total ions = 0.05 M<br><br>Al₂(SO₄)₃ → 2Al³⁺ + 3SO₄²⁻ → 5 ions → 0.01×5 = 0.05 M ions.<br>Traps:<br>π = iCRT = 5×0.01×RT (not 0.01 RT).<br>ΔT_f = iK_fm = 5×1.86×0.01 = 0.093°C (not 0.0186°C)."
+      },
+      {
+        question: "The azeotropic mixture of HCl-H₂O boils at 110°C. Which is TRUE?",
+        options: ["It shows negative deviation.", "Vapor phase is richer in HCl.", "It cannot be separated by distillation.", "All of the above."],
         answer: 3,
-        explanation: "(d) Obey Henry's law - Ideal solutions obey Raoult's law, not Henry's law (which applies to gas solubility)."
+        explanation: "Correct Option: d) All of the above<br><br>Negative deviation (B.P. > pure water).<br>Vapor phase richer in HCl (low-boiling component).<br>Azeotropes have fixed composition → no separation by distillation."
       },
       {
-        question: "The osmotic pressure of 0.1 M urea at 300 K is: (R = 0.0821 L atm K⁻¹ mol⁻¹)",
-        options: ["1.23 atm", "2.46 atm", "3.69 atm", "4.92 atm"],
-        answer: 1,
-        explanation: "(b) 2.46 atm - Calculation: π = CRT = 0.1 × 0.0821 × 300 = 2.46 atm"
-      },
-      {
-        question: "Which shows positive deviation from Raoult's law?",
-        options: ["Acetone-chloroform", "Ethanol-water", "Benzene-toluene", "HCl-water"],
-        answer: 1,
-        explanation: "(b) Ethanol-water - Weaker intermolecular forces in the mixture lead to higher vapour pressure than predicted."
-      },
-      {
-        question: "The solubility of gas in liquid decreases with:",
-        options: ["Increase in pressure", "Decrease in temperature", "Increase in temperature", "Decrease in volume"],
+        question: "Electrolysis of CuSO₄ (Copper Electrodes). What happens to the concentration of CuSO₄ solution?",
+        options: ["Increases", "Decreases", "Remains unchanged", "First increases, then decreases"],
         answer: 2,
-        explanation: "(c) Increase in temperature - Gas dissolution is exothermic. Le Chatelier's principle predicts lower solubility at higher temps."
+        explanation: "Correct Option: c) Remains unchanged<br><br>Anode: Cu → Cu²⁺ + 2e⁻ (Copper dissolves)<br>Cathode: Cu²⁺ + 2e⁻ → Cu (Copper deposits)<br>Net Effect: Cu²⁺ ions are recycled → Concentration stays constant.<br>Trap: Students often assume water is electrolyzed, but Cu²⁺ has higher reduction potential than H⁺."
       },
       {
-        question: "Which is a minimum-boiling azeotrope?",
-        options: ["68% HNO₃ + 32% H₂O", "95.6% ethanol + 4.4% water", "20% HCl + 80% H₂O", "98% H₂SO₄ + 2% H₂O"],
+        question: "Given: Zn²⁺ + 2e⁻ → Zn (E° = -0.76 V), Fe²⁺ + 2e⁻ → Fe (E° = -0.44 V). What is E°cell for Zn + Fe²⁺ → Zn²⁺ + Fe?",
+        options: ["-0.32 V", "+0.32 V", "+1.20 V", "-1.20 V"],
         answer: 1,
-        explanation: "(b) 95.6% ethanol + 4.4% water - Ethanol-water boils at 78.13°C (lower than pure ethanol's 78.5°C)."
-      },
-      {
-        question: "For a 0.01 M KCl solution, the van't Hoff factor (i) is approximately:",
-        options: ["1", "1.5", "1.8", "2"],
-        answer: 2,
-        explanation: "(c) 1.8 - KCl shows incomplete dissociation in solution (not 100% ions). i ≈ 1.8 for dilute KCl."
-      },
-      {
-        question: "The standard electrode potential of Standard Hydrogen Electrode (SHE) is:",
-        options: ["0.1 V", "0.0 V", "1.0 V", "2.0 V"],
-        answer: 1,
-        explanation: "(b) 0.0 V - By definition, the potential of SHE is 0.0 V at all temperatures, serving as the reference electrode."
-      },
-      {
-        question: "In a galvanic cell, oxidation occurs at the:",
-        options: ["Cathode", "Salt bridge", "Anode", "Electrolyte"],
-        answer: 2,
-        explanation: "(c) Anode - Anode is where oxidation occurs (loss of electrons), while reduction happens at the cathode."
-      },
-      {
-        question: "The relationship between ΔG° and E°cell is given by:",
-        options: ["ΔG° = -nFE°cell", "ΔG° = nFE°cell", "ΔG° = -RTlnK", "ΔG° = E°cell/nF"],
-        answer: 0,
-        explanation: "(a) ΔG° = -nFE°cell - This equation links thermodynamics (ΔG°) and electrochemistry (E°cell), where n = moles of electrons, F = Faraday constant."
-      },
-      {
-        question: "The unit of specific conductivity (κ) is:",
-        options: ["Ω⁻¹ cm⁻¹", "Ω⁻¹ cm⁻²", "S cm", "S cm⁻²"],
-        answer: 0,
-        explanation: "(a) Ω⁻¹ cm⁻¹ - κ = Conductivity (S) × cell constant (cm⁻¹). 1 S = 1 Ω⁻¹."
-      },
-      {
-        question: "Faraday's first law of electrolysis states:",
-        options: ["E°cell = E°cathode - E°anode", "The amount of substance deposited ∝ current passed", "Λm = κ/C", "Ecell = E°cell - (RT/nF)lnQ"],
-        answer: 1,
-        explanation: "(b) The amount of substance deposited ∝ current passed - Faraday's 1st Law: m = ZIt, where Z = electrochemical equivalent."
-      },
-      {
-        question: "The Nernst equation at 298 K is:",
-        options: ["Ecell = E°cell - (0.0591/n)logQ", "Ecell = E°cell + (0.0591/n)logQ", "Ecell = E°cell - (0.0257/n)lnQ", "Ecell = E°cell - (RT/nF)logQ"],
-        answer: 0,
-        explanation: "(a) Ecell = E°cell - (0.0591/n)logQ - At 298 K, (RT/F)lnQ = 0.0591 logQ."
+        explanation: "Correct Option: b) +0.32 V<br><br>Oxidation (Zn → Zn²⁺ + 2e⁻): E° = +0.76 V (Reverse sign!)<br>Reduction (Fe²⁺ + 2e⁻ → Fe): E° = -0.44 V<br>E°cell = E°cathode - E°anode = -0.44 - (-0.76) = +0.32 V<br>Key Concept: Always reverse the sign for oxidation."
       },
       {
         question: "Which is a secondary cell?",
-        options: ["Leclanché cell", "Daniell cell", "Lead-acid battery", "Dry cell"],
-        answer: 2,
-        explanation: "(c) Lead-acid battery - Secondary cells are rechargeable (e.g., lead-acid, Li-ion), while primary cells (dry cell, Daniell cell) are not."
-      },
-      {
-        question: "The molar conductivity (Λm) of a weak electrolyte:",
-        options: ["Increases linearly with concentration", "Decreases with dilution", "Increases sharply with dilution", "Remains constant"],
-        answer: 2,
-        explanation: "(c) Increases sharply with dilution - Weak electrolytes dissociate more on dilution, causing Λm to rise non-linearly."
-      },
-      {
-        question: "In the electrolysis of aqueous NaCl, the product at the anode is:",
-        options: ["Na metal", "H₂ gas", "Cl₂ gas", "O₂ gas"],
-        answer: 2,
-        explanation: "(c) Cl₂ gas - Anode reaction: 2Cl⁻ → Cl₂ + 2e⁻ (Cl⁻ has lower oxidation potential than H₂O)."
-      },
-      {
-        question: "The standard reduction potential of Zn²⁺/Zn is -0.76 V. For the oxidation of Zn, E° will be:",
-        options: ["-0.76 V", "+0.76 V", "-1.52 V", "+1.52 V"],
+        options: ["Dry cell (Leclanché)", "Lead-acid battery", "Mercury cell", "Daniell cell"],
         answer: 1,
-        explanation: "(b) +0.76 V - Oxidation potential = -Reduction potential. So, E°Zn/Zn²⁺ = +0.76V."
+        explanation: "Correct Option: b) Lead-acid battery<br><br>Secondary cells are rechargeable (e.g., lead-acid, Li-ion).<br>Primary cells (a, c, d) are non-rechargeable."
       },
       {
-        question: "Kohlrausch's law is used to calculate:",
-        options: ["E°cell", "Solubility of sparingly soluble salts", "ΔG°", "Overpotential"],
-        answer: 1,
-        explanation: "(b) Solubility of sparingly soluble salts - Λm⁰ values help find solubility via κ = Λm⁰ × C."
-      },
-      {
-        question: "The charge required to reduce 1 mole of MnO₄⁻ to Mn²⁺ is:",
-        options: ["1 F", "3 F", "5 F", "7 F"],
-        answer: 2,
-        explanation: "(c) 5 F - MnO₄⁻ + 8H⁺ + 5e⁻ → Mn²⁺ + 4H₂O. 5 moles of e⁻ = 5 F."
-      },
-      {
-        question: "The cell notation for Daniell cell is:",
-        options: ["Zn | Zn²⁺ || Cu²⁺ | Cu", "Cu | Cu²⁺ || Zn²⁺ | Zn", "Zn²⁺ | Zn || Cu | Cu²⁺", "Pt | H₂ | H⁺ || Zn²⁺ | Zn"],
+        question: "Λₘ° of KCl = 150 S cm² mol⁻¹. If λₘ°(K⁺) = 73.5 S cm² mol⁻¹, what is λₘ°(Cl⁻)?",
+        options: ["76.5 S cm² mol⁻¹", "223.5 S cm² mol⁻¹", "50.0 S cm² mol⁻¹", "36.8 S cm² mol⁻¹"],
         answer: 0,
-        explanation: "(a) Zn | Zn²⁺ || Cu²⁺ | Cu - Anode (Zn) is written first, followed by cathode (Cu)."
+        explanation: "Correct Option: a) 76.5 S cm² mol⁻¹<br><br>Kohlrausch's Law: Λₘ°(KCl) = λₘ°(K⁺) + λₘ°(Cl⁻)<br>150 = 73.5 + λₘ°(Cl⁻) → λₘ°(Cl⁻) = 76.5 S cm² mol⁻¹"
       },
       {
-        question: "The limiting molar conductivity (Λ°m) of CH₃COOH is given by:",
-        options: ["Λ°m(CH₃COOH) = Λ°m(HCl) + Λ°m(CH₃COONa) - Λ°m(NaCl)", "Λ°m(CH₃COOH) = Λ°m(CH₃COONa) + Λ°m(NaOH) - Λ°m(NaCl)", "Λ°m(CH₃COOH) = Λ°m(CH₃COOK) + Λ°m(HCl) - Λ°m(KCl)", "Λ°m(CH₃COOH) = Λ°m(CH₃COO⁻) + Λ°m(H⁺)"],
+        question: "During charging of a lead-acid battery, what occurs at the anode?",
+        options: ["Pb → Pb²⁺ + 2e⁻", "PbSO₄ + 2H₂O → PbO₂ + SO₄²⁻ + 4H⁺ + 2e⁻", "Pb²⁺ + 2e⁻ → Pb", "PbO₂ + 4H⁺ + SO₄²⁻ + 2e⁻ → PbSO₄ + 2H₂O"],
+        answer: 1,
+        explanation: "Correct Option: b) PbSO₄ → PbO₂<br><br>Charging: Converts PbSO₄ back to Pb (cathode) and PbO₂ (anode).<br>Trap: Option (d) is the discharge reaction."
+      },
+      {
+        question: "For the cell: Cu | Cu²⁺ (0.1 M) || Ag⁺ (0.01 M) | Ag, calculate Ecell at 298 K. Given: E°(Cu²⁺/Cu) = +0.34 V, E°(Ag⁺/Ag) = +0.80 V",
+        options: ["0.46 V", "0.34 V", "0.37 V", "0.52 V"],
         answer: 2,
-        explanation: "(c) Λ°m(CH₃COOH) = Λ°m(CH₃COOK) + Λ°m(HCl) - Λ°m(KCl) - Kohlrausch's law for weak electrolytes: Λ°CH₃COOH = λ°CH₃COO⁻ + λ°H⁺."
+        explanation: "Correct Option: c) 0.37 V<br><br>E°cell = 0.80 - 0.34 = 0.46 V<br>Nernst Equation:<br>Ecell = 0.46 - (0.0591/2)log(0.1/(0.01)²) = 0.37 V<br>Trap: Forgetting to square [Ag⁺] in Q."
       },
       {
-        question: "The time required to deposit 1.5 g of Ag from AgNO₃ solution using 2A current is: (Ag = 108 g/mol)",
-        options: ["670 s", "1340 s", "2010 s", "4020 s"],
+        question: "What is the oxidation state of Fe in K₃[Fe(CN)₆]?",
+        options: ["+2", "+3", "+4", "+6"],
+        answer: 1,
+        explanation: "Correct Option: b) +3<br><br>Let OS of Fe = x.<br>3(+1) + x + 6(-1) = 0 → x = +3<br>Trap: CN⁻ has -1 charge (not neutral)."
+      },
+      {
+        question: "A conductivity cell with 0.1 M KCl (R = 100 Ω) has a cell constant of 0.8 cm⁻¹. What is κ (conductivity)?",
+        options: ["0.008 S cm⁻¹", "0.0125 S cm⁻¹", "0.02 S cm⁻¹", "0.04 S cm⁻¹"],
         answer: 0,
-        explanation: "(a) 670 s - Calculation: t = (1.5 × 96500 × 1)/(108 × 2) ≈ 670 s"
+        explanation: "Correct Option: a) 0.008 S cm⁻¹<br><br>κ = Cell constant / R = 0.8 / 100 = 0.008 S cm⁻¹"
       },
       {
-        question: "The corrosion of iron is prevented by:",
-        options: ["Galvanization", "Alloying with chromium", "Both (a) and (b)", "Using oxidizing agents"],
+        question: "In a fuel cell (2H₂ + O₂ → 2H₂O), what is the anode product?",
+        options: ["H₂O", "O₂", "H⁺", "OH⁻"],
         answer: 2,
-        explanation: "(c) Both (a) and (b) - Galvanization coats iron with zinc. Alloying (e.g., stainless steel) prevents rusting."
+        explanation: "Correct Option: c) H⁺<br><br>Anode: H₂ → 2H⁺ + 2e⁻<br>Trap: H₂O is the final product, not the anode product."
       },
       {
-        question: "The standard EMF of a cell is 1.1 V. If ΔG° = -212.3 kJ, the number of electrons transferred (n) is: (F = 96500 C/mol)",
-        options: ["1", "2", "3", "4"],
+        question: "Time to deposit 1.27 g Cu from CuSO₄ using 2 A current? (Atomic mass Cu = 63.5 g/mol)",
+        options: ["965 sec", "1930 sec", "482.5 sec", "241.25 sec"],
         answer: 1,
-        explanation: "(b) 2 - Calculation: ΔG° = -nFE° ⇒ n = 212300/(1.1 × 96500) ≈ 2"
+        explanation: "Correct Option: b) 1930 sec<br><br>Moles of Cu = 1.27/63.5 = 0.02 mol<br>Charge = 0.02 × 2 × 96500 = 3860 C<br>Time = 3860/2 = 1930 sec"
       },
       {
-        question: "The molar conductivity (Λm) of 0.01 M acetic acid is 16 Ω⁻¹ cm² mol⁻¹. Its degree of dissociation (α) is: (Λ°m = 390 Ω⁻¹ cm² mol⁻¹)",
-        options: ["0.02", "0.04", "0.06", "0.08"],
+        question: "For a first-order reaction, the time taken for 75% completion is 40 minutes. What is its half-life?",
+        options: ["10 min", "20 min", "30 min", "40 min"],
         answer: 1,
-        explanation: "(b) 0.04 - Calculation: α = Λm/Λ°m = 16/390 ≈ 0.04"
+        explanation: "Correct Option: b) 20 min<br><br>First-order logic:<br>t75% = 2×t1/2 (since 75% = two half-lives).<br>Given t75% = 40 min → t1/2 = 20 min.<br>Trap: Students often confuse t50% and t75%."
       },
       {
-        question: "In the electrolysis of CuSO₄ using Cu electrodes, the mass of anode decreases by 3.2 g. The mass of cathode will:",
-        options: ["Decrease by 3.2 g", "Increase by 3.2 g", "Remain unchanged", "Increase by 6.4 g"],
+        question: "Which statement is FALSE about the Arrhenius equation?",
+        options: ["k = Ae^(-Ea/RT)", "Slope of ln(k) vs 1/T is -Ea/R", "Pre-exponential factor (A) depends on temperature", "Catalysts lower Ea but not A"],
+        answer: 2,
+        explanation: "Correct Option: c) Pre-exponential factor (A) depends on temperature<br><br>A = Frequency factor (independent of T).<br>Truths:<br>Arrhenius eq: k = Ae^(-Ea/RT) (Option a ✅).<br>Slope of ln(k) vs 1/T is -Ea/R (Option b ✅).<br>Catalysts reduce Ea but leave A unchanged (Option d ✅)."
+      },
+      {
+        question: "The rate law for 2A + B → C is Rate = k[A][B]². If [A] is doubled and [B] is halved, the new rate becomes:",
+        options: ["Same", "Doubled", "Halved", "Quadrupled"],
+        answer: 2,
+        explanation: "Correct Option: c) Halved<br><br>Original rate: k[A][B]².<br>New rate: k[2A][B/2]² = 2×1/4 k[A][B]² = 1/2 Rate.<br>Trap: Misapplying exponents (e.g., ignoring the square on [B])."
+      },
+      {
+        question: "A zero-order reaction completes 50% in 20 minutes. What is the time taken for 100% completion?",
+        options: ["20 min", "40 min", "60 min", "Never completes"],
         answer: 1,
-        explanation: "(b) Increase by 3.2 g - Copper dissolves from anode (loss) and deposits on cathode (gain) in 1:1 ratio."
+        explanation: "Correct Option: b) 40 min<br><br>Zero-order logic:<br>t50% = [A]0/2k = 20 min → t100% = [A]0/k = 40 min.<br>Trap: Assuming linearity for all orders (only true for zero-order)."
       },
       {
-        question: "The cell potential for: Zn | Zn²⁺ (0.1 M) || Ag⁺ (0.01 M) | Ag (E°Zn²⁺/Zn = -0.76 V, E°Ag⁺/Ag = 0.80 V) is:",
-        options: ["1.47 V", "1.53 V", "1.59 V", "1.65 V"],
-        answer: 1,
-        explanation: "(b) 1.53 V - Calculation: E°cell = 0.80 - (-0.76) = 1.56 V; Q = [Zn²⁺]/[Ag⁺]² = 0.1/(0.01)² = 1000; Ecell = 1.56 - (0.0591/2)log1000 = 1.53 V"
-      },
-      {
-        question: "The specific conductivity (κ) of 0.1 M KCl is 0.0129 Ω⁻¹ cm⁻¹. If resistance is 85 Ω, the cell constant is:",
-        options: ["0.5 cm⁻¹", "1.1 cm⁻¹", "2.5 cm⁻¹", "3.8 cm⁻¹"],
-        answer: 1,
-        explanation: "(b) 1.1 cm⁻¹ - Calculation: Cell constant = κ × R = 0.0129 × 85 ≈ 1.1 cm⁻¹"
-      },
-      {
-        question: "The oxidation state of Mn in MnO₄⁻ is:",
-        options: ["+2", "+4", "+6", "+7"],
+        question: "The half-life of a reaction is inversely proportional to the square of the initial concentration. What is the order?",
+        options: ["0", "1", "2", "3"],
         answer: 3,
-        explanation: "(d) +7 - Calculation: x + 4(-2) = -1 ⇒ x = +7"
+        explanation: "Correct Option: d) 3<br><br>Half-life dependence:<br>t1/2 ∝ 1/[A]0^(n-1). Given t1/2 ∝ 1/[A]0² → n-1=2 → n=3.<br>Trap: Confusing with t1/2 ∝ 1/[A]0 (2nd order)."
       },
       {
-        question: "The time (in s) to produce 2.7 g Al from Al₂O₃ using 5A current is: (Al = 27 g/mol)",
-        options: ["9650", "19300", "28950", "38600"],
+        question: "The rate constant of a reaction at 300K is 2×10⁻² s⁻¹ and at 320K is 4×10⁻² s⁻¹. What is Ea? (R = 8.314 J/mol-K)",
+        options: ["26.8 kJ/mol", "53.6 kJ/mol", "13.4 kJ/mol", "6.7 kJ/mol"],
+        answer: 1,
+        explanation: "Correct Option: b) 53.6 kJ/mol<br><br>Arrhenius equation (two-point form):<br>ln(k2/k1) = Ea/R(1/T1 - 1/T2)<br>Substituting values:<br>ln(4×10⁻²/2×10⁻²) = Ea/8.314(1/300 - 1/320) → Ea ≈ 53.6 kJ/mol"
+      },
+      {
+        question: "Which is TRUE about the rate-determining step (RDS)?",
+        options: ["It is the fastest step.", "It has the highest activation energy.", "It determines the overall order.", "Both (b) and (c)."],
         answer: 3,
-        explanation: "(d) 38600 - Calculation: Al³⁺ + 3e⁻ → Al; t = (2.7 × 96500 × 3)/(27 × 5) = 38600 s"
+        explanation: "Correct Option: d) Both (b) and (c).<br><br>RDS characteristics:<br>Slowest step (not fastest, so Option a ❌).<br>Highest Ea (Option b ✅).<br>Determines rate law (Option c ✅)."
       },
       {
-        question: "The E° for the reaction: 2Fe³⁺ + 2I⁻ → 2Fe²⁺ + I₂ is: (E°Fe³⁺/Fe²⁺ = 0.77 V, E°I₂/I⁻ = 0.54 V)",
-        options: ["-0.23 V", "+0.23 V", "-1.31 V", "+1.31 V"],
+        question: "For a reaction A → B, a plot of ln[A] vs time is linear with slope -2.5×10⁻³ s⁻¹. What is the rate constant?",
+        options: ["2.5×10⁻³ s⁻¹", "5.0×10⁻³ s⁻¹", "1.25×10⁻³ s⁻¹", "Depends on [A]₀"],
+        answer: 0,
+        explanation: "Correct Option: a) 2.5×10⁻³ s⁻¹<br><br>First-order plot: ln[A] vs t gives slope = -k.<br>Thus, k = 2.5×10⁻³ s⁻¹.<br>Trap: Missing the negative sign in the slope."
+      },
+      {
+        question: "The reaction 2NO + O₂ → 2NO₂ follows the mechanism: NO + O₂ ⇌ NO₃ (fast equilibrium), NO₃ + NO → 2NO₂ (slow). What is the rate law?",
+        options: ["Rate = k[NO][O₂]", "Rate = k[NO]²[O₂]", "Rate = k[NO₃][NO]", "Rate = k[NO]²"],
         answer: 1,
-        explanation: "(b) +0.23 V - Calculation: E°cell = E°cathode - E°anode = 0.77 - 0.54 = +0.23 V"
+        explanation: "Correct Option: b) Rate = k[NO]²[O₂]<br><br>RDS (Step 2): Rate = k2[NO₃][NO].<br>From Step 1 (equilibrium): K = [NO₃]/[NO][O₂] → [NO₃] = K[NO][O₂].<br>Final rate law: Rate = k[NO]²[O₂] (where k = k2×K)."
       },
       {
-        question: "The primary battery among these is:",
-        options: ["Lead-acid battery", "Nickel-Cd battery", "Lithium-ion battery", "Zinc-carbon battery"],
+        question: "The unit of the rate constant for a second-order reaction is:",
+        options: ["mol L⁻¹ s⁻¹", "L mol⁻¹ s⁻¹", "s⁻¹", "mol² L⁻² s⁻¹"],
+        answer: 1,
+        explanation: "Correct Option: b) L mol⁻¹ s⁻¹<br><br>General formula: For order n, units = mol^(1-n) L^(n-1) s⁻¹.<br>For n=2: L mol⁻¹ s⁻¹.<br>Trap: Confusing with zero-order (mol L⁻¹ s⁻¹) or first-order (s⁻¹)."
+      },
+      {
+        question: "Which of the following is NOT a property of boron (B) in Group 13?",
+        options: ["Forms electron-deficient compounds", "Shows maximum covalency of 6", "Acts as a strong oxidizing agent", "Forms stable +3 oxidation state"],
+        answer: 2,
+        explanation: "Correct Option: c) Acts as a strong oxidizing agent<br><br>Boron is electron-deficient (e.g., BH₃) and max covalency = 4 (via sp³).<br>+3 state is stable for B (no d-orbitals to expand).<br>Trap: Boron is a reducing agent, not oxidizing."
+      },
+      {
+        question: "The correct order of thermal stability for Group 16 hydrides is:",
+        options: ["H₂O > H₂S > H₂Se > H₂Te", "H₂Te > H₂Se > H₂S > H₂O", "H₂O > H₂Te > H₂Se > H₂S", "All are equally stable"],
+        answer: 0,
+        explanation: "Correct Option: a) H₂O > H₂S > H₂Se > H₂Te<br><br>Stability decreases down the group due to decreasing bond dissociation energy.<br>Exception: H₂O is most stable due to H-bonding."
+      },
+      {
+        question: "Which p-block element exhibits ALLOTROPY and CATENATION?",
+        options: ["Nitrogen", "Phosphorus", "Oxygen", "Fluorine"],
+        answer: 1,
+        explanation: "Correct Option: b) Phosphorus<br><br>Phosphorus shows allotropes (white, red, black) and catenation (P₄ rings/chains).<br>Trap: Nitrogen (N₂) is diatomic; no catenation."
+      },
+      {
+        question: "The shape of XeF₄ is:",
+        options: ["Tetrahedral", "Square planar", "Octahedral", "Trigonal bipyramidal"],
+        answer: 1,
+        explanation: "Correct Option: b) Square planar<br><br>XeF₄: Xe has sp³d² hybridization with 2 lone pairs → square planar.<br>Trap: XeF₆ is distorted octahedral."
+      },
+      {
+        question: "Which nitrogen oxide is a neutral oxide?",
+        options: ["NO₂", "N₂O₅", "NO", "N₂O₃"],
+        answer: 2,
+        explanation: "Correct Option: c) NO<br><br>Neutral oxides: NO, CO, N₂O.<br>Acidic oxides: NO₂, N₂O₅."
+      },
+      {
+        question: "The bleaching action of SO₂ is due to:",
+        options: ["Oxidation", "Reduction", "Chlorination", "Adsorption"],
+        answer: 1,
+        explanation: "Correct Option: b) Reduction<br><br>SO₂ bleaches by reduction (breaks chromophores).<br>Trap: Cl₂ bleaches by oxidation."
+      },
+      {
+        question: "Which halogen forms the strongest hydrogen bond with water?",
+        options: ["Fluorine", "Chlorine", "Bromine", "Iodine"],
+        answer: 0,
+        explanation: "Correct Option: a) Fluorine<br><br>F has the highest electronegativity → strongest H-bonding (e.g., HF)."
+      },
+      {
+        question: "The correct order of acidic strength for oxoacids of chlorine is:",
+        options: ["HClO₄ > HClO₃ > HClO₂ > HClO", "HClO > HClO₂ > HClO₃ > HClO₄", "HClO₄ > HClO₂ > HClO₃ > HClO", "All are equally acidic"],
+        answer: 0,
+        explanation: "Correct Option: a) HClO₄ > HClO₃ > HClO₂ > HClO<br><br>Acidity increases with oxidation state (+1 in HClO to +7 in HClO₄)."
+      },
+      {
+        question: "Which p-block element is liquid at room temperature?",
+        options: ["Bromine", "Iodine", "Phosphorus", "Sulfur"],
+        answer: 0,
+        explanation: "Correct Option: a) Bromine<br><br>Br₂ is a reddish-brown liquid (room temp).<br>Trap: Iodine is solid; white phosphorus is waxy solid."
+      },
+      {
+        question: "The inert pair effect is most prominent in:",
+        options: ["Carbon", "Silicon", "Lead", "Nitrogen"],
+        answer: 2,
+        explanation: "Correct Option: c) Lead<br><br>Inert pair effect: Reluctance of ns² electrons to bond (seen in Pb, Tl, Bi).<br>Pb²⁺ is more stable than Pb⁴⁺ due to this effect."
+      },
+      {
+        question: "Which ion is colorless in aqueous solution?",
+        options: ["Fe³⁺", "Ti³⁺", "Cu⁺", "V³⁺"],
+        answer: 2,
+        explanation: "Correct Option: c) Cu⁺<br><br>Cu⁺ (3d¹⁰): No d-d transitions possible (filled d-subshell) → colorless<br>Colored ions: Fe³⁺ (3d⁵), Ti³⁺ (3d¹), V³⁺ (3d²)<br>Trap: Assuming all transition metal ions are colored"
+      },
+      {
+        question: "The magnetic moment (BM) of [Mn(CN)₆]³⁻ is closest to:",
+        options: ["1.73", "2.83", "3.87", "4.90"],
+        answer: 0,
+        explanation: "Correct Option: a) 1.73<br><br>Mn³⁺ = 3d⁴ → Low-spin (CN⁻ strong field): t₂g⁴ eg⁰ → 1 unpaired e⁻<br>μ = √n(n+2) = √1(3) ≈ 1.73 BM<br>Trap: High-spin config (μ=4.90) is incorrect for cyanide complexes"
+      },
+      {
+        question: "Which lanthanoid shows +4 oxidation state commonly?",
+        options: ["La", "Ce", "Gd", "Lu"],
+        answer: 1,
+        explanation: "Correct Option: b) Ce<br><br>Ce⁴⁺ (4f⁰) is stable due to empty f-subshell<br>Trap: Gd (f⁷) and Lu (f¹⁴) prefer +3 state"
+      },
+      {
+        question: "The catalyst used in Haber's process is:",
+        options: ["Fe with Mo promoter", "V₂O₅", "Pt-Rh gauze", "Ni"],
+        answer: 0,
+        explanation: "Correct Option: a) Fe with Mo promoter<br><br>Haber process: N₂ + 3H₂ → 2NH₃ uses Fe-K₂O-Al₂O₃ catalyst<br>Mo prevents catalyst poisoning<br>Trap: V₂O₅ (Contact process), Pt-Rh (Ostwald process)"
+      },
+      {
+        question: "Which d-block element has highest melting point?",
+        options: ["Cr", "W", "Hg", "Zn"],
+        answer: 1,
+        explanation: "Correct Option: b) W (Tungsten)<br><br>W (5d⁴6s²): Strong metallic bonds due to half-filled d-orbitals → m.p. 3422°C<br>Trap: Cr (m.p. 1907°C) is high but < W"
+      },
+      {
+        question: "The E° value for Mn³⁺/Mn²⁺ is +1.51 V because:",
+        options: ["Mn²⁺ has stable half-filled d⁵ configuration", "Mn³⁺ is a strong oxidizing agent", "Both (a) and (b)", "Mn³⁺ has d⁴ configuration"],
+        answer: 2,
+        explanation: "Correct Option: c) Both (a) and (b)<br><br>Mn²⁺ (3d⁵) is stable → Hard to oxidize to Mn³⁺ (3d⁴)<br>High E° → Mn³⁺ readily gains e⁻ → strong oxidizer"
+      },
+      {
+        question: "The color of KMnO₄ is due to:",
+        options: ["d-d transition", "Charge transfer (LMCT)", "f-f transition", "Paramagnetism"],
+        answer: 1,
+        explanation: "Correct Option: b) Charge transfer (LMCT)<br><br>LMCT: O²⁻ → Mn⁷⁺ electron transfer (not d-d)<br>Purple color: Complementary to green light absorbed<br>Trap: d-d transitions occur in complexes with partially filled d-orbitals"
+      },
+      {
+        question: "Which lanthanoid contraction effect is INCORRECT?",
+        options: ["Causes similar atomic radii of Zr & Hf", "Makes La(OH)₃ most basic", "Increases 5d series ionization energy", "Decreases density of 4f elements"],
         answer: 3,
-        explanation: "(d) Zinc-carbon battery - Primary batteries are non-rechargeable (e.g., zinc-carbon, dry cells)."
+        explanation: "Correct Option: d) Decreases density of 4f elements<br><br>Lanthanoid contraction:<br>✔ Zr (4d) & Hf (5d) have similar sizes<br>✔ La(OH)₃ more basic than Lu(OH)₃<br>✔ Increases IE due to poor shielding<br>✖ Increases density (atomic size↓ but mass↑)"
       },
       {
-        question: "The phenomenon of electromagnetic induction was discovered by:",
-        options: ["Faraday", "Lenz", "Maxwell", "Oersted"],
-        answer: 0,
-        explanation: "(a) Faraday - Michael Faraday discovered electromagnetic induction in 1831, demonstrating that a changing magnetic field induces an EMF."
-      },
-      {
-        question: "The SI unit of magnetic flux is:",
-        options: ["Tesla", "Weber", "Henry", "Gauss"],
-        answer: 1,
-        explanation: "(b) Weber - Magnetic flux (Φ) = B × A × cosθ. SI unit: Weber (Wb) = T·m²."
-      },
-      {
-        question: "Lenz's law is a consequence of the conservation of:",
-        options: ["Charge", "Energy", "Momentum", "Current"],
-        answer: 1,
-        explanation: "(b) Energy - Lenz's law ensures the induced current opposes the change in flux, conserving energy."
-      },
-      {
-        question: "A coil of resistance 10 Ω and 100 turns is placed in a varying magnetic field. If the rate of change of flux is 0.1 Wb/s, the induced current is:",
-        options: ["0.1 A", "1 A", "10 A", "100 A"],
-        answer: 1,
-        explanation: "(b) 1 A - Calculation: Induced EMF (ε) = -N dΦ/dt = -100 × 0.1 = -10 V; Current (I) = ε/R = 10/10 = 1 A (ignore sign)."
-      },
-      {
-        question: "The eddy currents are minimized in transformers by using:",
-        options: ["Solid iron core", "Laminated core", "Copper core", "Air core"],
-        answer: 1,
-        explanation: "(b) Laminated core - Laminations reduce eddy currents by increasing resistance in the core."
-      },
-      {
-        question: "A straight conductor of length 0.5 m moves at 2 m/s perpendicular to a magnetic field of 0.1 T. The induced EMF is:",
-        options: ["0.01 V", "0.1 V", "1 V", "10 V"],
-        answer: 1,
-        explanation: "(b) 0.1 V - Calculation: ε = B l v = 0.1 × 0.5 × 2 = 0.1 V."
-      },
-      {
-        question: "The self-inductance of a solenoid depends on:",
-        options: ["Current", "Voltage", "Number of turns per unit length", "Resistance"],
+        question: "The number of unpaired e⁻ in [CoF₆]³⁻ is:",
+        options: ["0", "2", "4", "6"],
         answer: 2,
-        explanation: "(c) Number of turns per unit length - Formula: L = μ₀n²Al, where n = turns per unit length."
+        explanation: "Correct Option: c) 4<br><br>Co³⁺ = 3d⁶ → High-spin (F⁻ weak field): t₂g⁴ eg² → 4 unpaired e⁻<br>Trap: Low-spin (CN⁻ complex) would have 0 unpaired e⁻"
       },
       {
-        question: "In an AC generator, the maximum induced EMF depends on:",
-        options: ["Number of turns (N)", "Angular velocity (ω)", "Magnetic field (B)", "All of the above"],
+        question: "Which is NOT an interstitial alloy?",
+        options: ["Steel", "Wrought iron", "Brass", "Stellite"],
+        answer: 2,
+        explanation: "Correct Option: c) Brass<br><br>Interstitial alloys: Small atoms (C, N) in metal lattice (Steel, Wrought iron)<br>Substitutional alloys: Similar size atoms (Brass = Cu+Zn)<br>Stellite: Co+Cr interstitial alloy"
+      },
+      {
+        question: "The IUPAC name of [Co(NH₃)₄Cl₂]Cl is:",
+        options: ["Tetraamminedichlorocobalt(III) chloride", "Dichlorotetraamminecobalt(III) chloride", "Tetraamminecobalt(II) dichloride", "Tetraamminedichlorocobalt(II) chloride"],
+        answer: 0,
+        explanation: "Correct Option: a) Tetraamminedichlorocobalt(III) chloride<br><br>Oxidation state of Co: x + 0×4 + (-1)×2 = -1 → x = +3<br>Ligands named alphabetically (ammine before chloro).<br>Trap: Ignoring charge balance or misidentifying oxidation state."
+      },
+      {
+        question: "The number of geometrical isomers for [Pt(NH₃)₂Cl₂] is:",
+        options: ["2", "3", "4", "1"],
+        answer: 0,
+        explanation: "Correct Option: a) 2 (Cis & Trans)<br><br>Square planar MA₂B₂ type → Cis (polar) and Trans (non-polar) isomers.<br>Trap: Octahedral MA₂B₂ has 2 isomers, but square planar only 2."
+      },
+      {
+        question: "A coordination compound has CFSE = -0.8Δ₀ for d⁶ configuration. Its geometry is:",
+        options: ["Octahedral", "Tetrahedral", "Square planar", "Linear"],
+        answer: 0,
+        explanation: "Correct Option: a) Octahedral<br><br>CFSE formula for octahedral (d⁶): -0.4n(eg) + 0.6n(t₂g) = -0.8Δ₀.<br>Tetrahedral CFSE would be lower (≈ -0.27Δ₀).<br>Key: Low-spin d⁶ (e.g., [Co(NH₃)₆]³⁺) favors octahedral."
+      },
+      {
+        question: "The magnetic moment (BM) of [Fe(H₂O)₆]²⁺ is closest to:",
+        options: ["0", "1.73", "2.83", "4.90"],
         answer: 3,
-        explanation: "(d) All of the above - Formula: εmax = NBAω."
+        explanation: "Correct Option: d) 4.90<br><br>Fe²⁺ = d⁶ → High-spin in weak field (H₂O): t₂g⁴ eg² → 4 unpaired e⁻.<br>μ = √n(n+2) = √4(6) ≈ 4.90 BM.<br>Trap: Assuming low-spin (μ = 0 for paired e⁻)."
       },
       {
-        question: "The mutual inductance between two coils is 1 H. If the current in one coil changes at 1 A/s, the induced EMF in the other coil is:",
-        options: ["1 V", "2 V", "3 V", "4 V"],
+        question: "Which ligand is NOT chelating?",
+        options: ["EDTA", "Oxalate", "Pyridine", "Ethylenediamine"],
+        answer: 2,
+        explanation: "Correct Option: c) Pyridine<br><br>Chelating ligands bind via multiple atoms (EDTA:6, oxalate:2, en:2).<br>Pyridine is monodentate (only N donor).<br>Trap: Confusing with bidentate ligands like bipyridyl."
+      },
+      {
+        question: "The EAN of Fe in [Fe(CN)₆]⁴⁻ is:",
+        options: ["36", "34", "35", "33"],
         answer: 0,
-        explanation: "(a) 1 V - Calculation: ε = -M dI/dt = -1 × 1 = -1 V (magnitude = 1 V)."
+        explanation: "Correct Option: a) 36<br><br>EAN = Atomic no. (Fe) - Oxidation state + 2×Coordination no.<br>Fe²⁺ (Z=26) → 26 - (+2) + 2×6 = 36.<br>Trap: Using +3 oxidation state (for [Fe(CN)₆]³⁻, EAN=35)."
       },
       {
-        question: "The core of a transformer is laminated to reduce:",
-        options: ["Hysteresis loss", "Eddy current loss", "Copper loss", "Flux leakage"],
+        question: "Which shows optical isomerism?",
+        options: ["[Co(NH₃)₄Cl₂]⁺", "[Co(en)₃]³⁺", "[Pt(NH₃)₂Cl₂]", "[Ni(CO)₄]"],
         answer: 1,
-        explanation: "(b) Eddy current loss - Laminations increase resistance, minimizing energy loss due to eddy currents."
+        explanation: "Correct Option: b) [Co(en)₃]³⁺<br><br>Optical isomers require non-superimposable mirror images.<br>[Co(en)₃]³⁺ has chiral 'Λ' and 'Δ' forms.<br>Trap: Square planar complexes (c) lack optical isomers."
       },
       {
-        question: "A bar magnet is dropped through a copper ring. The acceleration of the magnet will be:",
-        options: ["Equal to g", "Greater than g", "Less than g", "Zero"],
-        answer: 2,
-        explanation: "(c) Less than g - The induced current opposes the motion (Lenz's law), reducing acceleration."
-      },
-      {
-        question: "The phase difference between voltage and current in a purely inductive AC circuit is:",
-        options: ["0°", "45°", "90°", "180°"],
-        answer: 2,
-        explanation: "(c) 90° - In inductors, voltage leads current by 90°."
-      },
-      {
-        question: "The energy stored in an inductor (L) carrying current (I) is:",
-        options: ["½ LI²", "LI²", "½ L²I", "½ I²/L"],
-        answer: 0,
-        explanation: "(a) ½ LI² - Formula: Magnetic energy = ½ LI²."
-      },
-      {
-        question: "A metal rod of length l rotates about one end perpendicular to a magnetic field B. The induced EMF is maximum when the angular velocity (ω) is:",
-        options: ["Parallel to B", "Antiparallel to B", "Perpendicular to B", "At 45° to B"],
-        answer: 2,
-        explanation: "(c) Perpendicular to B - Maximum EMF when motion is perpendicular to the field (ε = ½ Bωl²)."
-      },
-      {
-        question: "The dimensional formula of self-inductance (L) is:",
-        options: ["[ML²T⁻²A⁻²]", "[ML²T⁻³A⁻¹]", "[MLT⁻²A⁻²]", "[ML²T⁻¹A⁻²]"],
-        answer: 0,
-        explanation: "(a) [ML²T⁻²A⁻²] - From U = ½ LI², dimensions of L = Energy/Current²."
-      },
-      {
-        question: "The induced EMF in a coil rotating in a magnetic field is maximum when the angle between the magnetic field and the plane of the coil is:",
-        options: ["0°", "45°", "90°", "180°"],
-        answer: 0,
-        explanation: "(a) 0° - EMF is maximized when the plane of the coil is parallel to the magnetic field (θ = 0°), as the rate of change of flux is highest."
-      },
-      {
-        question: "A transformer has 100 turns in the primary and 200 turns in the secondary. If the input voltage is 50 V AC, the output voltage is:",
-        options: ["25 V", "50 V", "100 V", "200 V"],
-        answer: 2,
-        explanation: "(c) 100 V - Calculation: Vs/Vp = Ns/Np ⇒ Vs = (200/100) × 50 = 100 V"
-      },
-      {
-        question: "The self-inductance of a solenoid of length 10 cm, area 5 cm², and 1000 turns is: (μ₀ = 4π × 10⁻⁷ H/m)",
-        options: ["6.28 × 10⁻⁴ H", "6.28 × 10⁻³ H", "6.28 × 10⁻² H", "6.28 × 10⁻¹ H"],
-        answer: 0,
-        explanation: "(a) 6.28 × 10⁻⁴ H - Calculation: n = 1000/0.1 = 10⁴ turns/m; L = 4π × 10⁻⁷ × (10⁴)² × 5 × 10⁻⁴ × 0.1 = 6.28 × 10⁻⁴ H"
-      },
-      {
-        question: "A metal ring is placed in a uniform magnetic field. If the field is suddenly switched off, the induced current in the ring will:",
-        options: ["Be zero", "Flow clockwise", "Flow anticlockwise", "Alternate rapidly"],
-        answer: 2,
-        explanation: "(c) Flow anticlockwise - Lenz's Law: The induced current opposes the decrease in flux (anticlockwise to try to restore the field)."
-      },
-      {
-        question: "The time constant (τ) of an LR circuit is 2 ms. If L = 4 mH, the resistance R is:",
-        options: ["0.5 Ω", "1 Ω", "2 Ω", "4 Ω"],
-        answer: 2,
-        explanation: "(c) 2 Ω - Calculation: τ = L/R ⇒ R = 4 × 10⁻³ / 2 × 10⁻³ = 2 Ω"
-      },
-      {
-        question: "The back EMF in a DC motor is 12 V when running at 1200 rpm. If the speed increases to 1500 rpm, the back EMF becomes:",
-        options: ["9.6 V", "12 V", "15 V", "18 V"],
-        answer: 2,
-        explanation: "(c) 15 V - Back EMF ∝ speed. ε2/12 = 1500/1200 ⇒ ε2 = 15 V"
-      },
-      {
-        question: "A circular loop of radius 0.1 m is placed in a magnetic field of 0.5 T. If the loop is rotated about its diameter at 60 rad/s, the maximum induced EMF is:",
-        options: ["0.1π V", "0.3π V", "0.5π V", "0.6π V"],
+        question: "The hybridization of [Ni(CN)₄]²⁻ is:",
+        options: ["sp³", "dsp²", "sp³d²", "d²sp³"],
         answer: 1,
-        explanation: "(b) 0.3π V - Calculation: A = πr² = π × (0.1)² = 0.01π m²; εmax = 1 × 0.5 × 0.01π × 60 = 0.3π V"
+        explanation: "Correct Option: b) dsp²<br><br>Ni²⁺ = d⁸ → Square planar (low-spin, CN⁻ is strong field).<br>Hybridization: dsp² (uses 3d, 4s, 4p orbitals).<br>Trap: Assuming tetrahedral (sp³) like [NiCl₄]²⁻."
       },
       {
-        question: "The mutual inductance between two coils is 0.5 H. If the current in one coil changes from 2 A to 4 A in 0.1 s, the induced EMF in the other coil is:",
-        options: ["5 V", "10 V", "15 V", "20 V"],
+        question: "The color of [Ti(H₂O)₆]³⁺ is due to:",
+        options: ["d-d transition", "Charge transfer", "Paramagnetism", "Ligand fluorescence"],
+        answer: 0,
+        explanation: "Correct Option: a) d-d transition<br><br>Ti³⁺ = d¹ → Single electron transition (t₂g → eg) absorbs visible light.<br>Color: Purple (complementary to absorbed yellow-green).<br>Trap: Charge transfer occurs in MnO₄⁻, not here."
+      },
+      {
+        question: "The IUPAC name of K₃[Fe(C₂O₄)₃] is:",
+        options: ["Potassium ferrioxalate", "Potassium tris(oxalato)ferrate(III)", "Potassium trioxalatoiron(III)", "Potassium oxalatoferrate(III)"],
         answer: 1,
-        explanation: "(b) 10 V - Calculation: ε = -M dI/dt = -0.5 × (4-2)/0.1 = -10 V (magnitude = 10 V)"
+        explanation: "Correct Option: b) Potassium tris(oxalato)ferrate(III)<br><br>Anionic complex → Ligands first (oxalato), metal with -ate suffix (ferrate).<br>Prefix 'tris' for multiple oxalate ligands.<br>Trap: Missing 'tris' or using 'ferrioxalate' (common name)."
       },
       {
-        question: "A 50-turn coil has a cross-sectional area of 0.02 m². If the magnetic field through the coil changes from 0.1 T to 0.5 T in 2 s, the average induced EMF is:",
-        options: ["0.1 V", "0.2 V", "0.4 V", "0.8 V"],
+        question: "Which carbohydrate is a non-reducing sugar?",
+        options: ["Glucose", "Fructose", "Sucrose", "Maltose"],
+        answer: 2,
+        explanation: "Correct Option: c) Sucrose<br><br>Sucrose lacks a free aldehyde/ketone group (glycosidic bond between C1 of glucose and C2 of fructose).<br>Trap: Maltose (reducing) has free C1 aldehyde in one glucose unit."
+      },
+      {
+        question: "The α-helix structure of proteins is stabilized by:",
+        options: ["Disulfide bonds", "Hydrogen bonds (C=O···H-N)", "Ionic bonds", "Hydrophobic interactions"],
         answer: 1,
-        explanation: "(b) 0.2 V - Calculation: ε = -N ΔΦ/Δt = -50 × (0.5-0.1) × 0.02 / 2 = -0.2 V (magnitude = 0.2 V)"
+        explanation: "Correct Option: b) Hydrogen bonds<br><br>α-helix: H-bonds between C=O of residue i and N-H of residue i+4.<br>Trap: Disulfide bonds stabilize tertiary structure, not secondary."
       },
       {
-        question: "The core of an electromagnet is made of soft iron instead of steel because soft iron has:",
-        options: ["High retentivity", "Low coercivity", "High permeability", "Both (b) and (c)"],
+        question: "Which base is NOT present in RNA?",
+        options: ["Adenine", "Thymine", "Uracil", "Cytosine"],
+        answer: 1,
+        explanation: "Correct Option: b) Thymine<br><br>RNA: Adenine (A), Uracil (U), Cytosine (C), Guanine (G).<br>DNA: Replaces Uracil with Thymine."
+      },
+      {
+        question: "The enzyme that hydrolyzes starch into maltose is:",
+        options: ["Pepsin", "Amylase", "Lipase", "Trypsin"],
+        answer: 1,
+        explanation: "Correct Option: b) Amylase<br><br>Amylase break α(1→4) glycosidic bonds in starch → Maltose.<br>Trap: Pepsin/trypsin digest proteins, not carbs."
+      },
+      {
+        question: "Which lipid is a steroid?",
+        options: ["Palmitic acid", "Lecithin", "Cholesterol", "Glycerol"],
+        answer: 2,
+        explanation: "Correct Option: c) Cholesterol<br><br>Steroids: 4 fused rings (e.g., cholesterol, hormones).<br>Trap: Lecithin is a phospholipid; palmitic acid is a fatty acid."
+      },
+      {
+        question: "The vitamin responsible for blood clotting is:",
+        options: ["Vitamin A", "Vitamin C", "Vitamin K", "Vitamin D"],
+        answer: 2,
+        explanation: "Correct Option: c) Vitamin K<br><br>Vitamin K activates clotting factors (II, VII, IX, X).<br>Trap: Vitamin D regulates Ca²⁺ absorption."
+      },
+      {
+        question: "Which is an example of a globular protein?",
+        options: ["Collagen", "Keratin", "Hemoglobin", "Myosin"],
+        answer: 2,
+        explanation: "Correct Option: c) Hemoglobin<br><br>Globular proteins: Spherical, water-soluble (e.g., Hb, enzymes).<br>Fibrous proteins: Structural (collagen, keratin, myosin)."
+      },
+      {
+        question: "The bond linking amino acids in proteins is:",
+        options: ["Glycosidic bond", "Phosphodiester bond", "Peptide bond", "Ester bond"],
+        answer: 2,
+        explanation: "Correct Option: c) Peptide bond<br><br>Peptide bond: Amide linkage (–CO–NH–) between amino acids.<br>Trap: Glycosidic bonds link sugars; phosphodiester in DNA/RNA."
+      },
+      {
+        question: "Which nucleic acid carries amino acids during protein synthesis?",
+        options: ["mRNA", "tRNA", "rRNA", "DNA"],
+        answer: 1,
+        explanation: "Correct Option: b) tRNA<br><br>tRNA: Anticodon matches mRNA codon, delivers amino acids.<br>mRNA: Template for translation."
+      },
+      {
+        question: "Deficiency of which vitamin causes scurvy?",
+        options: ["Vitamin A", "Vitamin B12", "Vitamin C", "Vitamin D"],
+        answer: 2,
+        explanation: "Correct Option: c) Vitamin C<br><br>Scurvy: Weak collagen → bleeding gums, poor wound healing.<br>Vitamin C (ascorbic acid): Co-factor for collagen synthesis."
+      },
+      {
+        question: "Which undergoes SN² reaction fastest?",
+        options: ["CH₃-Br", "(CH₃)₂CH-Br", "(CH₃)₃C-Br", "C₆H₅-Br"],
+        answer: 0,
+        explanation: "Correct Option: a) CH₃-Br<br><br>SN² favored for:<br>✔ 1° halides (CH₃-X)<br>✔ Strong nucleophiles (e.g., OH⁻)<br>✔ Polar aprotic solvents<br><br>Steric hindrance slows SN²: 3° > 2° > 1°<br>Trap: Aryl halides (d) don't undergo SN²"
+      },
+      {
+        question: "Major product of CH₃-CH=CH₂ + Br₂ (in CCl₄)?",
+        options: ["CH₃-CHBr-CH₂Br", "CH₂Br-CH=CH₂", "CH₃-CH=CH-Br", "No reaction"],
+        answer: 0,
+        explanation: "Correct Option: a) CH₃-CHBr-CH₂Br<br><br>Anti-addition of Br₂ to alkenes → vicinal dibromide<br>Mechanism: Bromonium ion intermediate<br>Trap: (b) is allylic bromination (requires NBS/light)"
+      },
+      {
+        question: "Best method to prepare iodoethane from ethanol?",
+        options: ["HI (48%)", "PCl₅", "SOCl₂", "KI + H₃PO₄"],
         answer: 3,
-        explanation: "(d) Both (b) and (c) - Soft iron has low coercivity (easily demagnetized) and high permeability (conducts magnetic flux efficiently)."
+        explanation: "Correct Option: d) KI + H₃PO₄<br><br>Lucas reagent (ZnCl₂/HCl) converts alcohols to alkyl chlorides<br>HI causes reduction (may give ethane)<br>KI/H₃PO₄ gives clean substitution"
       },
       {
-        question: "The peak value of an AC voltage is 220√2 V. Its RMS value is:",
-        options: ["110 V", "220 V", "330 V", "440 V"],
+        question: "Which is most reactive towards nucleophilic substitution?",
+        options: ["Chlorobenzene", "Benzyl chloride", "Vinyl chloride", "CH₃Cl"],
         answer: 1,
-        explanation: "(b) 220 V - Calculation: VRMS = V₀/√2 = 220√2/√2 = 220 V"
+        explanation: "Correct Option: b) Benzyl chloride<br><br>Reactivity order:<br>Benzyl > Allyl > 1° > 2° > 3° > Aryl > Vinyl<br>Benzyl carbocation stabilized by resonance<br>Trap: Aryl/vinyl halides are unreactive"
       },
       {
-        question: "In a purely resistive AC circuit, the phase difference between voltage and current is:",
-        options: ["0°", "45°", "90°", "180°"],
+        question: "Product of C₆H₅-Cl + NaOH (high T/P)?",
+        options: ["Phenol", "Benzene", "Benzoic acid", "No reaction"],
         answer: 0,
-        explanation: "(a) 0° - In resistors, voltage and current are in phase."
+        explanation: "Correct Option: a) Phenol<br><br>Nucleophilic aromatic substitution requires:<br>✔ Strong electron-withdrawing groups (ortho/para)<br>✔ High temp/pressure<br><br>Here: Benzyne mechanism"
       },
       {
-        question: "The inductive reactance (XL) of a coil for 50 Hz AC is 100 Ω. Its value for 100 Hz AC will be:",
-        options: ["50 Ω", "100 Ω", "200 Ω", "400 Ω"],
+        question: "Major product of isobutane + Br₂ (light)?",
+        options: ["(CH₃)₂CH-CH₂Br", "(CH₃)₃C-Br", "CH₃-CHBr-CH₃", "CH₂Br-CH₂-CH₃"],
+        answer: 1,
+        explanation: "Correct Option: b) (CH₃)₃C-Br<br><br>Free radical mechanism:<br>Br• abstraction from 3° carbon (most stable radical)<br>Forms 3° alkyl halide<br>Trap: (a) is minor product"
+      },
+      {
+        question: "Which cannot form Grignard reagent?",
+        options: ["CH₃-CH₂-Br", "C₆H₅-Br", "CH₂=CH-Cl", "(CH₃)₃C-Cl"],
         answer: 2,
-        explanation: "(c) 200 Ω - XL = 2πfL ⇒ XL ∝ f. Doubling frequency doubles XL."
+        explanation: "Correct Option: c) CH₂=CH-Cl<br><br>Vinyl/aryl halides don't form Grignards easily<br>β-hydrogen leads to elimination<br>Trap: 3° halides (d) can form Grignards with excess Mg"
       },
       {
-        question: "The power factor of an AC circuit is 0.8. If the impedance is 10 Ω, the resistance is:",
-        options: ["2 Ω", "4 Ω", "6 Ω", "8 Ω"],
-        answer: 3,
-        explanation: "(d) 8 Ω - Calculation: Power factor = R/Z ⇒ R = Z cosϕ = 10 × 0.8 = 8 Ω"
+        question: "Best reagent for CH₃-CH₂-OH → CH₃-CH₂-I?",
+        options: ["NaI + H₃PO₄", "PCl₃", "SOCl₂", "HI (48%)"],
+        answer: 0,
+        explanation: "Correct Option: a) NaI + H₃PO₄<br><br>Finkelstein reaction: R-OH → R-I using NaI/H₃PO₄<br>HI causes reduction (→ ethane)<br>SOCl₂/PCl₃ give chlorides"
       },
       {
-        question: "In an LCR series circuit at resonance, the impedance is:",
-        options: ["Maximum", "Minimum", "Zero", "Infinite"],
-        answer: 1,
-        explanation: "(b) Minimum - At resonance, XL = XC, so Z = √(R² + (XL - XC)²) = R (minimum)."
+        question: "Product of C₆H₅-CH₂-Cl + KCN?",
+        options: ["C₆H₅-CH₂-CN", "C₆H₅-CH₂-NH₂", "C₆H₅-CH₂-OH", "C₆H₅-CH₃"],
+        answer: 0,
+        explanation: "Correct Option: a) C₆H₅-CH₂-CN<br><br>Nucleophilic substitution: Cl replaced by CN<br>Further reduction gives amines (but needs LiAlH₄)<br>Trap: (b) requires additional steps"
       },
       {
-        question: "The average power dissipated in an AC circuit is given by:",
-        options: ["VRMS IRMS", "VRMS IRMS cosϕ", "V₀I₀/2", "V₀I₀/√2"],
-        answer: 1,
-        explanation: "(b) VRMS IRMS cosϕ - cosϕ is the power factor."
-      },
-      {
-        question: "The resonant frequency (fr) of an LCR circuit with L = 1 mH and C = 1 μF is:",
-        options: ["1 kHz", "5 kHz", "10 kHz", "50 kHz"],
-        answer: 1,
-        explanation: "(b) 5 kHz - Calculation: fr = 1/(2π√(LC)) = 1/(2π√(10⁻³ × 10⁻⁶)) ≈ 5 kHz"
-      },
-      {
-        question: "A capacitor blocks DC but allows AC because:",
-        options: ["DC has zero frequency", "Capacitive reactance is infinite for DC", "Both (a) and (b)", "None of these"],
+        question: "Which shows optical activity?",
+        options: ["CH₃-CHCl-CH₃", "CH₃-CH₂-CH₂Cl", "CH₃-CHCl-COOH", "C₆H₅-CHCl-CH₃"],
         answer: 2,
-        explanation: "(c) Both (a) and (b) - XC = 1/(2πfC). For DC (f=0), XC → ∞."
+        explanation: "Correct Option: c) CH₃-CHCl-COOH<br><br>Chiral center requires 4 different groups<br>Only (c) has: H, Cl, CH₃, COOH<br>Trap: (a) has plane of symmetry"
       },
       {
-        question: "The phase difference between current and voltage in a purely capacitive AC circuit is:",
-        options: ["0°", "45°", "90°", "180°"],
+        question: "Lucas test for alcohols involves:",
+        options: ["Oxidation with K₂Cr₂O₇", "Reaction with ZnCl₂/HCl", "Decolorization of Br₂ water", "Formation of iodoform"],
+        answer: 1,
+        explanation: "Correct Option: b) Reaction with ZnCl₂/HCl<br><br>Lucas reagent (ZnCl₂ + conc. HCl) classifies alcohols based on reactivity:<br>3° alcohols react immediately (cloudiness)<br>2° alcohols react in 5-10 minutes<br>1° alcohols no reaction at room temp<br>Trap: K₂Cr₂O₇ is used for oxidation tests (not Lucas)."
+      },
+      {
+        question: "Which alcohol gives iodoform test positive?",
+        options: ["Ethanol", "Propan-2-ol", "Both (a) and (b)", "Methanol"],
         answer: 2,
-        explanation: "(c) 90° - In capacitors, current leads voltage by 90°."
+        explanation: "Correct Option: c) Both (a) and (b)<br><br>Iodoform test (NaOH + I₂): Positive for:<br>Ethanol (CH₃CH₂OH → CHI₃)<br>2° alcohols with CH₃-CH(OH)- group (Propan-2-ol)<br>Trap: Methanol (CH₃OH) gives negative test."
       },
       {
-        question: "The Q-factor of an LCR circuit is given by:",
-        options: ["R√(L/C)", "(1/R)√(L/C)", "XL/R", "Both (b) and (c)"],
-        answer: 3,
-        explanation: "(d) Both (b) and (c) - Formula: Q = ωrL/R = (1/R)√(L/C)."
-      },
-      {
-        question: "The impedance of an LCR series circuit at resonance is:",
-        options: ["R", "XL", "XC", "√(R² + (XL - XC)²)"],
-        answer: 0,
-        explanation: "(a) R - At resonance, XL = XC, so Z = R."
-      },
-      {
-        question: "The time taken for AC to complete one cycle is 0.02 s. Its frequency is:",
-        options: ["20 Hz", "50 Hz", "100 Hz", "200 Hz"],
-        answer: 1,
-        explanation: "(b) 50 Hz - Calculation: f = 1/T = 1/0.02 = 50 Hz"
-      },
-      {
-        question: "The power factor of an AC circuit is maximum when it is:",
-        options: ["Purely resistive", "Purely inductive", "Purely capacitive", "Contains L and C"],
-        answer: 0,
-        explanation: "(a) Purely resistive - For resistors, cosϕ = 1 (maximum)."
-      },
-      {
-        question: "The RMS current in an AC circuit is 5 A. The peak current is:",
-        options: ["5 A", "5√2 A", "10 A", "10√2 A"],
-        answer: 1,
-        explanation: "(b) 5√2 A - Formula: I₀ = IRMS × √2 = 5√2 A"
-      },
-      {
-        question: "In an AC circuit, the wattless current is due to:",
-        options: ["Resistance", "Inductance", "Capacitance", "Both (b) and (c)"],
-        answer: 3,
-        explanation: "(d) Both (b) and (c) - Inductors and capacitors cause phase shifts, leading to wattless (reactive) current."
-      },
-      {
-        question: "In an AC circuit with R = 4Ω, XL = 3Ω, and XC = 6Ω, the impedance is:",
-        options: ["5Ω", "7Ω", "10Ω", "13Ω"],
-        answer: 0,
-        explanation: "(a) 5Ω - Calculation: Z = √(R² + (XL - XC)²) = √(4² + (3-6)²) = √(16+9) = 5Ω"
-      },
-      {
-        question: "The Q-factor of a series LCR circuit with R = 10Ω, L = 1H, and C = 1μF is:",
-        options: ["1", "10", "100", "1000"],
+        question: "The major product of phenol + Br₂ water is:",
+        options: ["o-Bromophenol", "p-Bromophenol", "2,4,6-Tribromophenol", "Bromobenzene"],
         answer: 2,
-        explanation: "(c) 100 - Formula: Q = (1/R)√(L/C) = (1/10)√(1/10⁻⁶) = 100"
+        explanation: "Correct Option: c) 2,4,6-Tribromophenol<br><br>Phenol undergoes electrophilic aromatic substitution → Highly activated ring → Tri-substitution at 2,4,6 positions.<br>Trap: In non-aqueous medium, mono-substitution occurs."
       },
       {
-        question: "A transformer steps down 220V to 22V. If the secondary has 100 turns, the primary turns are:",
-        options: ["10", "100", "1000", "10000"],
+        question: "Williamson synthesis is used to prepare:",
+        options: ["Alcohols", "Phenols", "Ethers", "Aldehydes"],
         answer: 2,
-        explanation: "(c) 1000 - Calculation: Np/Ns = Vp/Vs ⇒ Np = (220/22) × 100 = 1000"
+        explanation: "Correct Option: c) Ethers<br><br>Williamson synthesis:<br>R-X + R'ONa → R-O-R' (Ether) + NaX<br>Best for symmetrical ethers (e.g., CH₃-O-CH₃).<br>Trap: Uses alkoxide (not phenol) for best yields."
       },
       {
-        question: "The power dissipated in an AC circuit with VRMS = 100V, IRMS = 2A, and power factor 0.5 is:",
-        options: ["50W", "100W", "200W", "400W"],
-        answer: 1,
-        explanation: "(b) 100W - Formula: P = VRMS IRMS cosϕ = 100 × 2 × 0.5 = 100W"
-      },
-      {
-        question: "In an LC oscillation circuit, the frequency depends on:",
-        options: ["Only L", "Only C", "Both L and C", "Neither L nor C"],
+        question: "Phenol is more acidic than ethanol because:",
+        options: ["Phenoxide ion is stabilized by resonance", "Ethoxide ion has +I effect", "Both (a) and (b)", "Phenol has higher molecular weight"],
         answer: 2,
-        explanation: "(c) Both L and C - Formula: f = 1/(2π√(LC))"
+        explanation: "Correct Option: c) Both (a) and (b)<br><br>Phenoxide ion: Negative charge delocalized into benzene ring (resonance stabilization).<br>Ethoxide ion: Unstable due to electron-donating (+I) effect of ethyl group."
       },
       {
-        question: "The phase difference between voltage and current in an LCR circuit at resonance is:",
-        options: ["0°", "45°", "90°", "180°"],
-        answer: 0,
-        explanation: "(a) 0° - At resonance, the circuit behaves as purely resistive, so voltage and current are in phase."
-      },
-      {
-        question: "The capacitive reactance (XC) of a 10μF capacitor for 50Hz AC is approximately:",
-        options: ["318Ω", "159Ω", "31.8Ω", "15.9Ω"],
-        answer: 0,
-        explanation: "(a) 318Ω - Calculation: XC = 1/(2πfC) = 1/(2π×50×10×10⁻⁶) ≈ 318Ω"
-      },
-      {
-        question: "The time constant of an LR circuit with L = 2H and R = 4Ω is:",
-        options: ["0.5s", "1s", "2s", "4s"],
-        answer: 0,
-        explanation: "(a) 0.5s - Formula: τ = L/R = 2/4 = 0.5s"
-      },
-      {
-        question: "In an AC generator, the instantaneous EMF is zero when the coil is:",
-        options: ["Parallel to the magnetic field", "Perpendicular to the magnetic field", "At 45° to the magnetic field", "Rotating at maximum speed"],
+        question: "Dehydration of ethanol with conc. H₂SO₄ at 170°C gives:",
+        options: ["Ethanal", "Ethene", "Diethyl ether", "Ethanoic acid"],
         answer: 1,
-        explanation: "(b) Perpendicular to the magnetic field - EMF ϵ = NBAωsinθ. When θ = 0° (parallel), EMF is maximum; when θ = 90° (perpendicular), EMF is zero."
+        explanation: "Correct Option: b) Ethene<br><br>Temperature control is critical:<br>140°C: Ether formation (C₂H₅-O-C₂H₅)<br>170°C: Alkene formation (CH₂=CH₂)<br>Trap: Ethanal requires oxidation (PCC/KMnO₄)."
       },
       {
-        question: "The skin effect in AC circuits becomes more pronounced at:",
-        options: ["Lower frequencies", "Higher frequencies", "Constant frequency", "DC current"],
+        question: "Which reagent converts phenol to salicylic acid?",
+        options: ["NaOH + CO₂ (Kolbe's reaction)", "CHCl₃ + NaOH (Reimer-Tiemann)", "Zn dust", "NaBH₄"],
+        answer: 0,
+        explanation: "Correct Option: a) NaOH + CO₂ (Kolbe's reaction)<br><br>Kolbe's reaction:<br>Phenol + NaOH → Sodium phenoxide<br>CO₂ at 400K, 4-7 atm → Salicylic acid (o-hydroxybenzoic acid).<br>Trap: Reimer-Tiemann gives salicylaldehyde (not acid)."
+      },
+      {
+        question: "The product of isopropyl alcohol + acidic K₂Cr₂O₇ is:",
+        options: ["Acetone", "Propanoic acid", "Propanal", "No reaction"],
+        answer: 0,
+        explanation: "Correct Option: a) Acetone<br><br>2° alcohols oxidize to ketones (no further oxidation):<br>(CH₃)₂CH-OH → (CH₃)₂C=O (Acetone)<br>Trap: K₂Cr₂O₇ oxidizes 1° alcohols to acids (not 2° alcohols)."
+      },
+      {
+        question: "Ethers are generally:",
+        options: ["Highly reactive", "Good hydrogen bond donors", "Polar but inert", "Water insoluble"],
+        answer: 2,
+        explanation: "Correct Option: c) Polar but inert<br><br>Ethers (R-O-R'):<br>Have dipole moment (polar C-O bonds)<br>Chemically inert (no H-bonding, unlike alcohols)<br>Soluble in water (H-bond acceptors).<br>Trap: Ethers are not reactive like alcohols."
+      },
+      {
+        question: "The IUPAC name of C₆H₅-O-CH₃ is:",
+        options: ["Methyl phenyl ether", "Methoxybenzene", "Phenol methyl", "Benzyl methyl ether"],
         answer: 1,
-        explanation: "(b) Higher frequencies - At high frequencies, current tends to flow near the conductor's surface due to self-inductance."
+        explanation: "Correct Option: b) Methoxybenzene<br><br>IUPAC naming: Smaller alkyl group as prefix (methoxy) + parent chain (benzene).<br>Common name: Anisole.<br>Trap: 'Phenyl' is used for -C₆H₅ substituents (not for O-linkage)."
+      },
+      {
+        question: "Tollen's reagent is used to distinguish:",
+        options: ["Aldehydes and ketones", "Alcohols and phenols", "Alkanes and alkenes", "Amines and amides"],
+        answer: 0,
+        explanation: "Correct Option: a) Aldehydes and ketones<br><br>Tollen's reagent (AgNO₃ + NH₄OH):<br>Aldehydes → Silver mirror (R-CHO → R-COOH + Ag↓)<br>Ketones → No reaction<br>Clinical link: Used in urine glucose tests (detects reducing sugars like glucose)."
+      },
+      {
+        question: "The product of acetone + NaHSO₃ is:",
+        options: ["Crystalline addition compound", "Alcohol", "Carboxylic acid", "No reaction"],
+        answer: 0,
+        explanation: "Correct Option: a) Crystalline addition compound<br><br>NaHSO₃ adds to C=O of methyl ketones/aldehydes → white crystalline bisulfite adduct<br>Mechanism: Nucleophilic addition<br>Trap: Doesn't work for diaryl ketones (e.g., benzophenone)."
+      },
+      {
+        question: "Which gives a positive Fehling's test?",
+        options: ["Acetone", "Benzaldehyde", "Formaldehyde", "Acetic acid"],
+        answer: 2,
+        explanation: "Correct Option: c) Formaldehyde<br><br>Fehling's solution (Cu²⁺ + tartrate):<br>Aliphatic aldehydes (R-CHO) → Red Cu₂O precipitate<br>Aromatic aldehydes (e.g., benzaldehyde) → No reaction<br>Trap: Ketones (acetone) and acids (acetic acid) don't react."
+      },
+      {
+        question: "The strongest acid among these is:",
+        options: ["HCOOH", "CH₃COOH", "ClCH₂COOH", "C₆H₅COOH"],
+        answer: 2,
+        explanation: "Correct Option: c) ClCH₂COOH<br><br>Acidity order: ClCH₂COOH > HCOOH > C₆H₅COOH > CH₃COOH<br>Reason:<br>-I effect of Cl stabilizes carboxylate anion<br>Formic acid (HCOOH) stronger than acetic (no electron-donating group)<br>Trap: Aromatic acids (benzoic) weaker than aliphatic."
+      },
+      {
+        question: "The product of Cannizzaro reaction with formaldehyde is:",
+        options: ["Methanol + formic acid", "Ethanol + acetic acid", "Methanol + CO₂", "No reaction"],
+        answer: 0,
+        explanation: "Correct Option: a) Methanol + formic acid<br><br>Cannizzaro reaction (NaOH):<br>Aldehydes without α-H (e.g., HCHO, C₆H₅CHO) → Alcohol + Carboxylic acid<br>HCHO → CH₃OH (methanol) + HCOOH (formic acid)<br>Trap: Ketones don't undergo Cannizzaro."
+      },
+      {
+        question: "IUPAC name of CH₃-CO-CH₂-CHO is:",
+        options: ["3-Oxobutanal", "1,3-Butanedione", "4-Oxopentanal", "Methylglyoxal"],
+        answer: 0,
+        explanation: "Correct Option: a) 3-Oxobutanal<br><br>Priority order: Aldehyde > Ketone<br>Naming:<br>-CHO as main group (butanal)<br>=O at C3 as prefix (3-oxo)<br>Trap: 'Dione' is incorrect (only one ketone group)."
+      },
+      {
+        question: "Which reagent converts acetophenone to benzoic acid?",
+        options: ["NaBH₄", "KMnO₄/H⁺", "LiAlH₄", "Tollen's reagent"],
+        answer: 1,
+        explanation: "Correct Option: b) KMnO₄/H⁺<br><br>Oxidation of alkyl ketones:<br>KMnO₄/H⁺ cleaves C-C bond → Carboxylic acids<br>Acetophenone (C₆H₅-CO-CH₃) → Benzoic acid + CO₂<br>Trap: NaBH₄/LiAlH₄ reduce C=O to alcohols."
+      },
+      {
+        question: "Hell-Volhard-Zelinsky (HVZ) reaction is used for:",
+        options: ["α-Halogenation of carboxylic acids", "Oxidation of aldehydes", "Reduction of ketones", "Decarboxylation"],
+        answer: 0,
+        explanation: "Correct Option: a) α-Halogenation of carboxylic acids<br><br>HVZ reaction:<br>R-CH₂-COOH + Br₂/P → R-CHBr-COOH (α-bromo acid)<br>Requires PBr₃ to form acyl bromide intermediate<br>Clinical link: Used to synthesize α-amino acids."
+      },
+      {
+        question: "Which test distinguishes acetaldehyde and acetone?",
+        options: ["Fehling's test", "Iodoform test", "Both (a) and (b)", "Tollens' test"],
+        answer: 2,
+        explanation: "Correct Option: c) Both (a) and (b)<br><br>Acetaldehyde (CH₃CHO):<br>Fehling's +ve (aliphatic aldehyde)<br>Iodoform +ve (CH₃-CO- group)<br>Acetone (CH₃-CO-CH₃):<br>Fehling's -ve (ketone)<br>Iodoform +ve<br>Trap: Only iodoform can't distinguish (both +ve)."
+      },
+      {
+        question: "The product of benzoic acid + SOCl₂ is:",
+        options: ["Benzoyl chloride", "Benzyl chloride", "Benzonitrile", "No reaction"],
+        answer: 0,
+        explanation: "Correct Option: a) Benzoyl chloride<br><br>SOCl₂ converts -COOH to -COCl (acyl chloride):<br>C₆H₅-COOH + SOCl₂ → C₆H₅-COCl + SO₂ + HCl<br>Trap: Benzyl chloride requires side-chain chlorination (C₆H₅-CH₂Cl)."
+      },
+      {
+        question: "Which test distinguishes primary, secondary, and tertiary amines?",
+        options: ["Tollen's test", "Carbylamine test", "Hinsberg test", "Fehling's test"],
+        answer: 2,
+        explanation: "Correct Option: c) Hinsberg test<br><br>Hinsberg reagent (C₆H₅SO₂Cl):<br>1° amine: Forms soluble sulfonamide with NaOH<br>2° amine: Forms insoluble sulfonamide<br>3° amine: No reaction<br>Trap: Carbylamine test only for 1° amines."
+      },
+      {
+        question: "The product of aniline + HNO₂ (0-5°C) + H₂O is:",
+        options: ["Phenol", "Nitrobenzene", "Benzene diazonium chloride", "Azobenzene"],
+        answer: 0,
+        explanation: "Correct Option: a) Phenol<br><br>Diazotization (0-5°C): C₆H₅NH₂ → C₆H₅N₂⁺Cl⁻<br>Warm water: C₆H₅N₂⁺Cl⁻ → C₆H₅OH + N₂↑<br>Trap: At 0-5°C, diazonium salt forms (not phenol)."
+      },
+      {
+        question: "Which amine is most basic in aqueous solution?",
+        options: ["NH₃", "(CH₃)₂NH", "(CH₃)₃N", "C₆H₅NH₂"],
+        answer: 1,
+        explanation: "Correct Option: b) (CH₃)₂NH<br><br>Basicity order (aqueous): 2° > 1° > 3° > NH₃ > ArNH₂<br>Reason:<br>+I effect of -CH₃ increases e⁻ density on N<br>3° amines have steric hindrance for H-bonding<br>Trap: Gas phase basicity order differs (3° > 2° > 1°)."
+      },
+      {
+        question: "The product of aniline + Br₂ water is:",
+        options: ["o-Bromoaniline", "p-Bromoaniline", "2,4,6-Tribromoaniline", "No reaction"],
+        answer: 2,
+        explanation: "Correct Option: c) 2,4,6-Tribromoaniline<br><br>-NH₂ group activates benzene ring → Electrophilic substitution at o/p positions<br>Excess Br₂ → Tri-substitution (white precipitate)<br>Trap: In controlled conditions, mono-substitution occurs."
+      },
+      {
+        question: "Gabriel phthalimide synthesis is used to prepare:",
+        options: ["1° amines", "2° amines", "3° amines", "Aromatic amines"],
+        answer: 0,
+        explanation: "Correct Option: a) 1° amines<br><br>Steps:<br>Phthalimide + KOH → Potassium phthalimide<br>Alkylation with R-X<br>Hydrolysis → Pure 1° amine<br>Trap: Cannot prepare 2°/3°/aryl amines."
+      },
+      {
+        question: "The reagent that converts RCN to RCH₂NH₂ is:",
+        options: ["LiAlH₄", "NaBH₄", "H₂/Ni", "Sn/HCl"],
+        answer: 0,
+        explanation: "Correct Option: a) LiAlH₄<br><br>LiAlH₄ reduces nitriles to 1° amines: R-C≡N → R-CH₂-NH₂<br>NaBH₄ cannot reduce nitriles<br>Trap: H₂/Ni gives partial reduction (stops at R-CH=NH)."
+      },
+      {
+        question: "The IUPAC name of (CH₃)₂N-CH₂-CH₃ is:",
+        options: ["Dimethylaminoethane", "N,N-Dimethylethanamine", "N-Ethyldimethylamine", "Trimethylamine"],
+        answer: 1,
+        explanation: "Correct Option: b) N,N-Dimethylethanamine<br><br>Prefix 'N,N-' shows both -CH₃ on nitrogen<br>Parent chain: Ethanamine<br>Trap: Common names (e.g., 'dimethylethylamine') are incorrect in IUPAC."
+      },
+      {
+        question: "Which gives a positive carbylamine test?",
+        options: ["(CH₃)₂NH", "C₆H₅NH₂", "(CH₃)₃N", "CH₃CONH₂"],
+        answer: 1,
+        explanation: "Correct Option: b) C₆H₅NH₂<br><br>Carbylamine test (CHCl₃ + KOH):<br>Only 1° amines give foul-smelling isocyanides<br>Works for aliphatic & aromatic 1° amines<br>Trap: 2°/3°/amides don't react."
+      },
+      {
+        question: "The product of nitrobenzene + Sn/HCl is:",
+        options: ["Aniline", "Phenylhydroxylamine", "Azoxybenzene", "Nitrosobenzene"],
+        answer: 0,
+        explanation: "Correct Option: a) Aniline<br><br>Sn/HCl reduces -NO₂ to -NH₂:<br>C₆H₅NO₂ → C₆H₅NH₂<br>Intermediate products:<br>Nitrosobenzene → Phenylhydroxylamine → Aniline<br>Trap: In neutral medium, stops at phenylhydroxylamine."
+      },
+      {
+        question: "Which is a neurotransmitter?",
+        options: ["Aniline", "Acetamide", "Dopamine", "Urea"],
+        answer: 2,
+        explanation: "Correct Option: c) Dopamine<br><br>Biogenic amines: Dopamine, serotonin, adrenaline<br>Clinical link: Parkinson's disease is linked to dopamine deficiency<br>Trap: Aniline is toxic (not biologically active)."
       }
     ];
 
@@ -1366,7 +1426,7 @@
     let userResponses = Array(quiz.length).fill(null);
     let testSubmitted = false;
     let testStarted = false;
-    let timeLeft = 100 * 60; // 100 minutes in seconds
+    let timeLeft = 110 * 60; // 110 minutes in seconds
     let timerInterval;
     let selectedOptionIndex = null;
     let quizState = JSON.parse(localStorage.getItem('quizState')) || null;
@@ -1497,7 +1557,7 @@
       const explanationText = document.getElementById("explanation-text");
       if (testSubmitted) {
         explanationEl.style.display = "block";
-        explanationText.textContent = quiz[currentQuestion].explanation;
+        explanationText.innerHTML = quiz[currentQuestion].explanation;
       } else {
         explanationEl.style.display = "none";
         explanationText.textContent = "";
@@ -1588,8 +1648,8 @@
         }
       });
       
-      // Calculate marks (4 marks per correct answer)
-      const obtainedMarks = correct * 4;
+      // Calculate marks (+4 for correct, -1 for wrong)
+      const obtainedMarks = (correct * 4) - (wrong * 1);
       
       document.getElementById("quiz-box").style.display = "none";
       document.querySelector(".timer").style.display = "none";
@@ -1634,7 +1694,7 @@
       
       // Show explanation
       document.getElementById("explanation").style.display = "block";
-      document.getElementById("explanation-text").textContent = question.explanation;
+      document.getElementById("explanation-text").innerHTML = question.explanation;
       
       // Update navigation buttons
       renderQuestionNav();
