@@ -675,7 +675,7 @@
         <p><i class="fas fa-question-circle"></i> <strong>Total Questions:</strong> 110</p>
         <p><i class="fas fa-clock"></i> <strong>Time Limit:</strong> 110 minutes</p>
         <p><i class="fas fa-graduation-cap"></i> <strong>Test Type:</strong> Practice Quiz</p>
-        <p><i class="fas fa-star"></i> <strong>Marks:</strong> +4 for correct, -1 for wrong, 0 for unattempted</p>
+        <p><i class="fas fa-star"></i> <strong>Marks:</strong> +1 for correct, -1/3 for wrong, 0 for unattempted</p>
       </div>
       <button class="btn" onclick="startQuiz()">
         <i class="fas fa-play"></i> Start Test
@@ -741,7 +741,7 @@
             <div>Marks Obtained</div>
           </div>
           <div class="stat stat-marks">
-            <div class="stat-value">440</div>
+            <div class="stat-value">110</div>
             <div>Total Marks</div>
           </div>
         </div>
@@ -1649,7 +1649,7 @@
       });
       
       // Calculate marks (+4 for correct, -1 for wrong)
-      const obtainedMarks = (correct * 4) - (wrong * 1);
+      const obtainedMarks = (correct * 1) - (wrong * (-1/3));
       
       document.getElementById("quiz-box").style.display = "none";
       document.querySelector(".timer").style.display = "none";
