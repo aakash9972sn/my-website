@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chemistry Test for AIIMS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDU PRO - Premium NEET/JEE Products</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #4a6bff;
-      --primary-light: #6c8cff;
-      --correct: #28a745;
-      --wrong: #dc3545;
-      --unattempted: #ffc107;
-      --answered: #17a2b8;
-      --text-dark: #212529;
-      --text-light: #f8f9fa;
+      --secondary: #6c8cff;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --premium: #ffd700;
     }
     
     body {
@@ -23,1682 +23,571 @@
       background: #f8f9fa;
       margin: 0;
       padding: 0;
-      color: var(--text-dark);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .container {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 30px;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-      flex: 1;
-    }
-    
-    #welcome-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      color: white;
-      animation: fadeOut 5s forwards;
-    }
-    
-    @keyframes fadeOut {
-      0% { opacity: 1; }
-      80% { opacity: 1; }
-      100% { opacity: 0; visibility: hidden; }
-    }
-    
-    #welcome-screen h1 {
-      margin: 0;
-      font-size: 4rem;
-      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    
-    #welcome-screen p {
-      font-size: 2rem;
-      margin-top: 20px;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    #welcome-screen .icon {
-      font-size: 2.5rem;
-      animation: bounce 2s infinite;
-    }
-    
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    
-    #intro-screen {
-      text-align: center;
-      padding: 20px;
-    }
-    
-    .title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 10px;
-      background: linear-gradient(90deg, #4a6bff, #8a2be2);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    .test-details {
-      background: #f1f5ff;
-      padding: 25px;
-      border-radius: 15px;
-      margin: 25px 0;
-      text-align: left;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .test-details::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 5px;
-      height: 100%;
-      background: var(--primary);
-    }
-    
-    .test-details p {
-      margin: 10px 0;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .test-details i {
-      color: var(--primary);
-      width: 20px;
-      text-align: center;
-    }
-    
-    .test-details strong {
-      color: var(--primary);
-    }
-    
-    .btn {
-      padding: 12px 30px;
-      border: none;
-      border-radius: 50px;
-      background: var(--primary);
-      color: white;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 10px rgba(74, 107, 255, 0.3);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(74, 107, 255, 0.4);
-      background: var(--primary-light);
-    }
-    
-    .btn:active {
-      transform: translateY(0);
-    }
-    
-    .timer {
-      background: #fff4e6;
-      padding: 15px;
-      border-radius: 10px;
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #e67e22;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    
-    #quiz-box {
-      display: none;
-    }
-    
-    .question-text {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      line-height: 1.5;
-      color: var(--text-dark);
-    }
-    
-    .options-container {
-      margin-bottom: 20px;
-    }
-    
-    .option {
-      display: block;
-      margin-bottom: 12px;
-      padding: 15px;
-      background: #f8f9fa;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: 2px solid transparent;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .option:hover {
-      background: #e9ecef;
-    }
-    
-    .option.selected {
-      background: #d1e7fd;
-      border-color: var(--primary);
-    }
-    
-    .option.correct {
-      background: #d4edda;
-      border-color: var(--correct);
-    }
-    
-    .option.incorrect {
-      background: #f8d7da;
-      border-color: var(--wrong);
-    }
-    
-    .option.correct-answer {
-      background: #d1e7fd;
-      border-color: var(--primary);
-    }
-    
-    .option-icon {
-      margin-right: 10px;
-      font-size: 1.2rem;
-    }
-    
-    .option.correct .option-icon {
-      color: var(--correct);
-    }
-    
-    .option.incorrect .option-icon {
-      color: var(--wrong);
-    }
-    
-    .option.correct-answer .option-icon {
-      color: var(--primary);
-    }
-    
-    .explanation {
-      margin-top: 20px;
-      padding: 20px;
-      background: #e7f5ff;
-      border-radius: 8px;
-      border-left: 4px solid var(--primary);
-      display: none;
-      animation: fadeIn 0.5s ease-out;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .explanation-title {
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    #summary {
-      display: none;
-      text-align: center;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 10px;
-      margin-top: 30px;
-      animation: fadeIn 0.5s ease-out;
-    }
-    
-    .result-card {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    
-    .result-title {
-      font-size: 1.8rem;
-      color: var(--primary);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    
-    .result-stats {
-      display: flex;
-      justify-content: space-around;
-      margin: 25px 0;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    
-    .stat {
-      text-align: center;
-      min-width: 100px;
-      padding: 15px;
-      border-radius: 10px;
-    }
-    
-    .stat-correct {
-      background: #d4edda;
-    }
-    
-    .stat-wrong {
-      background: #f8d7da;
-    }
-    
-    .stat-unattempted {
-      background: #fff3cd;
-    }
-    
-    .stat-marks {
-      background: #e7f5ff;
-      border: 2px solid var(--primary);
-    }
-    
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-    
-    .stat-correct .stat-value {
-      color: var(--correct);
-    }
-    
-    .stat-wrong .stat-value {
-      color: var(--wrong);
-    }
-    
-    .stat-unattempted .stat-value {
-      color: var(--unattempted);
-    }
-    
-    .stat-marks .stat-value {
-      color: var(--primary);
-    }
-    
-    .review-controls {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 30px;
-      flex-wrap: wrap;
-    }
-    
-    .question-nav-container {
-      margin-top: 20px;
-      text-align: center;
-    }
-    
-    .toggle-nav-btn {
-      padding: 10px 20px;
-      border-radius: 50px;
-      background: #6c757d;
-      color: white;
-      border: none;
-      cursor: pointer;
-      margin-bottom: 15px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.3s;
-    }
-    
-    .toggle-nav-btn:hover {
-      background: #5a6268;
-      transform: translateY(-2px);
-    }
-    
-    .question-nav {
-      display: none;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      animation: fadeIn 0.3s ease-out;
-    }
-    
-    .question-nav.active {
-      display: flex;
-    }
-    
-    .q-nav-btn {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .q-nav-btn::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    
-    .q-nav-btn:hover::after {
-      opacity: 1;
-    }
-    
-    .q-nav-btn.unattempted {
-      background: var(--unattempted);
       color: #333;
     }
     
-    .q-nav-btn.answered {
-      background: var(--answered);
-      color: white;
+    /* Header Styles */
+    .header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
     }
     
-    .q-nav-btn.correct {
-      background: var(--correct);
-      color: white;
-    }
-    
-    .q-nav-btn.incorrect {
-      background: var(--wrong);
-      color: white;
-    }
-    
-    .controls {
+    .navbar {
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    
-    .nav-buttons {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    
-    .nav-btn {
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: inline-flex;
       align-items: center;
-      gap: 8px;
+      padding: 1rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     
-    .nav-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
     }
     
-    .nav-btn:active {
-      transform: translateY(0);
+    .nav-links {
+      display: flex;
+      gap: 2rem;
     }
     
-    .confirmation-dialog {
+    .nav-link {
+      color: #333;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .nav-link:hover {
+      color: var(--primary);
+    }
+    
+    .auth-buttons .btn {
+      margin-left: 1rem;
+    }
+    
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 6rem auto 2rem;
+      padding: 0 2rem;
+    }
+    
+    /* Product Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-10px);
+    }
+    
+    .product-image {
+      height: 200px;
+      background: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+    }
+    
+    .product-content {
+      padding: 1.5rem;
+    }
+    
+    .product-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .product-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 1rem 0;
+    }
+    
+    .product-badge {
+      background: var(--premium);
+      color: #333;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    
+    /* Auth Modals */
+    .modal {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0,0,0,0.5);
       z-index: 2000;
       justify-content: center;
       align-items: center;
-      animation: fadeIn 0.3s ease-out;
     }
     
-    .confirmation-box {
+    .modal-content {
       background: white;
-      padding: 30px;
-      border-radius: 15px;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 100%;
       max-width: 400px;
-      width: 90%;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      transform: translateY(-20px);
-      animation: slideUp 0.3s ease-out forwards;
     }
     
-    @keyframes slideUp {
-      to { transform: translateY(0); }
-    }
-    
-    .confirmation-box h3 {
-      margin-top: 0;
-      color: var(--primary);
-      font-size: 1.5rem;
-    }
-    
-    .confirmation-buttons {
+    .modal-header {
       display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 25px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
     }
     
-    .confirmation-btn {
-      padding: 10px 20px;
-      border-radius: 50px;
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border-radius: 5px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
-      border: 2px solid transparent;
+      border: none;
     }
     
-    .confirmation-btn-primary {
+    .btn-primary {
       background: var(--primary);
       color: white;
     }
     
-    .confirmation-btn-primary:hover {
-      background: var(--primary-light);
+    .btn-primary:hover {
+      background: var(--secondary);
     }
     
-    .confirmation-btn-secondary {
-      background: white;
-      color: var(--text-dark);
-      border-color: #6c757d;
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
     }
     
-    .confirmation-btn-secondary:hover {
-      background: #f8f9fa;
+    .btn-outline:hover {
+      background: rgba(74, 107, 255, 0.1);
     }
     
+    /* Admin Panel Styles */
+    .admin-panel {
+      display: none;
+      background: #f1f5ff;
+      padding: 2rem;
+      border-radius: 10px;
+      margin-top: 2rem;
+    }
+    
+    .admin-tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 1.5rem;
+    }
+    
+    .admin-tab {
+      padding: 0.8rem 1.5rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .admin-tab.active {
+      border-bottom: 3px solid var(--primary);
+      font-weight: 600;
+    }
+    
+    .admin-content {
+      display: none;
+    }
+    
+    .admin-content.active {
+      display: block;
+    }
+    
+    /* Responsive */
     @media (max-width: 768px) {
-      .container {
-        padding: 20px;
-        margin: 15px;
-      }
-      
-      #welcome-screen h1 {
-        font-size: 3rem;
-      }
-      
-      #welcome-screen p {
-        font-size: 1.5rem;
-      }
-      
-      .title {
-        font-size: 2rem;
-      }
-      
-      .test-details {
-        padding: 20px;
-      }
-      
-      .controls {
+      .navbar {
         flex-direction: column;
+        padding: 1rem;
       }
       
-      .nav-buttons {
-        width: 100%;
-        justify-content: space-between;
+      .nav-links {
+        margin: 1rem 0;
       }
       
-      .nav-btn, .btn {
-        width: 100%;
-        justify-content: center;
-      }
-      
-      .q-nav-btn {
-        width: 40px;
-        height: 40px;
-      }
-      
-      .result-stats {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .stat {
-        width: 100%;
-        max-width: 200px;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      #welcome-screen h1 {
-        font-size: 2.5rem;
-      }
-      
-      #welcome-screen p {
-        font-size: 1.2rem;
-      }
-      
-      .test-details p {
-        font-size: 1rem;
-      }
-      
-      .btn, .nav-btn {
-        padding: 10px 15px;
-        font-size: 1rem;
-      }
-      
-      .question-text {
-        font-size: 1.1rem;
-      }
-      
-      .option {
-        padding: 12px;
+      .auth-buttons {
+        margin-top: 1rem;
       }
     }
   </style>
 </head>
 <body>
-  <div id="welcome-screen">
-    <h1>All the Best❤</h1>
-    <p><i class="fas fa-heart icon"></i> SANJAN JII! ❤️</p>
-  </div>
-
-  <div class="confirmation-dialog" id="confirmation-dialog">
-    <div class="confirmation-box">
-      <h3><i class="fas fa-question-circle"></i> Confirm Your Answer</h3>
-      <p>Are you sure about your selection?</p>
-      <div class="confirmation-buttons">
-        <button class="confirmation-btn confirmation-btn-primary" onclick="confirmSelection()">
-          <i class="fas fa-check"></i> Yes, Submit
-        </button>
-        <button class="confirmation-btn confirmation-btn-secondary" onclick="cancelSelection()">
-          <i class="fas fa-times"></i> No, Change
-        </button>
+  <!-- Header -->
+  <header class="header">
+    <nav class="navbar">
+      <div class="logo">EDU PRO</div>
+      <div class="nav-links">
+        <a href="#" class="nav-link">Products</a>
+        <a href="#" class="nav-link">Test Series</a>
+        <a href="#" class="nav-link">Results</a>
+        <a href="#" class="nav-link">About</a>
       </div>
-    </div>
-  </div>
+      <div class="auth-buttons">
+        <button class="btn btn-outline" onclick="openModal('login-modal')">Login</button>
+        <button class="btn btn-primary" onclick="openModal('register-modal')">Register</button>
+      </div>
+    </nav>
+  </header>
 
+  <!-- Main Content -->
   <div class="container">
-    <div id="intro-screen">
-      <div class="title">Aap Sab Kar Lengi</div>
-      <div class="test-details">
-        <p><i class="fas fa-book"></i> <strong>Subject:</strong> 12th Chemistry</p>
-        <p><i class="fas fa-tags"></i> <strong>Topics:</strong> Solutions, Electrochemistry, Chemical Kinetics, d- and f-Block Elements, Coordination Compounds, Haloalkanes and Haloarenes, Alcohols, Phenols and Ethers, Aldehydes, Ketones and Carboxylic Acids, Amines</p>
-        <p><i class="fas fa-question-circle"></i> <strong>Total Questions:</strong> 110</p>
-        <p><i class="fas fa-clock"></i> <strong>Time Limit:</strong> 110 minutes</p>
-        <p><i class="fas fa-graduation-cap"></i> <strong>Test Type:</strong> Practice Quiz</p>
-        <p><i class="fas fa-star"></i> <strong>Marks:</strong> +1 for correct, -1/3 for wrong, 0 for unattempted</p>
-      </div>
-      <button class="btn" onclick="startQuiz()">
-        <i class="fas fa-play"></i> Start Test
-      </button>
-    </div>
-
-    <div class="timer" style="display: none;">
-      <i class="fas fa-clock"></i> <span id="timer">110:00</span>
-    </div>
-
-    <div id="quiz-box">
-      <div class="question-text" id="question-text"></div>
-      <div class="options-container" id="options"></div>
-      <div class="explanation" id="explanation">
-        <div class="explanation-title">
-          <i class="fas fa-lightbulb"></i> Explanation
+    <h1>Premium NEET/JEE Preparation Products</h1>
+    <p>Get access to our high-quality test series, video lectures, and study materials</p>
+    
+    <div class="products-grid">
+      <!-- Product 1 -->
+      <div class="product-card">
+        <div class="product-image">
+          <i class="fas fa-book-open fa-3x"></i>
         </div>
-        <div id="explanation-text"></div>
+        <div class="product-content">
+          <span class="product-badge">BESTSELLER</span>
+          <h3 class="product-title">NEET Ultimate Test Series</h3>
+          <p>180 full-length tests with detailed solutions</p>
+          <div class="product-price">₹2999</div>
+          <button class="btn btn-primary" onclick="openModal('purchase-modal')">Buy Now</button>
+        </div>
       </div>
       
-      <div class="controls">
-        <div class="nav-buttons">
-          <button class="nav-btn" onclick="prevQuestion()">
-            <i class="fas fa-arrow-left"></i> Previous
-          </button>
-          <button class="nav-btn" onclick="nextQuestion()">
-            Next <i class="fas fa-arrow-right"></i>
-          </button>
+      <!-- Product 2 -->
+      <div class="product-card">
+        <div class="product-image">
+          <i class="fas fa-video fa-3x"></i>
         </div>
-        <button class="btn" onclick="confirmSubmit()">
-          <i class="fas fa-stop"></i> End Test
-        </button>
+        <div class="product-content">
+          <span class="product-badge">NEW</span>
+          <h3 class="product-title">JEE Video Lectures</h3>
+          <p>300+ hours of premium video content</p>
+          <div class="product-price">₹4999</div>
+          <button class="btn btn-primary" onclick="openModal('purchase-modal')">Buy Now</button>
+        </div>
       </div>
       
-      <div class="question-nav-container">
-        <button class="toggle-nav-btn" onclick="toggleQuestionNav()">
-          <i class="fas fa-list-ol"></i> Jump to Question
-        </button>
-        <div class="question-nav" id="question-nav"></div>
+      <!-- Product 3 -->
+      <div class="product-card">
+        <div class="product-image">
+          <i class="fas fa-chart-bar fa-3x"></i>
+        </div>
+        <div class="product-content">
+          <h3 class="product-title">Performance Analytics</h3>
+          <p>AI-driven analysis of your test performance</p>
+          <div class="product-price">₹1999</div>
+          <button class="btn btn-primary" onclick="openModal('purchase-modal')">Buy Now</button>
+        </div>
       </div>
     </div>
-
-    <div id="summary">
-      <div class="result-card">
-        <div class="result-title">
-          <i class="fas fa-trophy"></i> Your Test Results
-        </div>
-        <div class="result-stats">
-          <div class="stat stat-correct">
-            <div class="stat-value" id="correct-count">0</div>
-            <div>Correct</div>
-          </div>
-          <div class="stat stat-wrong">
-            <div class="stat-value" id="wrong-count">0</div>
-            <div>Wrong</div>
-          </div>
-          <div class="stat stat-unattempted">
-            <div class="stat-value" id="unattempted-count">0</div>
-            <div>Unattempted</div>
-          </div>
-          <div class="stat stat-marks">
-            <div class="stat-value" id="obtained-marks">0</div>
-            <div>Marks Obtained</div>
-          </div>
-          <div class="stat stat-marks">
-            <div class="stat-value">110</div>
-            <div>Total Marks</div>
-          </div>
-        </div>
-        
-        <div class="review-controls">
-          <button class="btn" onclick="reviewTest()">
-            <i class="fas fa-search"></i> Review Responses
-          </button>
-          <button class="btn" style="background: #6c757d;" onclick="location.reload()">
-            <i class="fas fa-redo"></i> New Test
-          </button>
-        </div>
+    
+    <!-- Admin Panel (Visible only to admins) -->
+    <div class="admin-panel" id="admin-panel">
+      <h2>Admin Dashboard</h2>
+      <div class="admin-tabs">
+        <div class="admin-tab active" onclick="switchAdminTab('products')">Products</div>
+        <div class="admin-tab" onclick="switchAdminTab('users')">Users</div>
+        <div class="admin-tab" onclick="switchAdminTab('orders')">Orders</div>
       </div>
+      
+      <div class="admin-content active" id="products-tab">
+        <h3>Manage Products</h3>
+        <button class="btn btn-primary" onclick="openModal('add-product-modal')">
+          <i class="fas fa-plus"></i> Add New Product
+        </button>
+        <!-- Product list would go here -->
+      </div>
+      
+      <div class="admin-content" id="users-tab">
+        <h3>User Management</h3>
+        <!-- User list would go here -->
+      </div>
+      
+      <div class="admin-content" id="orders-tab">
+        <h3>Order Management</h3>
+        <!-- Order list would go here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Modals -->
+  <div class="modal" id="login-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Login</h2>
+        <button class="close-modal" onclick="closeModal('login-modal')">&times;</button>
+      </div>
+      <form id="login-form">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+      <p style="text-align: center; margin-top: 1rem;">
+        <a href="#" onclick="openModal('forgot-modal')">Forgot password?</a>
+      </p>
+      <p style="text-align: center; margin-top: 1rem;">
+        Don't have an account? <a href="#" onclick="switchToRegister()">Register</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="modal" id="register-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Register</h2>
+        <button class="close-modal" onclick="closeModal('register-modal')">&times;</button>
+      </div>
+      <form id="register-form">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+      <p style="text-align: center; margin-top: 1rem;">
+        Already have an account? <a href="#" onclick="switchToLogin()">Login</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Purchase Modal -->
+  <div class="modal" id="purchase-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Complete Purchase</h2>
+        <button class="close-modal" onclick="closeModal('purchase-modal')">&times;</button>
+      </div>
+      <div id="product-details">
+        <!-- Product details will be dynamically inserted here -->
+      </div>
+      <form id="payment-form">
+        <div class="form-group">
+          <label>Card Number</label>
+          <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <div class="form-group" style="flex: 1;">
+            <label>Expiry Date</label>
+            <input type="text" class="form-control" placeholder="MM/YY" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>CVV</label>
+            <input type="text" class="form-control" placeholder="123" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Name on Card</label>
+          <input type="text" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          Pay Now
+        </button>
+      </form>
+      <p style="text-align: center; margin-top: 1rem;">
+        <i class="fas fa-lock"></i> Secure payment processing
+      </p>
+    </div>
+  </div>
+
+  <!-- Add Product Modal (Admin) -->
+  <div class="modal" id="add-product-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add New Product</h2>
+        <button class="close-modal" onclick="closeModal('add-product-modal')">&times;</button>
+      </div>
+      <form id="product-form">
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea class="form-control" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Price (₹)</label>
+          <input type="number" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Product Image</label>
+          <input type="file" class="form-control" accept="image/*">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select class="form-control" required>
+            <option value="">Select category</option>
+            <option value="test-series">Test Series</option>
+            <option value="video-lectures">Video Lectures</option>
+            <option value="books">Study Material</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+      </form>
     </div>
   </div>
 
   <script>
-    const quiz = [
-      {
-        question: "The van't Hoff factor (i) for a 0.2 M K₄[Fe(CN)₆] solution (75% dissociated) is:",
-        options: ["1.75", "3.25", "4.0", "2.5"],
-        answer: 1,
-        explanation: "Correct Option: b) 3.25<br><br>Dissociation: K₄[Fe(CN)₆] → 4K⁺ + [Fe(CN)₆]⁴⁻ (Total ions = 5).<br>i = 1 + (n−1)α = 1 + (5−1)(0.75) = 3.25.<br>Trap: Many forget to count all ions (e.g., ignore [Fe(CN)₆]⁴⁻)."
-      },
-      {
-        question: "Which graph represents an ideal solution?",
-        options: ["P vs X (Linear for both solute & solvent)", "P vs X (Non-linear with positive deviation)", "P vs X (Non-linear with negative deviation)", "P vs X (Only solvent is linear)"],
-        answer: 0,
-        explanation: "Correct Option: a) Linear for both (Follows Raoult's law).<br><br>Ideal solutions show straight-line P vs X plots for both components.<br>Non-linear graphs indicate non-ideal behavior (e.g., ethanol-water)."
-      },
-      {
-        question: "Which is NOT true for a 2 molal aqueous NaCl solution?",
-        options: ["ΔT_b = 2.08°C (K_b = 0.52°C/m)", "Freezing point = -7.44°C (K_f = 1.86°C/m)", "Osmotic pressure ≈ 100 atm at 300K", "Mole fraction of NaCl ≈ 0.03"],
-        answer: 3,
-        explanation: "Correct Option: d) Mole fraction ≈ 0.03 (Actual ≈ 0.0347)<br><br>i=2 for NaCl → ΔT_b = i×K_b×m = 2×0.52×2 = 2.08°C (Option a ✅).<br>ΔT_f = i×K_f×m = 2×1.86×2 = 7.44°C → FP = -7.44°C (Option b ✅).<br>π = iCRT ≈ 2×2×0.0821×300 ≈ 100 atm (Option c ✅).<br>Mole fraction (X₂):<br>Moles NaCl = 2, Moles H₂O = 1000/18 ≈ 55.5 → X₂ = 2/(2+55.5) ≈ 0.0347 (Option d ❌)."
-      },
-      {
-        question: "A 5% w/v urea (MW=60) solution is isotonic with:",
-        options: ["1.5% w/v glucose (MW=180)", "2.5% w/v sucrose (MW=342)", "0.9% w/v NaCl (MW=58.5, i≈1.8)", "1.8% w/v KCl (MW=74.5, i≈1.9)"],
-        answer: 0,
-        explanation: "Correct Option: a) 1.5% w/v glucose<br><br>Isotonic ⇒ Same osmotic pressure (π).<br>Urea (i=1): Molarity = (5/60) × (1000/100) = 0.833 M.<br>Glucose (i=1): (1.5/180) × 10 = 0.833 M (✅).<br>Trap: NaCl/KCl seem close but their i values change molarity."
-      },
-      {
-        question: "Which pair shows positive deviation from Raoult's law?",
-        options: ["Acetone-Chloroform (H-bonding)", "Benzene-Toluene (Ideal)", "Ethanol-Water (H-bonding)", "Acetone-CS₂ (Weak interactions)"],
-        answer: 3,
-        explanation: "Correct Option: d) Acetone-CS₂<br><br>Positive deviation:<br>A-B interactions < A-A or B-B (e.g., acetone-CS₂).<br>Vapor pressure > ideal, ΔH > 0, ΔV > 0.<br>Traps: Ethanol-water is non-ideal but H-bonded (not always positive deviation)."
-      },
-      {
-        question: "The solubility of a gas in water at 2 atm is 0.5 g/L. What's its solubility at 8 atm (T constant)?",
-        options: ["0.5 g/L", "1.0 g/L", "2.0 g/L", "4.0 g/L"],
-        answer: 2,
-        explanation: "Correct Option: c) 2.0 g/L<br><br>Henry's law: C ∝ P → C₂ = C₁ × (P₂/P₁) = 0.5 × (8/2) = 2.0 g/L.<br>Trap: Units must match (g/L or M)."
-      },
-      {
-        question: "Which colligative property is used to determine molar mass of polymers?",
-        options: ["Boiling point elevation", "Freezing point depression", "Osmotic pressure", "Relative lowering of vapor pressure"],
-        answer: 2,
-        explanation: "Correct Option: c) Osmotic pressure<br><br>Osmotic pressure (π) is sensitive for high MW substances (e.g., polymers).<br>Formula: π = (n₂/V)RT → MW = (w₂RT)/(πV).<br>Why not others? ΔT_b/ΔT_f are too small for large MW."
-      },
-      {
-        question: "A 0.1 M MgCl₂ solution (α=80%) has a freezing point of -0.744°C. What is K_f for the solvent?",
-        options: ["1.86°C/m", "3.72°C/m", "0.93°C/m", "5.58°C/m"],
-        answer: 0,
-        explanation: "Correct Option: a) 1.86°C/m<br><br>MgCl₂ → Mg²⁺ + 2Cl⁻ (i = 1 + (3−1)×0.8 = 2.6).<br>ΔT_f = i×K_f×m → 0.744 = 2.6 × K_f × 0.1 → K_f = 1.86°C/m (Water's value)."
-      },
-      {
-        question: "Which is TRUE for a 0.01 M Al₂(SO₄)₃ solution?",
-        options: ["Total ion concentration = 0.05 M", "Osmotic pressure = 0.01 RT", "Conductivity ≈ 0.01 S/cm", "Freezing point = -0.0186°C"],
-        answer: 0,
-        explanation: "Correct Option: a) Total ions = 0.05 M<br><br>Al₂(SO₄)₃ → 2Al³⁺ + 3SO₄²⁻ → 5 ions → 0.01×5 = 0.05 M ions.<br>Traps:<br>π = iCRT = 5×0.01×RT (not 0.01 RT).<br>ΔT_f = iK_fm = 5×1.86×0.01 = 0.093°C (not 0.0186°C)."
-      },
-      {
-        question: "The azeotropic mixture of HCl-H₂O boils at 110°C. Which is TRUE?",
-        options: ["It shows negative deviation.", "Vapor phase is richer in HCl.", "It cannot be separated by distillation.", "All of the above."],
-        answer: 3,
-        explanation: "Correct Option: d) All of the above<br><br>Negative deviation (B.P. > pure water).<br>Vapor phase richer in HCl (low-boiling component).<br>Azeotropes have fixed composition → no separation by distillation."
-      },
-      {
-        question: "Electrolysis of CuSO₄ (Copper Electrodes). What happens to the concentration of CuSO₄ solution?",
-        options: ["Increases", "Decreases", "Remains unchanged", "First increases, then decreases"],
-        answer: 2,
-        explanation: "Correct Option: c) Remains unchanged<br><br>Anode: Cu → Cu²⁺ + 2e⁻ (Copper dissolves)<br>Cathode: Cu²⁺ + 2e⁻ → Cu (Copper deposits)<br>Net Effect: Cu²⁺ ions are recycled → Concentration stays constant.<br>Trap: Students often assume water is electrolyzed, but Cu²⁺ has higher reduction potential than H⁺."
-      },
-      {
-        question: "Given: Zn²⁺ + 2e⁻ → Zn (E° = -0.76 V), Fe²⁺ + 2e⁻ → Fe (E° = -0.44 V). What is E°cell for Zn + Fe²⁺ → Zn²⁺ + Fe?",
-        options: ["-0.32 V", "+0.32 V", "+1.20 V", "-1.20 V"],
-        answer: 1,
-        explanation: "Correct Option: b) +0.32 V<br><br>Oxidation (Zn → Zn²⁺ + 2e⁻): E° = +0.76 V (Reverse sign!)<br>Reduction (Fe²⁺ + 2e⁻ → Fe): E° = -0.44 V<br>E°cell = E°cathode - E°anode = -0.44 - (-0.76) = +0.32 V<br>Key Concept: Always reverse the sign for oxidation."
-      },
-      {
-        question: "Which is a secondary cell?",
-        options: ["Dry cell (Leclanché)", "Lead-acid battery", "Mercury cell", "Daniell cell"],
-        answer: 1,
-        explanation: "Correct Option: b) Lead-acid battery<br><br>Secondary cells are rechargeable (e.g., lead-acid, Li-ion).<br>Primary cells (a, c, d) are non-rechargeable."
-      },
-      {
-        question: "Λₘ° of KCl = 150 S cm² mol⁻¹. If λₘ°(K⁺) = 73.5 S cm² mol⁻¹, what is λₘ°(Cl⁻)?",
-        options: ["76.5 S cm² mol⁻¹", "223.5 S cm² mol⁻¹", "50.0 S cm² mol⁻¹", "36.8 S cm² mol⁻¹"],
-        answer: 0,
-        explanation: "Correct Option: a) 76.5 S cm² mol⁻¹<br><br>Kohlrausch's Law: Λₘ°(KCl) = λₘ°(K⁺) + λₘ°(Cl⁻)<br>150 = 73.5 + λₘ°(Cl⁻) → λₘ°(Cl⁻) = 76.5 S cm² mol⁻¹"
-      },
-      {
-        question: "During charging of a lead-acid battery, what occurs at the anode?",
-        options: ["Pb → Pb²⁺ + 2e⁻", "PbSO₄ + 2H₂O → PbO₂ + SO₄²⁻ + 4H⁺ + 2e⁻", "Pb²⁺ + 2e⁻ → Pb", "PbO₂ + 4H⁺ + SO₄²⁻ + 2e⁻ → PbSO₄ + 2H₂O"],
-        answer: 1,
-        explanation: "Correct Option: b) PbSO₄ → PbO₂<br><br>Charging: Converts PbSO₄ back to Pb (cathode) and PbO₂ (anode).<br>Trap: Option (d) is the discharge reaction."
-      },
-      {
-        question: "For the cell: Cu | Cu²⁺ (0.1 M) || Ag⁺ (0.01 M) | Ag, calculate Ecell at 298 K. Given: E°(Cu²⁺/Cu) = +0.34 V, E°(Ag⁺/Ag) = +0.80 V",
-        options: ["0.46 V", "0.34 V", "0.37 V", "0.52 V"],
-        answer: 2,
-        explanation: "Correct Option: c) 0.37 V<br><br>E°cell = 0.80 - 0.34 = 0.46 V<br>Nernst Equation:<br>Ecell = 0.46 - (0.0591/2)log(0.1/(0.01)²) = 0.37 V<br>Trap: Forgetting to square [Ag⁺] in Q."
-      },
-      {
-        question: "What is the oxidation state of Fe in K₃[Fe(CN)₆]?",
-        options: ["+2", "+3", "+4", "+6"],
-        answer: 1,
-        explanation: "Correct Option: b) +3<br><br>Let OS of Fe = x.<br>3(+1) + x + 6(-1) = 0 → x = +3<br>Trap: CN⁻ has -1 charge (not neutral)."
-      },
-      {
-        question: "A conductivity cell with 0.1 M KCl (R = 100 Ω) has a cell constant of 0.8 cm⁻¹. What is κ (conductivity)?",
-        options: ["0.008 S cm⁻¹", "0.0125 S cm⁻¹", "0.02 S cm⁻¹", "0.04 S cm⁻¹"],
-        answer: 0,
-        explanation: "Correct Option: a) 0.008 S cm⁻¹<br><br>κ = Cell constant / R = 0.8 / 100 = 0.008 S cm⁻¹"
-      },
-      {
-        question: "In a fuel cell (2H₂ + O₂ → 2H₂O), what is the anode product?",
-        options: ["H₂O", "O₂", "H⁺", "OH⁻"],
-        answer: 2,
-        explanation: "Correct Option: c) H⁺<br><br>Anode: H₂ → 2H⁺ + 2e⁻<br>Trap: H₂O is the final product, not the anode product."
-      },
-      {
-        question: "Time to deposit 1.27 g Cu from CuSO₄ using 2 A current? (Atomic mass Cu = 63.5 g/mol)",
-        options: ["965 sec", "1930 sec", "482.5 sec", "241.25 sec"],
-        answer: 1,
-        explanation: "Correct Option: b) 1930 sec<br><br>Moles of Cu = 1.27/63.5 = 0.02 mol<br>Charge = 0.02 × 2 × 96500 = 3860 C<br>Time = 3860/2 = 1930 sec"
-      },
-      {
-        question: "For a first-order reaction, the time taken for 75% completion is 40 minutes. What is its half-life?",
-        options: ["10 min", "20 min", "30 min", "40 min"],
-        answer: 1,
-        explanation: "Correct Option: b) 20 min<br><br>First-order logic:<br>t75% = 2×t1/2 (since 75% = two half-lives).<br>Given t75% = 40 min → t1/2 = 20 min.<br>Trap: Students often confuse t50% and t75%."
-      },
-      {
-        question: "Which statement is FALSE about the Arrhenius equation?",
-        options: ["k = Ae^(-Ea/RT)", "Slope of ln(k) vs 1/T is -Ea/R", "Pre-exponential factor (A) depends on temperature", "Catalysts lower Ea but not A"],
-        answer: 2,
-        explanation: "Correct Option: c) Pre-exponential factor (A) depends on temperature<br><br>A = Frequency factor (independent of T).<br>Truths:<br>Arrhenius eq: k = Ae^(-Ea/RT) (Option a ✅).<br>Slope of ln(k) vs 1/T is -Ea/R (Option b ✅).<br>Catalysts reduce Ea but leave A unchanged (Option d ✅)."
-      },
-      {
-        question: "The rate law for 2A + B → C is Rate = k[A][B]². If [A] is doubled and [B] is halved, the new rate becomes:",
-        options: ["Same", "Doubled", "Halved", "Quadrupled"],
-        answer: 2,
-        explanation: "Correct Option: c) Halved<br><br>Original rate: k[A][B]².<br>New rate: k[2A][B/2]² = 2×1/4 k[A][B]² = 1/2 Rate.<br>Trap: Misapplying exponents (e.g., ignoring the square on [B])."
-      },
-      {
-        question: "A zero-order reaction completes 50% in 20 minutes. What is the time taken for 100% completion?",
-        options: ["20 min", "40 min", "60 min", "Never completes"],
-        answer: 1,
-        explanation: "Correct Option: b) 40 min<br><br>Zero-order logic:<br>t50% = [A]0/2k = 20 min → t100% = [A]0/k = 40 min.<br>Trap: Assuming linearity for all orders (only true for zero-order)."
-      },
-      {
-        question: "The half-life of a reaction is inversely proportional to the square of the initial concentration. What is the order?",
-        options: ["0", "1", "2", "3"],
-        answer: 3,
-        explanation: "Correct Option: d) 3<br><br>Half-life dependence:<br>t1/2 ∝ 1/[A]0^(n-1). Given t1/2 ∝ 1/[A]0² → n-1=2 → n=3.<br>Trap: Confusing with t1/2 ∝ 1/[A]0 (2nd order)."
-      },
-      {
-        question: "The rate constant of a reaction at 300K is 2×10⁻² s⁻¹ and at 320K is 4×10⁻² s⁻¹. What is Ea? (R = 8.314 J/mol-K)",
-        options: ["26.8 kJ/mol", "53.6 kJ/mol", "13.4 kJ/mol", "6.7 kJ/mol"],
-        answer: 1,
-        explanation: "Correct Option: b) 53.6 kJ/mol<br><br>Arrhenius equation (two-point form):<br>ln(k2/k1) = Ea/R(1/T1 - 1/T2)<br>Substituting values:<br>ln(4×10⁻²/2×10⁻²) = Ea/8.314(1/300 - 1/320) → Ea ≈ 53.6 kJ/mol"
-      },
-      {
-        question: "Which is TRUE about the rate-determining step (RDS)?",
-        options: ["It is the fastest step.", "It has the highest activation energy.", "It determines the overall order.", "Both (b) and (c)."],
-        answer: 3,
-        explanation: "Correct Option: d) Both (b) and (c).<br><br>RDS characteristics:<br>Slowest step (not fastest, so Option a ❌).<br>Highest Ea (Option b ✅).<br>Determines rate law (Option c ✅)."
-      },
-      {
-        question: "For a reaction A → B, a plot of ln[A] vs time is linear with slope -2.5×10⁻³ s⁻¹. What is the rate constant?",
-        options: ["2.5×10⁻³ s⁻¹", "5.0×10⁻³ s⁻¹", "1.25×10⁻³ s⁻¹", "Depends on [A]₀"],
-        answer: 0,
-        explanation: "Correct Option: a) 2.5×10⁻³ s⁻¹<br><br>First-order plot: ln[A] vs t gives slope = -k.<br>Thus, k = 2.5×10⁻³ s⁻¹.<br>Trap: Missing the negative sign in the slope."
-      },
-      {
-        question: "The reaction 2NO + O₂ → 2NO₂ follows the mechanism: NO + O₂ ⇌ NO₃ (fast equilibrium), NO₃ + NO → 2NO₂ (slow). What is the rate law?",
-        options: ["Rate = k[NO][O₂]", "Rate = k[NO]²[O₂]", "Rate = k[NO₃][NO]", "Rate = k[NO]²"],
-        answer: 1,
-        explanation: "Correct Option: b) Rate = k[NO]²[O₂]<br><br>RDS (Step 2): Rate = k2[NO₃][NO].<br>From Step 1 (equilibrium): K = [NO₃]/[NO][O₂] → [NO₃] = K[NO][O₂].<br>Final rate law: Rate = k[NO]²[O₂] (where k = k2×K)."
-      },
-      {
-        question: "The unit of the rate constant for a second-order reaction is:",
-        options: ["mol L⁻¹ s⁻¹", "L mol⁻¹ s⁻¹", "s⁻¹", "mol² L⁻² s⁻¹"],
-        answer: 1,
-        explanation: "Correct Option: b) L mol⁻¹ s⁻¹<br><br>General formula: For order n, units = mol^(1-n) L^(n-1) s⁻¹.<br>For n=2: L mol⁻¹ s⁻¹.<br>Trap: Confusing with zero-order (mol L⁻¹ s⁻¹) or first-order (s⁻¹)."
-      },
-      {
-        question: "Which of the following is NOT a property of boron (B) in Group 13?",
-        options: ["Forms electron-deficient compounds", "Shows maximum covalency of 6", "Acts as a strong oxidizing agent", "Forms stable +3 oxidation state"],
-        answer: 2,
-        explanation: "Correct Option: c) Acts as a strong oxidizing agent<br><br>Boron is electron-deficient (e.g., BH₃) and max covalency = 4 (via sp³).<br>+3 state is stable for B (no d-orbitals to expand).<br>Trap: Boron is a reducing agent, not oxidizing."
-      },
-      {
-        question: "The correct order of thermal stability for Group 16 hydrides is:",
-        options: ["H₂O > H₂S > H₂Se > H₂Te", "H₂Te > H₂Se > H₂S > H₂O", "H₂O > H₂Te > H₂Se > H₂S", "All are equally stable"],
-        answer: 0,
-        explanation: "Correct Option: a) H₂O > H₂S > H₂Se > H₂Te<br><br>Stability decreases down the group due to decreasing bond dissociation energy.<br>Exception: H₂O is most stable due to H-bonding."
-      },
-      {
-        question: "Which p-block element exhibits ALLOTROPY and CATENATION?",
-        options: ["Nitrogen", "Phosphorus", "Oxygen", "Fluorine"],
-        answer: 1,
-        explanation: "Correct Option: b) Phosphorus<br><br>Phosphorus shows allotropes (white, red, black) and catenation (P₄ rings/chains).<br>Trap: Nitrogen (N₂) is diatomic; no catenation."
-      },
-      {
-        question: "The shape of XeF₄ is:",
-        options: ["Tetrahedral", "Square planar", "Octahedral", "Trigonal bipyramidal"],
-        answer: 1,
-        explanation: "Correct Option: b) Square planar<br><br>XeF₄: Xe has sp³d² hybridization with 2 lone pairs → square planar.<br>Trap: XeF₆ is distorted octahedral."
-      },
-      {
-        question: "Which nitrogen oxide is a neutral oxide?",
-        options: ["NO₂", "N₂O₅", "NO", "N₂O₃"],
-        answer: 2,
-        explanation: "Correct Option: c) NO<br><br>Neutral oxides: NO, CO, N₂O.<br>Acidic oxides: NO₂, N₂O₅."
-      },
-      {
-        question: "The bleaching action of SO₂ is due to:",
-        options: ["Oxidation", "Reduction", "Chlorination", "Adsorption"],
-        answer: 1,
-        explanation: "Correct Option: b) Reduction<br><br>SO₂ bleaches by reduction (breaks chromophores).<br>Trap: Cl₂ bleaches by oxidation."
-      },
-      {
-        question: "Which halogen forms the strongest hydrogen bond with water?",
-        options: ["Fluorine", "Chlorine", "Bromine", "Iodine"],
-        answer: 0,
-        explanation: "Correct Option: a) Fluorine<br><br>F has the highest electronegativity → strongest H-bonding (e.g., HF)."
-      },
-      {
-        question: "The correct order of acidic strength for oxoacids of chlorine is:",
-        options: ["HClO₄ > HClO₃ > HClO₂ > HClO", "HClO > HClO₂ > HClO₃ > HClO₄", "HClO₄ > HClO₂ > HClO₃ > HClO", "All are equally acidic"],
-        answer: 0,
-        explanation: "Correct Option: a) HClO₄ > HClO₃ > HClO₂ > HClO<br><br>Acidity increases with oxidation state (+1 in HClO to +7 in HClO₄)."
-      },
-      {
-        question: "Which p-block element is liquid at room temperature?",
-        options: ["Bromine", "Iodine", "Phosphorus", "Sulfur"],
-        answer: 0,
-        explanation: "Correct Option: a) Bromine<br><br>Br₂ is a reddish-brown liquid (room temp).<br>Trap: Iodine is solid; white phosphorus is waxy solid."
-      },
-      {
-        question: "The inert pair effect is most prominent in:",
-        options: ["Carbon", "Silicon", "Lead", "Nitrogen"],
-        answer: 2,
-        explanation: "Correct Option: c) Lead<br><br>Inert pair effect: Reluctance of ns² electrons to bond (seen in Pb, Tl, Bi).<br>Pb²⁺ is more stable than Pb⁴⁺ due to this effect."
-      },
-      {
-        question: "Which ion is colorless in aqueous solution?",
-        options: ["Fe³⁺", "Ti³⁺", "Cu⁺", "V³⁺"],
-        answer: 2,
-        explanation: "Correct Option: c) Cu⁺<br><br>Cu⁺ (3d¹⁰): No d-d transitions possible (filled d-subshell) → colorless<br>Colored ions: Fe³⁺ (3d⁵), Ti³⁺ (3d¹), V³⁺ (3d²)<br>Trap: Assuming all transition metal ions are colored"
-      },
-      {
-        question: "The magnetic moment (BM) of [Mn(CN)₆]³⁻ is closest to:",
-        options: ["1.73", "2.83", "3.87", "4.90"],
-        answer: 0,
-        explanation: "Correct Option: a) 1.73<br><br>Mn³⁺ = 3d⁴ → Low-spin (CN⁻ strong field): t₂g⁴ eg⁰ → 1 unpaired e⁻<br>μ = √n(n+2) = √1(3) ≈ 1.73 BM<br>Trap: High-spin config (μ=4.90) is incorrect for cyanide complexes"
-      },
-      {
-        question: "Which lanthanoid shows +4 oxidation state commonly?",
-        options: ["La", "Ce", "Gd", "Lu"],
-        answer: 1,
-        explanation: "Correct Option: b) Ce<br><br>Ce⁴⁺ (4f⁰) is stable due to empty f-subshell<br>Trap: Gd (f⁷) and Lu (f¹⁴) prefer +3 state"
-      },
-      {
-        question: "The catalyst used in Haber's process is:",
-        options: ["Fe with Mo promoter", "V₂O₅", "Pt-Rh gauze", "Ni"],
-        answer: 0,
-        explanation: "Correct Option: a) Fe with Mo promoter<br><br>Haber process: N₂ + 3H₂ → 2NH₃ uses Fe-K₂O-Al₂O₃ catalyst<br>Mo prevents catalyst poisoning<br>Trap: V₂O₅ (Contact process), Pt-Rh (Ostwald process)"
-      },
-      {
-        question: "Which d-block element has highest melting point?",
-        options: ["Cr", "W", "Hg", "Zn"],
-        answer: 1,
-        explanation: "Correct Option: b) W (Tungsten)<br><br>W (5d⁴6s²): Strong metallic bonds due to half-filled d-orbitals → m.p. 3422°C<br>Trap: Cr (m.p. 1907°C) is high but < W"
-      },
-      {
-        question: "The E° value for Mn³⁺/Mn²⁺ is +1.51 V because:",
-        options: ["Mn²⁺ has stable half-filled d⁵ configuration", "Mn³⁺ is a strong oxidizing agent", "Both (a) and (b)", "Mn³⁺ has d⁴ configuration"],
-        answer: 2,
-        explanation: "Correct Option: c) Both (a) and (b)<br><br>Mn²⁺ (3d⁵) is stable → Hard to oxidize to Mn³⁺ (3d⁴)<br>High E° → Mn³⁺ readily gains e⁻ → strong oxidizer"
-      },
-      {
-        question: "The color of KMnO₄ is due to:",
-        options: ["d-d transition", "Charge transfer (LMCT)", "f-f transition", "Paramagnetism"],
-        answer: 1,
-        explanation: "Correct Option: b) Charge transfer (LMCT)<br><br>LMCT: O²⁻ → Mn⁷⁺ electron transfer (not d-d)<br>Purple color: Complementary to green light absorbed<br>Trap: d-d transitions occur in complexes with partially filled d-orbitals"
-      },
-      {
-        question: "Which lanthanoid contraction effect is INCORRECT?",
-        options: ["Causes similar atomic radii of Zr & Hf", "Makes La(OH)₃ most basic", "Increases 5d series ionization energy", "Decreases density of 4f elements"],
-        answer: 3,
-        explanation: "Correct Option: d) Decreases density of 4f elements<br><br>Lanthanoid contraction:<br>✔ Zr (4d) & Hf (5d) have similar sizes<br>✔ La(OH)₃ more basic than Lu(OH)₃<br>✔ Increases IE due to poor shielding<br>✖ Increases density (atomic size↓ but mass↑)"
-      },
-      {
-        question: "The number of unpaired e⁻ in [CoF₆]³⁻ is:",
-        options: ["0", "2", "4", "6"],
-        answer: 2,
-        explanation: "Correct Option: c) 4<br><br>Co³⁺ = 3d⁶ → High-spin (F⁻ weak field): t₂g⁴ eg² → 4 unpaired e⁻<br>Trap: Low-spin (CN⁻ complex) would have 0 unpaired e⁻"
-      },
-      {
-        question: "Which is NOT an interstitial alloy?",
-        options: ["Steel", "Wrought iron", "Brass", "Stellite"],
-        answer: 2,
-        explanation: "Correct Option: c) Brass<br><br>Interstitial alloys: Small atoms (C, N) in metal lattice (Steel, Wrought iron)<br>Substitutional alloys: Similar size atoms (Brass = Cu+Zn)<br>Stellite: Co+Cr interstitial alloy"
-      },
-      {
-        question: "The IUPAC name of [Co(NH₃)₄Cl₂]Cl is:",
-        options: ["Tetraamminedichlorocobalt(III) chloride", "Dichlorotetraamminecobalt(III) chloride", "Tetraamminecobalt(II) dichloride", "Tetraamminedichlorocobalt(II) chloride"],
-        answer: 0,
-        explanation: "Correct Option: a) Tetraamminedichlorocobalt(III) chloride<br><br>Oxidation state of Co: x + 0×4 + (-1)×2 = -1 → x = +3<br>Ligands named alphabetically (ammine before chloro).<br>Trap: Ignoring charge balance or misidentifying oxidation state."
-      },
-      {
-        question: "The number of geometrical isomers for [Pt(NH₃)₂Cl₂] is:",
-        options: ["2", "3", "4", "1"],
-        answer: 0,
-        explanation: "Correct Option: a) 2 (Cis & Trans)<br><br>Square planar MA₂B₂ type → Cis (polar) and Trans (non-polar) isomers.<br>Trap: Octahedral MA₂B₂ has 2 isomers, but square planar only 2."
-      },
-      {
-        question: "A coordination compound has CFSE = -0.8Δ₀ for d⁶ configuration. Its geometry is:",
-        options: ["Octahedral", "Tetrahedral", "Square planar", "Linear"],
-        answer: 0,
-        explanation: "Correct Option: a) Octahedral<br><br>CFSE formula for octahedral (d⁶): -0.4n(eg) + 0.6n(t₂g) = -0.8Δ₀.<br>Tetrahedral CFSE would be lower (≈ -0.27Δ₀).<br>Key: Low-spin d⁶ (e.g., [Co(NH₃)₆]³⁺) favors octahedral."
-      },
-      {
-        question: "The magnetic moment (BM) of [Fe(H₂O)₆]²⁺ is closest to:",
-        options: ["0", "1.73", "2.83", "4.90"],
-        answer: 3,
-        explanation: "Correct Option: d) 4.90<br><br>Fe²⁺ = d⁶ → High-spin in weak field (H₂O): t₂g⁴ eg² → 4 unpaired e⁻.<br>μ = √n(n+2) = √4(6) ≈ 4.90 BM.<br>Trap: Assuming low-spin (μ = 0 for paired e⁻)."
-      },
-      {
-        question: "Which ligand is NOT chelating?",
-        options: ["EDTA", "Oxalate", "Pyridine", "Ethylenediamine"],
-        answer: 2,
-        explanation: "Correct Option: c) Pyridine<br><br>Chelating ligands bind via multiple atoms (EDTA:6, oxalate:2, en:2).<br>Pyridine is monodentate (only N donor).<br>Trap: Confusing with bidentate ligands like bipyridyl."
-      },
-      {
-        question: "The EAN of Fe in [Fe(CN)₆]⁴⁻ is:",
-        options: ["36", "34", "35", "33"],
-        answer: 0,
-        explanation: "Correct Option: a) 36<br><br>EAN = Atomic no. (Fe) - Oxidation state + 2×Coordination no.<br>Fe²⁺ (Z=26) → 26 - (+2) + 2×6 = 36.<br>Trap: Using +3 oxidation state (for [Fe(CN)₆]³⁻, EAN=35)."
-      },
-      {
-        question: "Which shows optical isomerism?",
-        options: ["[Co(NH₃)₄Cl₂]⁺", "[Co(en)₃]³⁺", "[Pt(NH₃)₂Cl₂]", "[Ni(CO)₄]"],
-        answer: 1,
-        explanation: "Correct Option: b) [Co(en)₃]³⁺<br><br>Optical isomers require non-superimposable mirror images.<br>[Co(en)₃]³⁺ has chiral 'Λ' and 'Δ' forms.<br>Trap: Square planar complexes (c) lack optical isomers."
-      },
-      {
-        question: "The hybridization of [Ni(CN)₄]²⁻ is:",
-        options: ["sp³", "dsp²", "sp³d²", "d²sp³"],
-        answer: 1,
-        explanation: "Correct Option: b) dsp²<br><br>Ni²⁺ = d⁸ → Square planar (low-spin, CN⁻ is strong field).<br>Hybridization: dsp² (uses 3d, 4s, 4p orbitals).<br>Trap: Assuming tetrahedral (sp³) like [NiCl₄]²⁻."
-      },
-      {
-        question: "The color of [Ti(H₂O)₆]³⁺ is due to:",
-        options: ["d-d transition", "Charge transfer", "Paramagnetism", "Ligand fluorescence"],
-        answer: 0,
-        explanation: "Correct Option: a) d-d transition<br><br>Ti³⁺ = d¹ → Single electron transition (t₂g → eg) absorbs visible light.<br>Color: Purple (complementary to absorbed yellow-green).<br>Trap: Charge transfer occurs in MnO₄⁻, not here."
-      },
-      {
-        question: "The IUPAC name of K₃[Fe(C₂O₄)₃] is:",
-        options: ["Potassium ferrioxalate", "Potassium tris(oxalato)ferrate(III)", "Potassium trioxalatoiron(III)", "Potassium oxalatoferrate(III)"],
-        answer: 1,
-        explanation: "Correct Option: b) Potassium tris(oxalato)ferrate(III)<br><br>Anionic complex → Ligands first (oxalato), metal with -ate suffix (ferrate).<br>Prefix 'tris' for multiple oxalate ligands.<br>Trap: Missing 'tris' or using 'ferrioxalate' (common name)."
-      },
-      {
-        question: "Which carbohydrate is a non-reducing sugar?",
-        options: ["Glucose", "Fructose", "Sucrose", "Maltose"],
-        answer: 2,
-        explanation: "Correct Option: c) Sucrose<br><br>Sucrose lacks a free aldehyde/ketone group (glycosidic bond between C1 of glucose and C2 of fructose).<br>Trap: Maltose (reducing) has free C1 aldehyde in one glucose unit."
-      },
-      {
-        question: "The α-helix structure of proteins is stabilized by:",
-        options: ["Disulfide bonds", "Hydrogen bonds (C=O···H-N)", "Ionic bonds", "Hydrophobic interactions"],
-        answer: 1,
-        explanation: "Correct Option: b) Hydrogen bonds<br><br>α-helix: H-bonds between C=O of residue i and N-H of residue i+4.<br>Trap: Disulfide bonds stabilize tertiary structure, not secondary."
-      },
-      {
-        question: "Which base is NOT present in RNA?",
-        options: ["Adenine", "Thymine", "Uracil", "Cytosine"],
-        answer: 1,
-        explanation: "Correct Option: b) Thymine<br><br>RNA: Adenine (A), Uracil (U), Cytosine (C), Guanine (G).<br>DNA: Replaces Uracil with Thymine."
-      },
-      {
-        question: "The enzyme that hydrolyzes starch into maltose is:",
-        options: ["Pepsin", "Amylase", "Lipase", "Trypsin"],
-        answer: 1,
-        explanation: "Correct Option: b) Amylase<br><br>Amylase break α(1→4) glycosidic bonds in starch → Maltose.<br>Trap: Pepsin/trypsin digest proteins, not carbs."
-      },
-      {
-        question: "Which lipid is a steroid?",
-        options: ["Palmitic acid", "Lecithin", "Cholesterol", "Glycerol"],
-        answer: 2,
-        explanation: "Correct Option: c) Cholesterol<br><br>Steroids: 4 fused rings (e.g., cholesterol, hormones).<br>Trap: Lecithin is a phospholipid; palmitic acid is a fatty acid."
-      },
-      {
-        question: "The vitamin responsible for blood clotting is:",
-        options: ["Vitamin A", "Vitamin C", "Vitamin K", "Vitamin D"],
-        answer: 2,
-        explanation: "Correct Option: c) Vitamin K<br><br>Vitamin K activates clotting factors (II, VII, IX, X).<br>Trap: Vitamin D regulates Ca²⁺ absorption."
-      },
-      {
-        question: "Which is an example of a globular protein?",
-        options: ["Collagen", "Keratin", "Hemoglobin", "Myosin"],
-        answer: 2,
-        explanation: "Correct Option: c) Hemoglobin<br><br>Globular proteins: Spherical, water-soluble (e.g., Hb, enzymes).<br>Fibrous proteins: Structural (collagen, keratin, myosin)."
-      },
-      {
-        question: "The bond linking amino acids in proteins is:",
-        options: ["Glycosidic bond", "Phosphodiester bond", "Peptide bond", "Ester bond"],
-        answer: 2,
-        explanation: "Correct Option: c) Peptide bond<br><br>Peptide bond: Amide linkage (–CO–NH–) between amino acids.<br>Trap: Glycosidic bonds link sugars; phosphodiester in DNA/RNA."
-      },
-      {
-        question: "Which nucleic acid carries amino acids during protein synthesis?",
-        options: ["mRNA", "tRNA", "rRNA", "DNA"],
-        answer: 1,
-        explanation: "Correct Option: b) tRNA<br><br>tRNA: Anticodon matches mRNA codon, delivers amino acids.<br>mRNA: Template for translation."
-      },
-      {
-        question: "Deficiency of which vitamin causes scurvy?",
-        options: ["Vitamin A", "Vitamin B12", "Vitamin C", "Vitamin D"],
-        answer: 2,
-        explanation: "Correct Option: c) Vitamin C<br><br>Scurvy: Weak collagen → bleeding gums, poor wound healing.<br>Vitamin C (ascorbic acid): Co-factor for collagen synthesis."
-      },
-      {
-        question: "Which undergoes SN² reaction fastest?",
-        options: ["CH₃-Br", "(CH₃)₂CH-Br", "(CH₃)₃C-Br", "C₆H₅-Br"],
-        answer: 0,
-        explanation: "Correct Option: a) CH₃-Br<br><br>SN² favored for:<br>✔ 1° halides (CH₃-X)<br>✔ Strong nucleophiles (e.g., OH⁻)<br>✔ Polar aprotic solvents<br><br>Steric hindrance slows SN²: 3° > 2° > 1°<br>Trap: Aryl halides (d) don't undergo SN²"
-      },
-      {
-        question: "Major product of CH₃-CH=CH₂ + Br₂ (in CCl₄)?",
-        options: ["CH₃-CHBr-CH₂Br", "CH₂Br-CH=CH₂", "CH₃-CH=CH-Br", "No reaction"],
-        answer: 0,
-        explanation: "Correct Option: a) CH₃-CHBr-CH₂Br<br><br>Anti-addition of Br₂ to alkenes → vicinal dibromide<br>Mechanism: Bromonium ion intermediate<br>Trap: (b) is allylic bromination (requires NBS/light)"
-      },
-      {
-        question: "Best method to prepare iodoethane from ethanol?",
-        options: ["HI (48%)", "PCl₅", "SOCl₂", "KI + H₃PO₄"],
-        answer: 3,
-        explanation: "Correct Option: d) KI + H₃PO₄<br><br>Lucas reagent (ZnCl₂/HCl) converts alcohols to alkyl chlorides<br>HI causes reduction (may give ethane)<br>KI/H₃PO₄ gives clean substitution"
-      },
-      {
-        question: "Which is most reactive towards nucleophilic substitution?",
-        options: ["Chlorobenzene", "Benzyl chloride", "Vinyl chloride", "CH₃Cl"],
-        answer: 1,
-        explanation: "Correct Option: b) Benzyl chloride<br><br>Reactivity order:<br>Benzyl > Allyl > 1° > 2° > 3° > Aryl > Vinyl<br>Benzyl carbocation stabilized by resonance<br>Trap: Aryl/vinyl halides are unreactive"
-      },
-      {
-        question: "Product of C₆H₅-Cl + NaOH (high T/P)?",
-        options: ["Phenol", "Benzene", "Benzoic acid", "No reaction"],
-        answer: 0,
-        explanation: "Correct Option: a) Phenol<br><br>Nucleophilic aromatic substitution requires:<br>✔ Strong electron-withdrawing groups (ortho/para)<br>✔ High temp/pressure<br><br>Here: Benzyne mechanism"
-      },
-      {
-        question: "Major product of isobutane + Br₂ (light)?",
-        options: ["(CH₃)₂CH-CH₂Br", "(CH₃)₃C-Br", "CH₃-CHBr-CH₃", "CH₂Br-CH₂-CH₃"],
-        answer: 1,
-        explanation: "Correct Option: b) (CH₃)₃C-Br<br><br>Free radical mechanism:<br>Br• abstraction from 3° carbon (most stable radical)<br>Forms 3° alkyl halide<br>Trap: (a) is minor product"
-      },
-      {
-        question: "Which cannot form Grignard reagent?",
-        options: ["CH₃-CH₂-Br", "C₆H₅-Br", "CH₂=CH-Cl", "(CH₃)₃C-Cl"],
-        answer: 2,
-        explanation: "Correct Option: c) CH₂=CH-Cl<br><br>Vinyl/aryl halides don't form Grignards easily<br>β-hydrogen leads to elimination<br>Trap: 3° halides (d) can form Grignards with excess Mg"
-      },
-      {
-        question: "Best reagent for CH₃-CH₂-OH → CH₃-CH₂-I?",
-        options: ["NaI + H₃PO₄", "PCl₃", "SOCl₂", "HI (48%)"],
-        answer: 0,
-        explanation: "Correct Option: a) NaI + H₃PO₄<br><br>Finkelstein reaction: R-OH → R-I using NaI/H₃PO₄<br>HI causes reduction (→ ethane)<br>SOCl₂/PCl₃ give chlorides"
-      },
-      {
-        question: "Product of C₆H₅-CH₂-Cl + KCN?",
-        options: ["C₆H₅-CH₂-CN", "C₆H₅-CH₂-NH₂", "C₆H₅-CH₂-OH", "C₆H₅-CH₃"],
-        answer: 0,
-        explanation: "Correct Option: a) C₆H₅-CH₂-CN<br><br>Nucleophilic substitution: Cl replaced by CN<br>Further reduction gives amines (but needs LiAlH₄)<br>Trap: (b) requires additional steps"
-      },
-      {
-        question: "Which shows optical activity?",
-        options: ["CH₃-CHCl-CH₃", "CH₃-CH₂-CH₂Cl", "CH₃-CHCl-COOH", "C₆H₅-CHCl-CH₃"],
-        answer: 2,
-        explanation: "Correct Option: c) CH₃-CHCl-COOH<br><br>Chiral center requires 4 different groups<br>Only (c) has: H, Cl, CH₃, COOH<br>Trap: (a) has plane of symmetry"
-      },
-      {
-        question: "Lucas test for alcohols involves:",
-        options: ["Oxidation with K₂Cr₂O₇", "Reaction with ZnCl₂/HCl", "Decolorization of Br₂ water", "Formation of iodoform"],
-        answer: 1,
-        explanation: "Correct Option: b) Reaction with ZnCl₂/HCl<br><br>Lucas reagent (ZnCl₂ + conc. HCl) classifies alcohols based on reactivity:<br>3° alcohols react immediately (cloudiness)<br>2° alcohols react in 5-10 minutes<br>1° alcohols no reaction at room temp<br>Trap: K₂Cr₂O₇ is used for oxidation tests (not Lucas)."
-      },
-      {
-        question: "Which alcohol gives iodoform test positive?",
-        options: ["Ethanol", "Propan-2-ol", "Both (a) and (b)", "Methanol"],
-        answer: 2,
-        explanation: "Correct Option: c) Both (a) and (b)<br><br>Iodoform test (NaOH + I₂): Positive for:<br>Ethanol (CH₃CH₂OH → CHI₃)<br>2° alcohols with CH₃-CH(OH)- group (Propan-2-ol)<br>Trap: Methanol (CH₃OH) gives negative test."
-      },
-      {
-        question: "The major product of phenol + Br₂ water is:",
-        options: ["o-Bromophenol", "p-Bromophenol", "2,4,6-Tribromophenol", "Bromobenzene"],
-        answer: 2,
-        explanation: "Correct Option: c) 2,4,6-Tribromophenol<br><br>Phenol undergoes electrophilic aromatic substitution → Highly activated ring → Tri-substitution at 2,4,6 positions.<br>Trap: In non-aqueous medium, mono-substitution occurs."
-      },
-      {
-        question: "Williamson synthesis is used to prepare:",
-        options: ["Alcohols", "Phenols", "Ethers", "Aldehydes"],
-        answer: 2,
-        explanation: "Correct Option: c) Ethers<br><br>Williamson synthesis:<br>R-X + R'ONa → R-O-R' (Ether) + NaX<br>Best for symmetrical ethers (e.g., CH₃-O-CH₃).<br>Trap: Uses alkoxide (not phenol) for best yields."
-      },
-      {
-        question: "Phenol is more acidic than ethanol because:",
-        options: ["Phenoxide ion is stabilized by resonance", "Ethoxide ion has +I effect", "Both (a) and (b)", "Phenol has higher molecular weight"],
-        answer: 2,
-        explanation: "Correct Option: c) Both (a) and (b)<br><br>Phenoxide ion: Negative charge delocalized into benzene ring (resonance stabilization).<br>Ethoxide ion: Unstable due to electron-donating (+I) effect of ethyl group."
-      },
-      {
-        question: "Dehydration of ethanol with conc. H₂SO₄ at 170°C gives:",
-        options: ["Ethanal", "Ethene", "Diethyl ether", "Ethanoic acid"],
-        answer: 1,
-        explanation: "Correct Option: b) Ethene<br><br>Temperature control is critical:<br>140°C: Ether formation (C₂H₅-O-C₂H₅)<br>170°C: Alkene formation (CH₂=CH₂)<br>Trap: Ethanal requires oxidation (PCC/KMnO₄)."
-      },
-      {
-        question: "Which reagent converts phenol to salicylic acid?",
-        options: ["NaOH + CO₂ (Kolbe's reaction)", "CHCl₃ + NaOH (Reimer-Tiemann)", "Zn dust", "NaBH₄"],
-        answer: 0,
-        explanation: "Correct Option: a) NaOH + CO₂ (Kolbe's reaction)<br><br>Kolbe's reaction:<br>Phenol + NaOH → Sodium phenoxide<br>CO₂ at 400K, 4-7 atm → Salicylic acid (o-hydroxybenzoic acid).<br>Trap: Reimer-Tiemann gives salicylaldehyde (not acid)."
-      },
-      {
-        question: "The product of isopropyl alcohol + acidic K₂Cr₂O₇ is:",
-        options: ["Acetone", "Propanoic acid", "Propanal", "No reaction"],
-        answer: 0,
-        explanation: "Correct Option: a) Acetone<br><br>2° alcohols oxidize to ketones (no further oxidation):<br>(CH₃)₂CH-OH → (CH₃)₂C=O (Acetone)<br>Trap: K₂Cr₂O₇ oxidizes 1° alcohols to acids (not 2° alcohols)."
-      },
-      {
-        question: "Ethers are generally:",
-        options: ["Highly reactive", "Good hydrogen bond donors", "Polar but inert", "Water insoluble"],
-        answer: 2,
-        explanation: "Correct Option: c) Polar but inert<br><br>Ethers (R-O-R'):<br>Have dipole moment (polar C-O bonds)<br>Chemically inert (no H-bonding, unlike alcohols)<br>Soluble in water (H-bond acceptors).<br>Trap: Ethers are not reactive like alcohols."
-      },
-      {
-        question: "The IUPAC name of C₆H₅-O-CH₃ is:",
-        options: ["Methyl phenyl ether", "Methoxybenzene", "Phenol methyl", "Benzyl methyl ether"],
-        answer: 1,
-        explanation: "Correct Option: b) Methoxybenzene<br><br>IUPAC naming: Smaller alkyl group as prefix (methoxy) + parent chain (benzene).<br>Common name: Anisole.<br>Trap: 'Phenyl' is used for -C₆H₅ substituents (not for O-linkage)."
-      },
-      {
-        question: "Tollen's reagent is used to distinguish:",
-        options: ["Aldehydes and ketones", "Alcohols and phenols", "Alkanes and alkenes", "Amines and amides"],
-        answer: 0,
-        explanation: "Correct Option: a) Aldehydes and ketones<br><br>Tollen's reagent (AgNO₃ + NH₄OH):<br>Aldehydes → Silver mirror (R-CHO → R-COOH + Ag↓)<br>Ketones → No reaction<br>Clinical link: Used in urine glucose tests (detects reducing sugars like glucose)."
-      },
-      {
-        question: "The product of acetone + NaHSO₃ is:",
-        options: ["Crystalline addition compound", "Alcohol", "Carboxylic acid", "No reaction"],
-        answer: 0,
-        explanation: "Correct Option: a) Crystalline addition compound<br><br>NaHSO₃ adds to C=O of methyl ketones/aldehydes → white crystalline bisulfite adduct<br>Mechanism: Nucleophilic addition<br>Trap: Doesn't work for diaryl ketones (e.g., benzophenone)."
-      },
-      {
-        question: "Which gives a positive Fehling's test?",
-        options: ["Acetone", "Benzaldehyde", "Formaldehyde", "Acetic acid"],
-        answer: 2,
-        explanation: "Correct Option: c) Formaldehyde<br><br>Fehling's solution (Cu²⁺ + tartrate):<br>Aliphatic aldehydes (R-CHO) → Red Cu₂O precipitate<br>Aromatic aldehydes (e.g., benzaldehyde) → No reaction<br>Trap: Ketones (acetone) and acids (acetic acid) don't react."
-      },
-      {
-        question: "The strongest acid among these is:",
-        options: ["HCOOH", "CH₃COOH", "ClCH₂COOH", "C₆H₅COOH"],
-        answer: 2,
-        explanation: "Correct Option: c) ClCH₂COOH<br><br>Acidity order: ClCH₂COOH > HCOOH > C₆H₅COOH > CH₃COOH<br>Reason:<br>-I effect of Cl stabilizes carboxylate anion<br>Formic acid (HCOOH) stronger than acetic (no electron-donating group)<br>Trap: Aromatic acids (benzoic) weaker than aliphatic."
-      },
-      {
-        question: "The product of Cannizzaro reaction with formaldehyde is:",
-        options: ["Methanol + formic acid", "Ethanol + acetic acid", "Methanol + CO₂", "No reaction"],
-        answer: 0,
-        explanation: "Correct Option: a) Methanol + formic acid<br><br>Cannizzaro reaction (NaOH):<br>Aldehydes without α-H (e.g., HCHO, C₆H₅CHO) → Alcohol + Carboxylic acid<br>HCHO → CH₃OH (methanol) + HCOOH (formic acid)<br>Trap: Ketones don't undergo Cannizzaro."
-      },
-      {
-        question: "IUPAC name of CH₃-CO-CH₂-CHO is:",
-        options: ["3-Oxobutanal", "1,3-Butanedione", "4-Oxopentanal", "Methylglyoxal"],
-        answer: 0,
-        explanation: "Correct Option: a) 3-Oxobutanal<br><br>Priority order: Aldehyde > Ketone<br>Naming:<br>-CHO as main group (butanal)<br>=O at C3 as prefix (3-oxo)<br>Trap: 'Dione' is incorrect (only one ketone group)."
-      },
-      {
-        question: "Which reagent converts acetophenone to benzoic acid?",
-        options: ["NaBH₄", "KMnO₄/H⁺", "LiAlH₄", "Tollen's reagent"],
-        answer: 1,
-        explanation: "Correct Option: b) KMnO₄/H⁺<br><br>Oxidation of alkyl ketones:<br>KMnO₄/H⁺ cleaves C-C bond → Carboxylic acids<br>Acetophenone (C₆H₅-CO-CH₃) → Benzoic acid + CO₂<br>Trap: NaBH₄/LiAlH₄ reduce C=O to alcohols."
-      },
-      {
-        question: "Hell-Volhard-Zelinsky (HVZ) reaction is used for:",
-        options: ["α-Halogenation of carboxylic acids", "Oxidation of aldehydes", "Reduction of ketones", "Decarboxylation"],
-        answer: 0,
-        explanation: "Correct Option: a) α-Halogenation of carboxylic acids<br><br>HVZ reaction:<br>R-CH₂-COOH + Br₂/P → R-CHBr-COOH (α-bromo acid)<br>Requires PBr₃ to form acyl bromide intermediate<br>Clinical link: Used to synthesize α-amino acids."
-      },
-      {
-        question: "Which test distinguishes acetaldehyde and acetone?",
-        options: ["Fehling's test", "Iodoform test", "Both (a) and (b)", "Tollens' test"],
-        answer: 2,
-        explanation: "Correct Option: c) Both (a) and (b)<br><br>Acetaldehyde (CH₃CHO):<br>Fehling's +ve (aliphatic aldehyde)<br>Iodoform +ve (CH₃-CO- group)<br>Acetone (CH₃-CO-CH₃):<br>Fehling's -ve (ketone)<br>Iodoform +ve<br>Trap: Only iodoform can't distinguish (both +ve)."
-      },
-      {
-        question: "The product of benzoic acid + SOCl₂ is:",
-        options: ["Benzoyl chloride", "Benzyl chloride", "Benzonitrile", "No reaction"],
-        answer: 0,
-        explanation: "Correct Option: a) Benzoyl chloride<br><br>SOCl₂ converts -COOH to -COCl (acyl chloride):<br>C₆H₅-COOH + SOCl₂ → C₆H₅-COCl + SO₂ + HCl<br>Trap: Benzyl chloride requires side-chain chlorination (C₆H₅-CH₂Cl)."
-      },
-      {
-        question: "Which test distinguishes primary, secondary, and tertiary amines?",
-        options: ["Tollen's test", "Carbylamine test", "Hinsberg test", "Fehling's test"],
-        answer: 2,
-        explanation: "Correct Option: c) Hinsberg test<br><br>Hinsberg reagent (C₆H₅SO₂Cl):<br>1° amine: Forms soluble sulfonamide with NaOH<br>2° amine: Forms insoluble sulfonamide<br>3° amine: No reaction<br>Trap: Carbylamine test only for 1° amines."
-      },
-      {
-        question: "The product of aniline + HNO₂ (0-5°C) + H₂O is:",
-        options: ["Phenol", "Nitrobenzene", "Benzene diazonium chloride", "Azobenzene"],
-        answer: 0,
-        explanation: "Correct Option: a) Phenol<br><br>Diazotization (0-5°C): C₆H₅NH₂ → C₆H₅N₂⁺Cl⁻<br>Warm water: C₆H₅N₂⁺Cl⁻ → C₆H₅OH + N₂↑<br>Trap: At 0-5°C, diazonium salt forms (not phenol)."
-      },
-      {
-        question: "Which amine is most basic in aqueous solution?",
-        options: ["NH₃", "(CH₃)₂NH", "(CH₃)₃N", "C₆H₅NH₂"],
-        answer: 1,
-        explanation: "Correct Option: b) (CH₃)₂NH<br><br>Basicity order (aqueous): 2° > 1° > 3° > NH₃ > ArNH₂<br>Reason:<br>+I effect of -CH₃ increases e⁻ density on N<br>3° amines have steric hindrance for H-bonding<br>Trap: Gas phase basicity order differs (3° > 2° > 1°)."
-      },
-      {
-        question: "The product of aniline + Br₂ water is:",
-        options: ["o-Bromoaniline", "p-Bromoaniline", "2,4,6-Tribromoaniline", "No reaction"],
-        answer: 2,
-        explanation: "Correct Option: c) 2,4,6-Tribromoaniline<br><br>-NH₂ group activates benzene ring → Electrophilic substitution at o/p positions<br>Excess Br₂ → Tri-substitution (white precipitate)<br>Trap: In controlled conditions, mono-substitution occurs."
-      },
-      {
-        question: "Gabriel phthalimide synthesis is used to prepare:",
-        options: ["1° amines", "2° amines", "3° amines", "Aromatic amines"],
-        answer: 0,
-        explanation: "Correct Option: a) 1° amines<br><br>Steps:<br>Phthalimide + KOH → Potassium phthalimide<br>Alkylation with R-X<br>Hydrolysis → Pure 1° amine<br>Trap: Cannot prepare 2°/3°/aryl amines."
-      },
-      {
-        question: "The reagent that converts RCN to RCH₂NH₂ is:",
-        options: ["LiAlH₄", "NaBH₄", "H₂/Ni", "Sn/HCl"],
-        answer: 0,
-        explanation: "Correct Option: a) LiAlH₄<br><br>LiAlH₄ reduces nitriles to 1° amines: R-C≡N → R-CH₂-NH₂<br>NaBH₄ cannot reduce nitriles<br>Trap: H₂/Ni gives partial reduction (stops at R-CH=NH)."
-      },
-      {
-        question: "The IUPAC name of (CH₃)₂N-CH₂-CH₃ is:",
-        options: ["Dimethylaminoethane", "N,N-Dimethylethanamine", "N-Ethyldimethylamine", "Trimethylamine"],
-        answer: 1,
-        explanation: "Correct Option: b) N,N-Dimethylethanamine<br><br>Prefix 'N,N-' shows both -CH₃ on nitrogen<br>Parent chain: Ethanamine<br>Trap: Common names (e.g., 'dimethylethylamine') are incorrect in IUPAC."
-      },
-      {
-        question: "Which gives a positive carbylamine test?",
-        options: ["(CH₃)₂NH", "C₆H₅NH₂", "(CH₃)₃N", "CH₃CONH₂"],
-        answer: 1,
-        explanation: "Correct Option: b) C₆H₅NH₂<br><br>Carbylamine test (CHCl₃ + KOH):<br>Only 1° amines give foul-smelling isocyanides<br>Works for aliphatic & aromatic 1° amines<br>Trap: 2°/3°/amides don't react."
-      },
-      {
-        question: "The product of nitrobenzene + Sn/HCl is:",
-        options: ["Aniline", "Phenylhydroxylamine", "Azoxybenzene", "Nitrosobenzene"],
-        answer: 0,
-        explanation: "Correct Option: a) Aniline<br><br>Sn/HCl reduces -NO₂ to -NH₂:<br>C₆H₅NO₂ → C₆H₅NH₂<br>Intermediate products:<br>Nitrosobenzene → Phenylhydroxylamine → Aniline<br>Trap: In neutral medium, stops at phenylhydroxylamine."
-      },
-      {
-        question: "Which is a neurotransmitter?",
-        options: ["Aniline", "Acetamide", "Dopamine", "Urea"],
-        answer: 2,
-        explanation: "Correct Option: c) Dopamine<br><br>Biogenic amines: Dopamine, serotonin, adrenaline<br>Clinical link: Parkinson's disease is linked to dopamine deficiency<br>Trap: Aniline is toxic (not biologically active)."
+    // Modal Functions
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+    
+    function switchToRegister() {
+      closeModal('login-modal');
+      openModal('register-modal');
+    }
+    
+    function switchToLogin() {
+      closeModal('register-modal');
+      openModal('login-modal');
+    }
+    
+    // Admin Tab Switching
+    function switchAdminTab(tab) {
+      // Hide all tabs
+      document.querySelectorAll('.admin-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Deactivate all tab buttons
+      document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Activate selected tab
+      document.getElementById(`${tab}-tab`).classList.add('active');
+      event.target.classList.add('active');
+    }
+    
+    // Check if user is admin (in real app, this would come from backend)
+    function checkAdminStatus() {
+      // For demo, we'll use a URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      if(urlParams.get('admin') === 'true') {
+        document.getElementById('admin-panel').style.display = 'block';
       }
-    ];
-
-    let currentQuestion = 0;
-    let userResponses = Array(quiz.length).fill(null);
-    let testSubmitted = false;
-    let testStarted = false;
-    let timeLeft = 110 * 60; // 110 minutes in seconds
-    let timerInterval;
-    let selectedOptionIndex = null;
-    let quizState = JSON.parse(localStorage.getItem('quizState')) || null;
-
-    // Check for saved state on page load
+    }
+    
+    // Initialize
     window.onload = function() {
-      if (quizState) {
-        if (confirm("We found an unfinished test. Do you want to continue where you left off?")) {
-          loadSavedState();
-        } else {
-          localStorage.removeItem('quizState');
-        }
-      }
+      checkAdminStatus();
+      
+      // Add event listeners for forms
+      document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Login functionality would be implemented here');
+        closeModal('login-modal');
+      });
+      
+      document.getElementById('register-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Registration functionality would be implemented here');
+        closeModal('register-modal');
+      });
+      
+      document.getElementById('payment-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Payment processing would be implemented here');
+        closeModal('purchase-modal');
+      });
+      
+      document.getElementById('product-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('New product would be added to database');
+        closeModal('add-product-modal');
+      });
     };
-
-    // Hide welcome screen after 5 seconds
-    setTimeout(() => {
-      document.getElementById('welcome-screen').style.display = 'none';
-    }, 5000);
-
-    function loadSavedState() {
-      currentQuestion = quizState.currentQuestion;
-      userResponses = quizState.userResponses;
-      timeLeft = quizState.timeLeft;
-      testStarted = true;
-      
-      document.getElementById("intro-screen").style.display = "none";
-      document.querySelector(".timer").style.display = "flex";
-      document.getElementById("quiz-box").style.display = "block";
-      startTimer();
-      renderQuestion();
-      renderQuestionNav();
-    }
-
-    function saveState() {
-      const state = {
-        currentQuestion,
-        userResponses,
-        timeLeft,
-        testStarted: true
-      };
-      localStorage.setItem('quizState', JSON.stringify(state));
-    }
-
-    function startQuiz() {
-      document.getElementById("intro-screen").style.display = "none";
-      document.querySelector(".timer").style.display = "flex";
-      document.getElementById("quiz-box").style.display = "block";
-      startTimer();
-      renderQuestion();
-      renderQuestionNav();
-      testStarted = true;
-      saveState();
-    }
-
-    function startTimer() {
-      const timerDisplay = document.getElementById("timer");
-      updateTimerDisplay(timerDisplay);
-      
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        updateTimerDisplay(timerDisplay);
-        saveState();
-        
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          submitTest();
-        }
-      }, 1000);
-    }
-
-    function updateTimerDisplay(timerDisplay) {
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-      
-      if (timeLeft <= 300) { // 5 minutes or less
-        timerDisplay.parentElement.style.background = "#ffdddd";
-        timerDisplay.parentElement.style.color = "#dc3545";
+    
+    // For product purchase - in real app this would be dynamic
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+      if(btn.textContent.includes('Buy Now')) {
+        btn.addEventListener('click', function() {
+          const productCard = this.closest('.product-card');
+          const title = productCard.querySelector('.product-title').textContent;
+          const price = productCard.querySelector('.product-price').textContent;
+          
+          document.getElementById('product-details').innerHTML = `
+            <h3>${title}</h3>
+            <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0;">${price}</p>
+            <hr style="margin: 1.5rem 0;">
+          `;
+        });
       }
-    }
-
-    function renderQuestion() {
-      const question = quiz[currentQuestion];
-      document.getElementById("question-text").textContent = `${currentQuestion + 1}. ${question.question}`;
-      
-      const optionsContainer = document.getElementById("options");
-      optionsContainer.innerHTML = "";
-      
-      question.options.forEach((option, index) => {
-        const optionElement = document.createElement("div");
-        optionElement.className = "option";
-        
-        // Add icon span
-        const iconSpan = document.createElement("span");
-        iconSpan.className = "option-icon";
-        optionElement.appendChild(iconSpan);
-        
-        // Add option text
-        optionElement.appendChild(document.createTextNode(option));
-        
-        if (userResponses[currentQuestion] === index) {
-          optionElement.classList.add("selected");
-        }
-        
-        // In review mode, show correct/incorrect answers
-        if (testSubmitted) {
-          if (index === question.answer) {
-            optionElement.classList.add("correct-answer");
-            iconSpan.innerHTML = '<i class="fas fa-check-circle"></i>';
-          } else if (userResponses[currentQuestion] === index && userResponses[currentQuestion] !== question.answer) {
-            optionElement.classList.add("incorrect");
-            iconSpan.innerHTML = '<i class="fas fa-times-circle"></i>';
-          }
-        }
-        
-        optionElement.onclick = () => {
-          if (!testSubmitted) {
-            selectedOptionIndex = index;
-            document.getElementById('confirmation-dialog').style.display = 'flex';
-          }
-        };
-        optionsContainer.appendChild(optionElement);
-      });
-      
-      // Show explanation only in review mode for current question
-      const explanationEl = document.getElementById("explanation");
-      const explanationText = document.getElementById("explanation-text");
-      if (testSubmitted) {
-        explanationEl.style.display = "block";
-        explanationText.innerHTML = quiz[currentQuestion].explanation;
-      } else {
-        explanationEl.style.display = "none";
-        explanationText.textContent = "";
-      }
-    }
-
-    function confirmSelection() {
-      userResponses[currentQuestion] = selectedOptionIndex;
-      document.getElementById('confirmation-dialog').style.display = 'none';
-      renderQuestion();
-      renderQuestionNav();
-      saveState();
-    }
-
-    function cancelSelection() {
-      document.getElementById('confirmation-dialog').style.display = 'none';
-      selectedOptionIndex = null;
-    }
-
-    function renderQuestionNav() {
-      const navContainer = document.getElementById("question-nav");
-      navContainer.innerHTML = "";
-      
-      quiz.forEach((question, index) => {
-        const navButton = document.createElement("div");
-        navButton.className = "q-nav-btn";
-        navButton.textContent = index + 1;
-        
-        if (testSubmitted) {
-          if (userResponses[index] === question.answer) {
-            navButton.classList.add("correct");
-          } else if (userResponses[index] !== null) {
-            navButton.classList.add("incorrect");
-          } else {
-            navButton.classList.add("unattempted");
-          }
-        } else {
-          navButton.classList.add(userResponses[index] === null ? "unattempted" : "answered");
-        }
-        
-        navButton.onclick = () => {
-          currentQuestion = index;
-          renderQuestion();
-        };
-        navContainer.appendChild(navButton);
-      });
-    }
-
-    function toggleQuestionNav() {
-      const nav = document.getElementById("question-nav");
-      nav.classList.toggle("active");
-    }
-
-    function prevQuestion() {
-      if (currentQuestion > 0) {
-        currentQuestion--;
-        renderQuestion();
-      }
-    }
-
-    function nextQuestion() {
-      if (currentQuestion < quiz.length - 1) {
-        currentQuestion++;
-        renderQuestion();
-      }
-    }
-
-    function confirmSubmit() {
-      if (confirm("Are you sure you want to end the test?")) {
-        submitTest();
-      }
-    }
-
-    function submitTest() {
-      clearInterval(timerInterval);
-      testSubmitted = true;
-      localStorage.removeItem('quizState');
-      
-      let correct = 0, wrong = 0, unattempted = 0;
-      
-      quiz.forEach((question, index) => {
-        if (userResponses[index] === null) {
-          unattempted++;
-        } else if (userResponses[index] === question.answer) {
-          correct++;
-        } else {
-          wrong++;
-        }
-      });
-      
-      // Calculate marks (+4 for correct, -1 for wrong)
-      const obtainedMarks = (correct * 1) - (wrong * (1/3));
-      
-      document.getElementById("quiz-box").style.display = "none";
-      document.querySelector(".timer").style.display = "none";
-      document.getElementById("correct-count").textContent = correct;
-      document.getElementById("wrong-count").textContent = wrong;
-      document.getElementById("unattempted-count").textContent = unattempted;
-      document.getElementById("obtained-marks").textContent = obtainedMarks;
-      document.getElementById("summary").style.display = "block";
-    }
-
-    function reviewTest() {
-      document.getElementById("summary").style.display = "none";
-      document.getElementById("quiz-box").style.display = "block";
-      
-      // Render current question with correct/incorrect highlights
-      const question = quiz[currentQuestion];
-      const optionsContainer = document.getElementById("options");
-      optionsContainer.innerHTML = "";
-      
-      question.options.forEach((option, index) => {
-        const optionElement = document.createElement("div");
-        optionElement.className = "option";
-        
-        // Add icon span
-        const iconSpan = document.createElement("span");
-        iconSpan.className = "option-icon";
-        optionElement.appendChild(iconSpan);
-        
-        // Add option text
-        optionElement.appendChild(document.createTextNode(option));
-        
-        if (index === question.answer) {
-          optionElement.classList.add("correct-answer");
-          iconSpan.innerHTML = '<i class="fas fa-check-circle"></i>';
-        } else if (userResponses[currentQuestion] === index && userResponses[currentQuestion] !== question.answer) {
-          optionElement.classList.add("incorrect");
-          iconSpan.innerHTML = '<i class="fas fa-times-circle"></i>';
-        }
-        
-        optionsContainer.appendChild(optionElement);
-      });
-      
-      // Show explanation
-      document.getElementById("explanation").style.display = "block";
-      document.getElementById("explanation-text").innerHTML = question.explanation;
-      
-      // Update navigation buttons
-      renderQuestionNav();
-    }
+    });
   </script>
 </body>
 </html>
