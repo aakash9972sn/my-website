@@ -1,593 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EDU PRO - Premium NEET/JEE Products</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #4a6bff;
-      --secondary: #6c8cff;
-      --dark: #1a1a2e;
-      --light: #f8f9fa;
-      --success: #28a745;
-      --danger: #dc3545;
-      --warning: #ffc107;
-      --premium: #ffd700;
-    }
-    
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f8f9fa;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    
-    /* Header Styles */
-    .header {
-      background: white;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-    }
-    
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    .logo {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-    }
-    
-    .nav-link {
-      color: #333;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
-    
-    .nav-link:hover {
-      color: var(--primary);
-    }
-    
-    .auth-buttons .btn {
-      margin-left: 1rem;
-    }
-    
-    /* Main Content */
-    .container {
-      max-width: 1200px;
-      margin: 6rem auto 2rem;
-      padding: 0 2rem;
-    }
-    
-    /* Product Grid */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-    
-    .product-card {
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-    }
-    
-    .product-card:hover {
-      transform: translateY(-10px);
-    }
-    
-    .product-image {
-      height: 200px;
-      background: #eee;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-    }
-    
-    .product-content {
-      padding: 1.5rem;
-    }
-    
-    .product-title {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .product-price {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin: 1rem 0;
-    }
-    
-    .product-badge {
-      background: var(--premium);
-      color: #333;
-      padding: 0.3rem 0.8rem;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      display: inline-block;
-      margin-bottom: 1rem;
-    }
-    
-    /* Auth Modals */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .modal-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 400px;
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    
-    .close-modal {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    
-    .form-control {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-    
-    /* Buttons */
-    .btn {
-      padding: 0.8rem 1.5rem;
-      border-radius: 5px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: none;
-    }
-    
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background: var(--secondary);
-    }
-    
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-    }
-    
-    .btn-outline:hover {
-      background: rgba(74, 107, 255, 0.1);
-    }
-    
-    /* Admin Panel Styles */
-    .admin-panel {
-      display: none;
-      background: #f1f5ff;
-      padding: 2rem;
-      border-radius: 10px;
-      margin-top: 2rem;
-    }
-    
-    .admin-tabs {
-      display: flex;
-      border-bottom: 1px solid #ddd;
-      margin-bottom: 1.5rem;
-    }
-    
-    .admin-tab {
-      padding: 0.8rem 1.5rem;
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-    }
-    
-    .admin-tab.active {
-      border-bottom: 3px solid var(--primary);
-      font-weight: 600;
-    }
-    
-    .admin-content {
-      display: none;
-    }
-    
-    .admin-content.active {
-      display: block;
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-        padding: 1rem;
-      }
-      
-      .nav-links {
-        margin: 1rem 0;
-      }
-      
-      .auth-buttons {
-        margin-top: 1rem;
-      }
-    }
-  </style>
+    <title>BlunderShop - Worst Shopping Experience</title>
+    <style>
+        /* CSS Blunders */
+        body {
+            font-family: "Comic Sans MS", "Papyrus", sans-serif;
+            background-color: hotpink;
+            color: limegreen;
+        }
+        .product {
+            border: 10px dotted yellow;
+            margin: 2px;
+            padding: 500px;
+            background-image: url('https://example.com/nonexistent-image.jpg');
+        }
+        #header {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            font-size: 2px;
+        }
+        .price {
+            font-weight: bold;
+            color: transparent;
+        }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <nav class="navbar">
-      <div class="logo">EDU PRO</div>
-      <div class="nav-links">
-        <a href="#" class="nav-link">Products</a>
-        <a href="#" class="nav-link">Test Series</a>
-        <a href="#" class="nav-link">Results</a>
-        <a href="#" class="nav-link">About</a>
-      </div>
-      <div class="auth-buttons">
-        <button class="btn btn-outline" onclick="openModal('login-modal')">Login</button>
-        <button class="btn btn-primary" onclick="openModal('register-modal')">Register</button>
-      </div>
-    </nav>
-  </header>
-
-  <!-- Main Content -->
-  <div class="container">
-    <h1>Premium NEET/JEE Preparation Products</h1>
-    <p>Get access to our high-quality test series, video lectures, and study materials</p>
+    <!-- Layout Blunders -->
+    <footer style="position: absolute; top: 0;">Welcome to BlunderShop!</footer>
     
-    <div class="products-grid">
-      <!-- Product 1 -->
-      <div class="product-card">
-        <div class="product-image">
-          <i class="fas fa-book-open fa-3x"></i>
-        </div>
-        <div class="product-content">
-          <span class="product-badge">BESTSELLER</span>
-          <h3 class="product-title">NEET Ultimate Test Series</h3>
-          <p>180 full-length tests with detailed solutions</p>
-          <div class="product-price">₹2999</div>
-          <button class="btn btn-primary" onclick="openModal('purchase-modal')">Buy Now</button>
-        </div>
-      </div>
-      
-      <!-- Product 2 -->
-      <div class="product-card">
-        <div class="product-image">
-          <i class="fas fa-video fa-3x"></i>
-        </div>
-        <div class="product-content">
-          <span class="product-badge">NEW</span>
-          <h3 class="product-title">JEE Video Lectures</h3>
-          <p>300+ hours of premium video content</p>
-          <div class="product-price">₹4999</div>
-          <button class="btn btn-primary" onclick="openModal('purchase-modal')">Buy Now</button>
-        </div>
-      </div>
-      
-      <!-- Product 3 -->
-      <div class="product-card">
-        <div class="product-image">
-          <i class="fas fa-chart-bar fa-3x"></i>
-        </div>
-        <div class="product-content">
-          <h3 class="product-title">Performance Analytics</h3>
-          <p>AI-driven analysis of your test performance</p>
-          <div class="product-price">₹1999</div>
-          <button class="btn btn-primary" onclick="openModal('purchase-modal')">Buy Now</button>
-        </div>
-      </div>
+    <div id="header">
+        <h1>Hidden Header</h1>
     </div>
     
-    <!-- Admin Panel (Visible only to admins) -->
-    <div class="admin-panel" id="admin-panel">
-      <h2>Admin Dashboard</h2>
-      <div class="admin-tabs">
-        <div class="admin-tab active" onclick="switchAdminTab('products')">Products</div>
-        <div class="admin-tab" onclick="switchAdminTab('users')">Users</div>
-        <div class="admin-tab" onclick="switchAdminTab('orders')">Orders</div>
-      </div>
-      
-      <div class="admin-content active" id="products-tab">
-        <h3>Manage Products</h3>
-        <button class="btn btn-primary" onclick="openModal('add-product-modal')">
-          <i class="fas fa-plus"></i> Add New Product
-        </button>
-        <!-- Product list would go here -->
-      </div>
-      
-      <div class="admin-content" id="users-tab">
-        <h3>User Management</h3>
-        <!-- User list would go here -->
-      </div>
-      
-      <div class="admin-content" id="orders-tab">
-        <h3>Order Management</h3>
-        <!-- Order list would go here -->
-      </div>
+    <main style="display: none;">
+        <!-- Content not visible -->
+        <h2>Actual Products</h2>
+    </main>
+    
+    <!-- JavaScript Blunders -->
+    <script>
+        // Bad variable names and practices
+        function loadProducts() {
+            var x = 0;
+            while (x < x) {
+                console.log("This will never run but who cares");
+            }
+            
+            // Try to load products but actually don't
+            var products = undefined;
+            products.forEach(p => {
+                document.write("<div>Product: " + p.nonExistentProperty + "</div>");
+            });
+        }
+        
+        // Auto-scroll madness
+        setInterval(() => {
+            window.scrollTo(Math.random() * 10000, Math.random() * 10000);
+        }, 500);
+        
+        // Broken cart functionality
+        function addToCart(item) {
+            let cart = localStorage.getItem('cart');
+            localStorage.setItem('cart', cart + 1);
+            alert("Item added to cart! Just kidding, we didn't track which item.");
+        }
+        
+        // Call undefined function
+        initApp();
+    </script>
+    
+    <!-- Product Listing Blunders -->
+    <div class="product" onclick="addToCart()">
+        <h3 style="font-size: 0.5px;">Premium T-Shirt</h3>
+        <img src="" alt="No image available" width="1000" height="1">
+        <div class="price">Rs. NaN</div>
+        <button disabled>Out of Stock</button>
     </div>
-  </div>
-
-  <!-- Auth Modals -->
-  <div class="modal" id="login-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Login</h2>
-        <button class="close-modal" onclick="closeModal('login-modal')">&times;</button>
-      </div>
-      <form id="login-form">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-      </form>
-      <p style="text-align: center; margin-top: 1rem;">
-        <a href="#" onclick="openModal('forgot-modal')">Forgot password?</a>
-      </p>
-      <p style="text-align: center; margin-top: 1rem;">
-        Don't have an account? <a href="#" onclick="switchToRegister()">Register</a>
-      </p>
+    
+    <div class="product" onmouseover="alert('Why are you hovering?')">
+        <h3>Mystery Item</h3>
+        <img src="javascript:alert('XSS attempt')" alt="Hacked">
+        <div class="price">Pay us to find out!</div>
+        <button onclick="window.location='https://example.com/phishing-page'">BUY NOW</button>
     </div>
-  </div>
-
-  <div class="modal" id="register-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Register</h2>
-        <button class="close-modal" onclick="closeModal('register-modal')">&times;</button>
-      </div>
-      <form id="register-form">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label>Confirm Password</label>
-          <input type="password" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Register</button>
-      </form>
-      <p style="text-align: center; margin-top: 1rem;">
-        Already have an account? <a href="#" onclick="switchToLogin()">Login</a>
-      </p>
-    </div>
-  </div>
-
-  <!-- Purchase Modal -->
-  <div class="modal" id="purchase-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Complete Purchase</h2>
-        <button class="close-modal" onclick="closeModal('purchase-modal')">&times;</button>
-      </div>
-      <div id="product-details">
-        <!-- Product details will be dynamically inserted here -->
-      </div>
-      <form id="payment-form">
-        <div class="form-group">
-          <label>Card Number</label>
-          <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
-        </div>
-        <div style="display: flex; gap: 1rem;">
-          <div class="form-group" style="flex: 1;">
-            <label>Expiry Date</label>
-            <input type="text" class="form-control" placeholder="MM/YY" required>
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label>CVV</label>
-            <input type="text" class="form-control" placeholder="123" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Name on Card</label>
-          <input type="text" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%;">
-          Pay Now
-        </button>
-      </form>
-      <p style="text-align: center; margin-top: 1rem;">
-        <i class="fas fa-lock"></i> Secure payment processing
-      </p>
-    </div>
-  </div>
-
-  <!-- Add Product Modal (Admin) -->
-  <div class="modal" id="add-product-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Add New Product</h2>
-        <button class="close-modal" onclick="closeModal('add-product-modal')">&times;</button>
-      </div>
-      <form id="product-form">
-        <div class="form-group">
-          <label>Product Name</label>
-          <input type="text" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label>Description</label>
-          <textarea class="form-control" rows="3" required></textarea>
-        </div>
-        <div class="form-group">
-          <label>Price (₹)</label>
-          <input type="number" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label>Product Image</label>
-          <input type="file" class="form-control" accept="image/*">
-        </div>
-        <div class="form-group">
-          <label>Category</label>
-          <select class="form-control" required>
-            <option value="">Select category</option>
-            <option value="test-series">Test Series</option>
-            <option value="video-lectures">Video Lectures</option>
-            <option value="books">Study Material</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Product</button>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    // Modal Functions
-    function openModal(id) {
-      document.getElementById(id).style.display = 'flex';
-    }
     
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-    }
+    <!-- Broken Form -->
+    <form action="/submit" method="GET">
+        <input type="password" style="color: red; font-size: 24px;" placeholder="Visible Password">
+        <input type="submit" value="Submit" onclick="document.forms[0].action='malicious-site.com'">
+    </form>
     
-    function switchToRegister() {
-      closeModal('login-modal');
-      openModal('register-modal');
-    }
-    
-    function switchToLogin() {
-      closeModal('register-modal');
-      openModal('login-modal');
-    }
-    
-    // Admin Tab Switching
-    function switchAdminTab(tab) {
-      // Hide all tabs
-      document.querySelectorAll('.admin-content').forEach(content => {
-        content.classList.remove('active');
-      });
-      
-      // Deactivate all tab buttons
-      document.querySelectorAll('.admin-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      
-      // Activate selected tab
-      document.getElementById(`${tab}-tab`).classList.add('active');
-      event.target.classList.add('active');
-    }
-    
-    // Check if user is admin (in real app, this would come from backend)
-    function checkAdminStatus() {
-      // For demo, we'll use a URL parameter
-      const urlParams = new URLSearchParams(window.location.search);
-      if(urlParams.get('admin') === 'true') {
-        document.getElementById('admin-panel').style.display = 'block';
-      }
-    }
-    
-    // Initialize
-    window.onload = function() {
-      checkAdminStatus();
-      
-      // Add event listeners for forms
-      document.getElementById('login-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Login functionality would be implemented here');
-        closeModal('login-modal');
-      });
-      
-      document.getElementById('register-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Registration functionality would be implemented here');
-        closeModal('register-modal');
-      });
-      
-      document.getElementById('payment-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Payment processing would be implemented here');
-        closeModal('purchase-modal');
-      });
-      
-      document.getElementById('product-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('New product would be added to database');
-        closeModal('add-product-modal');
-      });
-    };
-    
-    // For product purchase - in real app this would be dynamic
-    document.querySelectorAll('.btn-primary').forEach(btn => {
-      if(btn.textContent.includes('Buy Now')) {
-        btn.addEventListener('click', function() {
-          const productCard = this.closest('.product-card');
-          const title = productCard.querySelector('.product-title').textContent;
-          const price = productCard.querySelector('.product-price').textContent;
-          
-          document.getElementById('product-details').innerHTML = `
-            <h3>${title}</h3>
-            <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0;">${price}</p>
-            <hr style="margin: 1.5rem 0;">
-          `;
-        });
-      }
-    });
-  </script>
+    <!-- Never ending loop -->
+    <script>
+        while (true) {
+            console.log("Consuming your CPU cycles");
+        }
+    </script>
 </body>
 </html>
