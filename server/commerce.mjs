@@ -38,7 +38,10 @@ export function validateCustomer(input) {
     ["pincode", 6, 6],
   ]) {
     assert(typeof input?.[field] === "string", `Please enter your ${field}.`);
-    customer[field] = input[field].trim();
+    customer[field] =
+      field === "address"
+        ? input[field].trim().replace(/\s+/g, " ")
+        : input[field].trim();
     assert(
       customer[field].length >= min &&
         customer[field].length <= max &&
@@ -61,6 +64,24 @@ export function validateCustomer(input) {
     /^[1-9]\d{5}$/.test(customer.pincode),
     "Please enter a valid 6-digit PIN code.",
   );
+  if (input.location !== undefined && input.location !== null) {
+    const location = input.location;
+    assert(
+      typeof location === "object" &&
+        !Array.isArray(location) &&
+        typeof location.latitude === "number" &&
+        typeof location.longitude === "number" &&
+        Number.isFinite(location.latitude) &&
+        Number.isFinite(location.longitude) &&
+        Math.abs(location.latitude) <= 90 &&
+        Math.abs(location.longitude) <= 180,
+      "Please choose a valid delivery map point.",
+    );
+    customer.location = {
+      latitude: Number(location.latitude.toFixed(6)),
+      longitude: Number(location.longitude.toFixed(6)),
+    };
+  }
   return customer;
 }
 

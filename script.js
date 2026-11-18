@@ -55,7 +55,76 @@
     detailProduct: null,
     detailVariant: "",
     checkoutBusy: false,
+    checkoutLocation: null,
+    activeRequest: null,
   };
+  const requests = window.BlunderRequests;
+  const requestMode = () =>
+    !state.config?.checkoutEnabled && requests.contacts(state.config).enabled;
+  const checkoutAvailable = () =>
+    state.config?.checkoutEnabled || requestMode();
+  let requestDrafts;
+  function savedRequests() {
+    if (requestDrafts) return requestDrafts;
+    let entries = [];
+    try {
+      entries = JSON.parse(sessionStorage.getItem("blunder:requests")) || [];
+    } catch {}
+    requestDrafts = (Array.isArray(entries) ? entries : [])
+      .slice(0, 5)
+      .flatMap((entry) => {
+        try {
+          return /^BW-[A-F0-9]{12}$/.test(entry?.id)
+            ? [requests.create(entry)]
+            : [];
+        } catch {
+          return [];
+        }
+      });
+    return requestDrafts;
+  }
+  function saveRequests(entries) {
+    requestDrafts = entries.slice(0, 5);
+    try {
+      sessionStorage.setItem("blunder:requests", JSON.stringify(requestDrafts));
+    } catch {}
+  }
+  function prepareRequest(customer) {
+    const t = totals();
+    const draft = requests.create({
+      items: t.items,
+      customer,
+      shipping: t.shipping,
+      discount: t.discount,
+    });
+    const signature = (value) =>
+      JSON.stringify([
+        value.items,
+        value.customer,
+        value.shipping,
+        value.discount,
+      ]);
+    const existing = savedRequests().find(
+      (value) => signature(value) === signature(draft),
+    );
+    const current = existing || draft;
+    saveRequests([
+      current,
+      ...savedRequests().filter((value) => value.id !== current.id),
+    ]);
+    closeDialog($("#checkout-dialog"));
+    showRequest(current);
+  }
+  function showRequest(draft) {
+    clearTimeout(pollTimer);
+    state.activeRequest = draft;
+    $("#orders-title").textContent = "Your COD request.";
+    const email = requests.emailURL(draft, state.config);
+    $("#orders-content").innerHTML =
+      `<div class="request-heading"><span class="request-step">ONE MORE STEP · SEND YOUR REQUEST</span><h3>Your basket. A message away.</h3><p>Open WhatsApp, then press <strong>Send</strong>. The store will confirm stock, the final total and delivery in chat.</p></div><div class="order-reference"><span>${esc(draft.id)}</span><span class="request-status">Ready to send</span></div><div class="request-next"><span>01<br><b>Review below</b></span><span>02<br><b>Send in WhatsApp</b></span><span>03<br><b>Store confirms</b></span></div><div class="order-details"><h4>Deliver to</h4><p>${esc(draft.customer.name)}<br>${esc(draft.customer.address)}<br>${esc(draft.customer.city)}, ${esc(draft.customer.state)} ${esc(draft.customer.pincode)}<br>+91 ${esc(draft.customer.phone)}</p>${directions(draft.customer.location) ? `<a class="order-map-link" href="${directions(draft.customer.location)}" target="_blank" rel="noopener">${icon("pin")} Check delivery point</a>` : ""}</div><div class="request-products">${draft.items.map((item) => `<div class="request-product"><span><strong>${esc(item.name)}</strong><small>${esc(item.pack)} × ${item.quantity}</small></span><strong>${money(item.price * item.quantity)}</strong></div>`).join("")}</div>${totalRows(draft, true)}<div class="request-actions"><a id="send-whatsapp" class="button button-dark" href="${esc(requests.whatsappURL(draft, state.config))}" target="_blank" rel="noopener">Open WhatsApp ${icon("diagonal")}</a><div>${email ? `<a id="email-request" class="button button-outline" href="${esc(email)}">Use email instead</a>` : ""}<button class="button button-outline" data-action="copy-request">Copy request</button></div></div><p class="request-disclosure">Your message includes your basket, contact details, address and selected map pin. Opening WhatsApp or email does not send it automatically. This page cannot confirm that it was sent; confirmation comes from the store in chat.</p><details class="request-preview"><summary>Preview the full message</summary><label class="sr-only" for="request-message">Your order request message</label><textarea id="request-message" readonly spellcheck="false">${esc(requests.message(draft))}</textarea></details><p class="request-feedback" id="request-feedback" role="status"></p><div class="request-tools"><button class="text-button" data-action="edit-request">Edit details</button><button class="text-button" data-action="delete-request">Delete this draft</button></div><p class="request-retention">Saved in this tab only. Your basket stays available until you change it. Already sent this request? Continue in the same WhatsApp conversation.</p><button class="text-button" data-action="orders">All requests & orders ${icon("arrow")}</button>`;
+    openDialog("orders-dialog");
+    $("#orders-dialog").scrollTop = 0;
+  }
   const apiOrigin = String(window.BLUNDER_API_ORIGIN || "").replace(/\/$/, "");
   let hasAPI = false,
     toastTimer,
@@ -80,7 +149,7 @@
         ...(options.key ? { "Idempotency-Key": options.key } : {}),
       },
       body: data === undefined ? undefined : JSON.stringify(data),
-      signal: AbortSignal.timeout(20000),
+      signal: options.signal || AbortSignal.timeout(20000),
     });
     let result;
     try {
@@ -318,8 +387,8 @@
       }
     );
   }
-  function totalRows(t) {
-    return `<div class="totals"><div><span>Products</span><span>${money(t.subtotal)}</span></div>${t.discount ? `<div><span>Offer savings</span><span>−${money(t.discount)}</span></div>` : ""}<div><span>Delivery</span><span>${t.shipping ? money(t.shipping) : "Free"}</span></div><div class="total"><span>Total</span><span>${money(t.total)}</span></div></div>`;
+  function totalRows(t, estimated = requestMode()) {
+    return `<div class="totals"><div><span>Products</span><span>${money(t.subtotal)}</span></div>${t.discount ? `<div><span>Offer savings</span><span>−${money(t.discount)}</span></div>` : ""}<div><span>${estimated ? "Estimated delivery" : "Delivery"}</span><span>${t.shipping ? money(t.shipping) : "Free"}</span></div><div class="total"><span>${estimated ? "Estimated total" : "Total"}</span><span>${money(t.total)}</span></div></div>`;
   }
   function renderBag() {
     const content = $("#bag-content");
@@ -345,7 +414,7 @@
         })
         .join(
           "",
-        )}</div><div class="basket-summary"><div class="shipping-progress">${t.subtotal >= threshold ? "Your basket qualifies for free delivery." : `You’re ${money(threshold - t.subtotal)} away from free delivery.`}<div><i style="width:${Math.min(100, (t.subtotal / threshold) * 100)}%"></i></div></div>${totalRows(t)}${!state.config.checkoutEnabled ? '<p class="notice">We’re preparing to open. Explore the shop and save your basket; orders are not being accepted yet.</p>' : ""}<button class="button button-dark" data-action="checkout">Review & checkout ${icon("arrow")}</button><small>Delivery availability is checked before placing your order.</small></div>`;
+        )}</div><div class="basket-summary"><div class="shipping-progress">${t.subtotal >= threshold ? "Your basket meets the free delivery threshold." : `You’re ${money(threshold - t.subtotal)} away from free delivery.`}<div><i style="width:${Math.min(100, (t.subtotal / threshold) * 100)}%"></i></div></div>${totalRows(t)}${requestMode() ? '<p class="notice">Send your basket as a Cash on Delivery request on WhatsApp. Stock, final total and delivery are confirmed in chat.</p>' : !state.config.checkoutEnabled ? '<p class="notice">We’re preparing to open. Explore the shop and save your basket; orders are not being accepted yet.</p>' : ""}<button class="button button-dark" data-action="checkout">Review & checkout ${icon("arrow")}</button><small>${requestMode() ? "The store confirms delivery availability before accepting your request." : "Delivery availability is checked before placing your order."}</small></div>`;
     }
     if (focus?.id)
       content
@@ -390,18 +459,31 @@
     $("#policy-title").textContent = titles[type] || "Contact the store.";
     const text = state.config.policies?.[type];
     $("#policy-content").innerHTML = text
-      ? `<p>${esc(text)}</p>${!state.config.checkoutEnabled ? '<p class="notice">The store is preparing to open. No orders are being accepted yet.</p>' : ""}`
+      ? `<p>${esc(text)}</p>${!checkoutAvailable() ? '<p class="notice">The store is preparing to open. No orders are being accepted yet.</p>' : ""}`
       : `<p>${state.config.supportEmail ? `For help with an order, email <a href="mailto:${esc(state.config.supportEmail)}">${esc(state.config.supportEmail)}</a> and include your order reference.` : "Our support contact will be published before the store opens. We are not accepting orders yet."}</p>`;
     if (state.config.supportEmail && type !== "support")
       $("#policy-content").insertAdjacentHTML(
         "beforeend",
         `<p>Need help? <a href="mailto:${esc(state.config.supportEmail)}">${esc(state.config.supportEmail)}</a></p>`,
       );
+    const contact = requests.contacts(state.config);
+    if (type === "support" && contact.enabled)
+      $("#policy-content").insertAdjacentHTML(
+        "beforeend",
+        `<a class="button button-dark" href="https://wa.me/${contact.phone}" target="_blank" rel="noopener">Chat on WhatsApp ${icon("diagonal")}</a><p>For a new order, add your products to the basket and choose checkout. Delivery and stock are confirmed in chat.</p>`,
+      );
     openDialog("policy-dialog");
   }
   function checkDelivery(pin) {
     if (!/^[1-9]\d{5}$/.test(pin))
       return { valid: false, text: "Please enter a valid 6-digit PIN code." };
+    if (requestMode())
+      return {
+        valid: true,
+        available: false,
+        requiresConfirmation: true,
+        text: "The store will confirm delivery to this PIN code, product availability and timing in WhatsApp before accepting your request.",
+      };
     if (!state.config.checkoutEnabled)
       return {
         valid: false,
@@ -415,13 +497,111 @@
         : "We don’t deliver to this PIN code yet. Please try another address.",
     };
   }
+  function directions(point) {
+    if (
+      !point ||
+      !Number.isFinite(point.latitude) ||
+      !Number.isFinite(point.longitude) ||
+      Math.abs(point.latitude) > 90 ||
+      Math.abs(point.longitude) > 180
+    )
+      return "";
+    return `https://www.google.com/maps/dir/?api=1&destination=${point.latitude.toFixed(6)},${point.longitude.toFixed(6)}`;
+  }
+  function locationMatchesForm(selection) {
+    if (!selection?.point || !$("#checkout-form")) return false;
+    const normal = (value) =>
+      String(value || "")
+        .trim()
+        .toLowerCase();
+    return ["city", "state", "pincode"].every(
+      (name) =>
+        !selection[name] ||
+        normal($("#checkout-form").elements[name].value) ===
+          normal(selection[name]),
+    );
+  }
+  function paintCheckoutLocation() {
+    const container = $("#checkout-location");
+    if (!container) return;
+    const point = state.checkoutLocation?.point;
+    container.innerHTML = `<div>${icon("pin")}<strong>${point ? "Delivery point selected" : "Pin your delivery address"}</strong><button type="button" data-action="checkout-location">${point ? "Change location" : "Choose on map"}</button></div><p>${point ? `Pin at ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Check the house / flat details below.` : "Search your area or use your current location. You can also enter your address manually."}</p>${point ? `<a href="${directions(point)}" target="_blank" rel="noopener">Open directions ↗</a>` : ""}`;
+  }
+  function applyDeliverySelection(selection, preserveHouse = false) {
+    state.checkoutLocation = selection;
+    const form = $("#checkout-form");
+    if (form && selection) {
+      for (const field of ["address", "city", "state", "pincode"]) {
+        if (
+          field === "address" &&
+          preserveHouse &&
+          form.elements[field].value.trim()
+        )
+          continue;
+        if (selection[field]) form.elements[field].value = selection[field];
+      }
+      $("#checkout-delivery").textContent = checkDelivery(
+        form.elements.pincode.value,
+      ).text;
+    }
+    paintCheckoutLocation();
+  }
+  function openLocation(fromCheckout = false) {
+    let seed;
+    if (fromCheckout && $("#checkout-form")) {
+      const form = $("#checkout-form");
+      seed = Object.fromEntries(
+        ["address", "city", "state", "pincode"].map((name) => [
+          name,
+          form.elements[name].value,
+        ]),
+      );
+      seed.point = locationMatchesForm(state.checkoutLocation)
+        ? state.checkoutLocation.point
+        : null;
+    }
+    openDialog("delivery-dialog");
+    window.BlunderLocation.open(seed);
+  }
+  function configureLocation() {
+    window.BlunderLocation.configure({
+      checkAvailability: checkDelivery,
+      readPin: () => read("pin", ""),
+      request:
+        hasAPI && state.config.mapsAvailable
+          ? (kind, payload, signal) =>
+              api(`/api/maps/${kind}`, payload, { signal })
+          : undefined,
+      onSelect: (selection, action) => {
+        save("pin", selection?.pincode || "");
+        $("#delivery-label").textContent = selection
+          ? `${selection.city || "Delivery area"} · ${selection.pincode}`
+          : "Check your delivery area";
+        if ($("#checkout-dialog").open) applyDeliverySelection(selection);
+        if (action === "confirm") {
+          closeDialog($("#delivery-dialog"));
+          toast("Delivery address saved for this tab.", false);
+        }
+      },
+    });
+    const selection = window.BlunderLocation.getSelection();
+    if (selection)
+      $("#delivery-label").textContent =
+        `${selection.city || "Delivery area"} · ${selection.pincode}`;
+  }
   function renderCheckout() {
     if (!state.cart.length) return;
     const t = totals(),
-      enabled = state.config.checkoutEnabled;
-    const methods = enabled ? state.config.paymentMethods : ["cod"];
+      enabled = checkoutAvailable(),
+      chat = requestMode();
+    const methods = chat
+      ? ["whatsapp"]
+      : enabled
+        ? state.config.paymentMethods
+        : ["cod"];
     $("#checkout-content").innerHTML =
-      `<form id="checkout-form"><div class="checkout-layout"><div class="checkout-form"><h3>01 &nbsp; Your details</h3><div class="field-grid"><div class="field field-wide"><label for="customer-name">Full name</label><input id="customer-name" name="name" autocomplete="name" minlength="2" maxlength="80" required></div><div class="field"><label for="customer-email">Email address</label><input id="customer-email" name="email" type="email" autocomplete="email" maxlength="160" required></div><div class="field"><label for="customer-phone">Mobile number</label><input id="customer-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national" pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10-digit mobile number" required></div></div><h3>02 &nbsp; Where to?</h3><div class="field-grid"><div class="field field-wide"><label for="customer-address">House / flat, building & street</label><textarea id="customer-address" name="address" autocomplete="street-address" minlength="8" maxlength="220" required></textarea></div><div class="field"><label for="customer-city">City</label><input id="customer-city" name="city" autocomplete="address-level2" minlength="2" maxlength="80" required></div><div class="field"><label for="customer-state">State</label><input id="customer-state" name="state" autocomplete="address-level1" minlength="2" maxlength="80" required></div><div class="field field-wide"><label for="customer-pin">PIN code</label><input id="customer-pin" name="pincode" inputmode="numeric" autocomplete="postal-code" pattern="[1-9][0-9]{5}" maxlength="6" value="${esc(read("pin", ""))}" required><small id="checkout-delivery">${esc(state.config.shipping.estimate)}</small></div></div><h3>03 &nbsp; Pay your way</h3>${methods.map((method, i) => `<label class="payment-option"><input type="radio" name="method" value="${method}" ${i === 0 ? "checked" : ""}><span><strong>${method === "cod" ? "Cash on Delivery" : state.config.paymentMode === "test" ? "Online payment · Test mode" : "Pay online"}</strong><small>${method === "cod" ? "Pay when your order reaches you. The store confirms your request before dispatch." : "UPI, cards and supported payment methods via Razorpay."}</small></span></label>`).join("")}<p class="notice ${enabled ? "success" : ""}">${enabled ? "Check your address and total before placing your order." : "We’re preparing to open. You can review your basket, but orders and payments are not yet available."}</p></div><aside class="checkout-summary"><h3>Your little finds <span>(${count()})</span></h3>${t.items.map((i) => `<div class="bag-line"><img src="${esc(i.image)}" alt="" width="46" height="50"><div><h3>${esc(i.name)}</h3><p>${esc(i.pack)} × ${i.quantity}</p></div><strong>${money(i.price * i.quantity)}</strong></div>`).join("")}<details class="coupon-section"><summary>Have an offer code?</summary><div class="coupon-row"><label class="sr-only" for="coupon">Offer code</label><input id="coupon" placeholder="Enter code" value="${esc(state.coupon)}" maxlength="30"><button type="button" data-action="coupon">Apply</button></div><p class="coupon-feedback" id="coupon-feedback" role="status"></p></details><div id="checkout-totals">${totalRows(t)}</div><button class="button button-dark" type="submit" id="place-order" ${!enabled ? "disabled" : ""}>${methods[0] === "cod" ? "Place COD order" : "Continue to payment"} ${icon("arrow")}</button><small>By placing an order, you agree to the store’s <button type="button" class="inline-link" data-policy="terms">terms</button> and <button type="button" class="inline-link" data-policy="privacy">privacy policy</button>.</small><div id="checkout-message" class="checkout-message" role="status"></div></aside></div></form>`;
+      `<form id="checkout-form"><div class="checkout-layout"><div class="checkout-form"><h3>01 &nbsp; Your details</h3><div class="field-grid"><div class="field field-wide"><label for="customer-name">Full name</label><input id="customer-name" name="name" autocomplete="name" minlength="2" maxlength="80" required></div><div class="field"><label for="customer-email">Email address</label><input id="customer-email" name="email" type="email" autocomplete="email" maxlength="160" required></div><div class="field"><label for="customer-phone">Mobile number</label><input id="customer-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national" pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10-digit mobile number" required></div></div><h3>02 &nbsp; Where to?</h3><div id="checkout-location" class="checkout-location"></div><div class="field-grid"><div class="field field-wide"><label for="customer-address">House / flat, building & street</label><textarea id="customer-address" name="address" autocomplete="street-address" minlength="8" maxlength="220" required></textarea></div><div class="field"><label for="customer-city">City</label><input id="customer-city" name="city" autocomplete="address-level2" minlength="2" maxlength="80" required></div><div class="field"><label for="customer-state">State</label><input id="customer-state" name="state" autocomplete="address-level1" minlength="2" maxlength="80" required></div><div class="field field-wide"><label for="customer-pin">PIN code</label><input id="customer-pin" name="pincode" inputmode="numeric" autocomplete="postal-code" pattern="[1-9][0-9]{5}" maxlength="6" value="${esc(read("pin", ""))}" required><small id="checkout-delivery">${esc(state.config.shipping.estimate)}</small></div></div><h3>03 &nbsp; Pay your way</h3>${methods.map((method, i) => `<label class="payment-option"><input type="radio" name="method" value="${method}" ${i === 0 ? "checked" : ""}><span><strong>${method === "whatsapp" ? "Cash on Delivery via WhatsApp" : method === "cod" ? "Cash on Delivery" : state.config.paymentMode === "test" ? "Online payment · Test mode" : "Pay online"}</strong><small>${method === "whatsapp" ? "Send a request in WhatsApp. Pay on delivery after the store accepts your order." : method === "cod" ? "Pay when your order reaches you. The store confirms your request before dispatch." : "UPI, cards and supported payment methods via Razorpay."}</small></span></label>`).join("")}<p class="notice ${enabled ? "success" : ""}">${chat ? "Review your request first, then send it in WhatsApp. The store confirms stock, the final total and delivery before accepting your order." : enabled ? "Check your address and total before placing your order." : "We’re preparing to open. You can review your basket, but orders and payments are not yet available."}</p></div><aside class="checkout-summary"><h3>Your little finds <span>(${count()})</span></h3>${t.items.map((i) => `<div class="bag-line"><img src="${esc(i.image)}" alt="" width="46" height="50"><div><h3>${esc(i.name)}</h3><p>${esc(i.pack)} × ${i.quantity}</p></div><strong>${money(i.price * i.quantity)}</strong></div>`).join("")}${!chat ? `<details class="coupon-section"><summary>Have an offer code?</summary><div class="coupon-row"><label class="sr-only" for="coupon">Offer code</label><input id="coupon" placeholder="Enter code" value="${esc(state.coupon)}" maxlength="30"><button type="button" data-action="coupon">Apply</button></div><p class="coupon-feedback" id="coupon-feedback" role="status"></p></details>` : ""}<div id="checkout-totals">${totalRows(t)}</div><button class="button button-dark" type="submit" id="place-order" ${!enabled ? "disabled" : ""}>${chat ? "Review COD request" : methods[0] === "cod" ? "Place COD order" : "Continue to payment"} ${icon("arrow")}</button><small>${chat ? "Opening WhatsApp shares your prepared request, including contact details, address and optional map pin, with WhatsApp. Press Send there to share it with the store. By continuing, you agree" : "By placing an order, you agree"} to the store’s <button type="button" class="inline-link" data-policy="terms">terms</button> and <button type="button" class="inline-link" data-policy="privacy">privacy policy</button>.</small><div id="checkout-message" class="checkout-message" role="status"></div></aside></div></form>`;
+    applyDeliverySelection(window.BlunderLocation.getSelection());
     closeDialog($("#bag-dialog"));
     openDialog("checkout-dialog");
   }
@@ -447,7 +627,7 @@
     );
   }
   async function placeOrder(form) {
-    if (state.checkoutBusy || !state.config.checkoutEnabled) return;
+    if (state.checkoutBusy || !checkoutAvailable()) return;
     if (!form.reportValidity()) return;
     const data = new FormData(form),
       customer = Object.fromEntries(
@@ -455,10 +635,20 @@
           (key) => [key, String(data.get(key)).trim()],
         ),
       );
+    if (locationMatchesForm(state.checkoutLocation))
+      customer.location = { ...state.checkoutLocation.point };
     const check = checkDelivery(customer.pincode),
       feedback = $("#checkout-message");
     if (!check.valid) {
       feedback.innerHTML = `<p class="notice error">${esc(check.text)}</p>`;
+      return;
+    }
+    if (requestMode()) {
+      try {
+        prepareRequest(customer);
+      } catch (error) {
+        feedback.innerHTML = `<p class="notice error">${esc(error.message)}</p>`;
+      }
       return;
     }
     state.checkoutBusy = true;
@@ -647,9 +837,11 @@
   }
   function ordersList() {
     clearTimeout(pollTimer);
-    const orders = savedOrders();
+    const orders = savedOrders(),
+      drafts = savedRequests();
+    $("#orders-title").textContent = "Requests & orders.";
     $("#orders-content").innerHTML =
-      `<p class="orders-intro">Your orders are private. Orders placed on this device appear here; use your reference and private access code to find an order from another device.</p>${orders.length ? orders.map((o) => `<button class="order-list-card" data-order="${esc(o.id)}"><span><strong>${esc(o.id)}</strong><span>${new Date(o.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" })}</span></span>${icon("arrow")}</button>`).join("") : '<p class="notice">No orders on this device yet. Your first little basket is waiting.</p>'}<form class="lookup-form" id="lookup-form"><h3>Find an order</h3><label for="lookup-reference">Order reference</label><input id="lookup-reference" name="reference" placeholder="BL-…" pattern="BL-[A-Fa-f0-9]{14}" required><label for="lookup-code">Private access code</label><input id="lookup-code" name="code" type="password" autocomplete="off" minlength="64" maxlength="64" required><button class="button button-dark">Find my order ${icon("arrow")}</button><p id="lookup-feedback" role="status"></p></form>`;
+      `<p class="orders-intro">${requestMode() ? "Prepared requests stay in this tab. Open a request to send it or continue your existing conversation in WhatsApp. The store confirms orders in chat." : "Your orders are private. Orders placed on this device appear here; use your reference and private access code to find an order from another device."}</p>${drafts.map((draft) => `<button class="order-list-card" data-request="${esc(draft.id)}"><span><strong>${esc(draft.id)}</strong><span>${draft.items.reduce((sum, item) => sum + item.quantity, 0)} items · ${money(draft.total)} estimate · Confirmation in chat</span></span>${icon("arrow")}</button>`).join("")}${orders.map((order) => `<button class="order-list-card" data-order="${esc(order.id)}"><span><strong>${esc(order.id)}</strong><span>${new Date(order.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" })}</span></span>${icon("arrow")}</button>`).join("")}${!orders.length && !drafts.length ? '<div class="empty-state"><h3>Your next little basket starts here.</h3><p>Add a few favourites and head to checkout to prepare your request.</p><button class="button button-dark" data-action="continue">Explore the shop</button></div>' : ""}${hasAPI && (state.config.checkoutEnabled || orders.length) ? `<details class="private-code"><summary>Find an order from the hosted order service</summary><form class="lookup-form" id="lookup-form"><h3>Find an order</h3><label for="lookup-reference">Order reference</label><input id="lookup-reference" name="reference" placeholder="BL-…" pattern="BL-[A-Fa-f0-9]{14}" required><label for="lookup-code">Private access code</label><input id="lookup-code" name="code" type="password" autocomplete="off" minlength="64" maxlength="64" required><button class="button button-dark">Find my order ${icon("arrow")}</button><p id="lookup-feedback" role="status"></p></form></details>` : ""}`;
     openDialog("orders-dialog");
   }
   const statusCopy = {
@@ -694,12 +886,13 @@
     clearTimeout(pollTimer);
     state.activeOrder = order;
     state.orderToken = token;
+    $("#orders-title").textContent = "Your order.";
     const copy = statusCopy[order.status] || [
       "Your order",
       "Checking the latest order details.",
     ];
     $("#orders-content").innerHTML =
-      `<div class="order-success"><div class="success-icon">${icon(["paid", "cod_confirmed"].includes(order.status) ? "check" : "box")}</div><h3>${copy[0]}</h3><p>${copy[1]}</p></div><div class="order-reference"><span>${esc(order.id)}</span><button data-action="copy-order">Copy reference</button></div><div class="order-details"><h4>Delivery status</h4><p>${esc(order.fulfillment === "unfulfilled" ? "Not dispatched yet" : order.fulfillment === "shipped" ? "Dispatched" : "Delivered")}${order.tracking && /^https:\/\//.test(order.tracking) ? ` · <a href="${esc(order.tracking)}" target="_blank" rel="noopener">Track delivery ↗</a>` : ""}</p><h4>Delivery address</h4><p>${esc(order.customer.name)}<br>${esc(order.customer.address)}<br>${esc(order.customer.city)}, ${esc(order.customer.state)} ${esc(order.customer.pincode)}</p></div>${order.items.map((i) => `<div class="bag-line"><img src="${esc(i.image)}" alt=""><div><h3>${esc(i.name)}</h3><p>${esc(i.pack)} × ${i.quantity}</p></div><strong>${money(i.price * i.quantity)}</strong></div>`).join("")}${totalRows(order)}<p class="orders-intro">${order.method === "cod" ? (order.status === "paid" ? "Cash on Delivery payment recorded." : "Cash on Delivery · Pay only when your order is delivered.") : "Online payment via Razorpay."}</p><div class="order-actions"><button class="button button-dark" data-action="refresh-order">Refresh status ${icon("arrow")}</button>${order.status === "pending" ? `<button class="button button-outline" data-action="retry-payment">Complete payment</button>` : ""}<button class="button button-outline" data-action="receipt">Download order details</button>${order.method === "cod" && ["cod_pending", "cod_confirmed"].includes(order.status) && order.fulfillment === "unfulfilled" ? '<button class="text-button" data-action="cancel-order">Cancel COD order</button>' : ""}</div><p id="order-feedback" class="orders-intro" role="status"></p><details class="private-code"><summary>Your private order access code</summary><p>Keep this code private. It lets you view this order on another device.</p><code>${esc(token)}</code><button class="text-button" data-action="copy-code">Copy private code</button></details><button class="text-button" data-action="orders">Back to your orders ${icon("arrow")}</button>`;
+      `<div class="order-success"><div class="success-icon">${icon(["paid", "cod_confirmed"].includes(order.status) ? "check" : "box")}</div><h3>${copy[0]}</h3><p>${copy[1]}</p></div><div class="order-reference"><span>${esc(order.id)}</span><button data-action="copy-order">Copy reference</button></div><div class="order-details"><h4>Delivery status</h4><p>${esc(order.fulfillment === "unfulfilled" ? "Not dispatched yet" : order.fulfillment === "shipped" ? "Dispatched" : "Delivered")}${order.tracking && /^https:\/\//.test(order.tracking) ? ` · <a href="${esc(order.tracking)}" target="_blank" rel="noopener">Track delivery ↗</a>` : ""}</p><h4>Delivery address</h4><p>${esc(order.customer.name)}<br>${esc(order.customer.address)}<br>${esc(order.customer.city)}, ${esc(order.customer.state)} ${esc(order.customer.pincode)}</p>${directions(order.customer.location) ? `<a class="order-map-link" href="${directions(order.customer.location)}" target="_blank" rel="noopener">${icon("pin")} Open delivery directions</a>` : ""}</div>${order.items.map((i) => `<div class="bag-line"><img src="${esc(i.image)}" alt=""><div><h3>${esc(i.name)}</h3><p>${esc(i.pack)} × ${i.quantity}</p></div><strong>${money(i.price * i.quantity)}</strong></div>`).join("")}${totalRows(order, false)}<p class="orders-intro">${order.method === "cod" ? (order.status === "paid" ? "Cash on Delivery payment recorded." : "Cash on Delivery · Pay only when your order is delivered.") : "Online payment via Razorpay."}</p><div class="order-actions"><button class="button button-dark" data-action="refresh-order">Refresh status ${icon("arrow")}</button>${order.status === "pending" ? `<button class="button button-outline" data-action="retry-payment">Complete payment</button>` : ""}<button class="button button-outline" data-action="receipt">Download order details</button>${order.method === "cod" && ["cod_pending", "cod_confirmed"].includes(order.status) && order.fulfillment === "unfulfilled" ? '<button class="text-button" data-action="cancel-order">Cancel COD order</button>' : ""}</div><p id="order-feedback" class="orders-intro" role="status"></p><details class="private-code"><summary>Your private order access code</summary><p>Keep this code private. It lets you view this order on another device.</p><code>${esc(token)}</code><button class="text-button" data-action="copy-code">Copy private code</button></details><button class="text-button" data-action="orders">Back to your orders ${icon("arrow")}</button>`;
     openDialog("orders-dialog");
   }
   async function fetchOrder(id, token) {
@@ -740,7 +933,7 @@
   }
   function downloadReceipt() {
     const o = state.activeOrder;
-    const body = `BLUNDER · ORDER DETAILS\n${o.id}\nStatus: ${o.status}\nPayment: ${o.method === "cod" ? "Cash on Delivery" : "Razorpay"}\n\n${o.items.map((i) => `${i.name} · ${i.pack} × ${i.quantity} — ${money(i.price * i.quantity)}`).join("\n")}\n\nProducts: ${money(o.subtotal)}\nDiscount: ${money(o.discount)}\nDelivery: ${money(o.shipping)}\nTotal: ${money(o.total)}\n\nDeliver to:\n${o.customer.name}\n${o.customer.address}\n${o.customer.city}, ${o.customer.state} ${o.customer.pincode}\n\nThis is an order summary, not a tax invoice.\n`;
+    const body = `BLUNDER · ORDER DETAILS\n${o.id}\nStatus: ${o.status}\nPayment: ${o.method === "cod" ? "Cash on Delivery" : "Razorpay"}\n\n${o.items.map((i) => `${i.name} · ${i.pack} × ${i.quantity} — ${money(i.price * i.quantity)}`).join("\n")}\n\nProducts: ${money(o.subtotal)}\nDiscount: ${money(o.discount)}\nDelivery: ${money(o.shipping)}\nTotal: ${money(o.total)}\n\nDeliver to:\n${o.customer.name}\n${o.customer.address}\n${o.customer.city}, ${o.customer.state} ${o.customer.pincode}\n${directions(o.customer.location) ? `Delivery pin: ${directions(o.customer.location)}\n` : ""}\nThis is an order summary, not a tax invoice.\n`;
     const url = URL.createObjectURL(
       new Blob([body], { type: "text/plain;charset=utf-8" }),
     );
@@ -815,6 +1008,13 @@
       return;
     }
     if (button.dataset.policy) return policy(button.dataset.policy);
+    if (button.dataset.request) {
+      const draft = savedRequests().find(
+        (item) => item.id === button.dataset.request,
+      );
+      if (draft) showRequest(draft);
+      return;
+    }
     if (button.dataset.order) {
       const saved = savedOrders().find((o) => o.id === button.dataset.order);
       try {
@@ -856,10 +1056,8 @@
       renderProducts(true);
       scrollShop();
     }
-    if (action === "delivery") {
-      $("#delivery-pin").value = read("pin", "");
-      openDialog("delivery-dialog");
-    }
+    if (action === "delivery") openLocation();
+    if (action === "checkout-location") openLocation(true);
     if (action === "support") policy("support");
     if (action === "detail-add") {
       mutateCart(state.detailProduct, state.detailVariant, 1);
@@ -869,6 +1067,54 @@
     }
     if (action === "checkout") renderCheckout();
     if (action === "orders") ordersList();
+    if (action === "edit-request") {
+      const draft = state.activeRequest;
+      if (!state.cart.length)
+        return toast(
+          "Add items to your basket before preparing a new request.",
+          false,
+        );
+      closeDialog($("#orders-dialog"));
+      renderCheckout();
+      for (const [name, value] of Object.entries(draft.customer)) {
+        if (name !== "location")
+          $("#checkout-form").elements[name].value = value;
+      }
+      state.checkoutLocation = {
+        ...draft.customer,
+        point: draft.customer.location || null,
+      };
+      paintCheckoutLocation();
+      $("#checkout-delivery").textContent = checkDelivery(
+        draft.customer.pincode,
+      ).text;
+    }
+    if (action === "delete-request") {
+      saveRequests(
+        savedRequests().filter((item) => item.id !== state.activeRequest.id),
+      );
+      state.activeRequest = null;
+      ordersList();
+      toast(
+        "Draft deleted from this tab. Messages already sent are unchanged.",
+        false,
+      );
+    }
+    if (action === "copy-request") {
+      try {
+        await navigator.clipboard.writeText(
+          requests.message(state.activeRequest),
+        );
+        $("#request-feedback").textContent =
+          "Request copied. Paste it into your chat or email, then send it.";
+      } catch {
+        $(".request-preview").open = true;
+        $("#request-message").focus();
+        $("#request-message").select();
+        $("#request-feedback").textContent =
+          "Automatic copy is unavailable. Copy the selected message below, then paste it into your chat or email.";
+      }
+    }
     if (action === "coupon") {
       const code = $("#coupon").value.trim().toUpperCase();
       try {
@@ -934,16 +1180,6 @@
       renderProducts(true);
       scrollShop();
     }
-    if (event.target.id === "delivery-form") {
-      event.preventDefault();
-      const pin = $("#delivery-pin").value.trim(),
-        result = checkDelivery(pin);
-      $("#delivery-result").textContent = result.text;
-      $("#delivery-result").className =
-        `notice ${result.valid ? "success" : ""}`;
-      save("pin", pin);
-      $("#delivery-label").textContent = `Delivery to ${pin}`;
-    }
     if (event.target.id === "checkout-form") {
       event.preventDefault();
       await placeOrder(event.target);
@@ -980,9 +1216,19 @@
     renderProducts(true);
   });
   document.addEventListener("change", (event) => {
+    if (
+      ["customer-pin", "customer-city", "customer-state"].includes(
+        event.target.id,
+      ) &&
+      state.checkoutLocation?.point &&
+      !locationMatchesForm(state.checkoutLocation)
+    ) {
+      state.checkoutLocation = null;
+      paintCheckoutLocation();
+    }
     if (event.target.name === "method")
       $("#place-order").innerHTML =
-        `${event.target.value === "cod" ? "Place COD order" : "Continue to payment"} ${icon("arrow")}`;
+        `${event.target.value === "whatsapp" ? "Review COD request" : event.target.value === "cod" ? "Place COD order" : "Continue to payment"} ${icon("arrow")}`;
     if (event.target.id === "customer-pin")
       $("#checkout-delivery").textContent = checkDelivery(
         event.target.value,
@@ -1139,13 +1385,13 @@
           state.config = await api("/api/store");
           hasAPI = true;
         } catch {
-          /* GitHub Pages and static previews use a catalogue-only fallback. */
+          /* Static storefronts use the configured WhatsApp request flow. */
         }
       }
       if (!state.config) {
         const [catalogResponse, configResponse] = await Promise.all([
-          fetch("data/catalog.json"),
-          fetch("data/store.json"),
+          fetch("data/catalog.json", { cache: "no-cache" }),
+          fetch("data/store.json", { cache: "no-cache" }),
         ]);
         if (!catalogResponse.ok || !configResponse.ok)
           throw new Error("The product selection could not be loaded.");
@@ -1206,8 +1452,11 @@
           state.config.paymentMode === "test"
             ? "PAYMENT TEST MODE · NO REAL ONLINE CHARGE"
             : "YOUR EVERYDAY STORE · NOW OPEN";
+      if (requestMode())
+        $("#store-status").textContent = "ORDER VIA WHATSAPP · PAY ON DELIVERY";
       if (read("pin", ""))
         $("#delivery-label").textContent = `Delivery to ${read("pin", "")}`;
+      configureLocation();
       if (params.get("product")) detail(params.get("product"));
     } catch (error) {
       $("#result-count").textContent = "We couldn’t load the shop.";

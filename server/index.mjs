@@ -5,6 +5,7 @@ import { resolve, extname, dirname, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createCommerce, StoreError } from "./commerce.mjs";
 import { razorpayGateway } from "./gateway.mjs";
+import { createGeocoder } from "./geocoder.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export function loadSettings(env = process.env) {
@@ -51,6 +52,10 @@ export function createApp({
   settings = loadSettings(env),
   gateway = razorpayGateway(env),
   commerce,
+  geocoder = createGeocoder({
+    baseURL: env.GEOCODER_URL,
+    origin: env.PUBLIC_ORIGIN,
+  }),
 } = {}) {
   const { config, catalog, enabled } = settings;
   const store =
@@ -129,11 +134,11 @@ export function createApp({
     res.setHeader("X-Frame-Options", "DENY");
     res.setHeader(
       "Permissions-Policy",
-      "camera=(), microphone=(), geolocation=()",
+      "camera=(), microphone=(), geolocation=(self)",
     );
     res.setHeader(
       "Content-Security-Policy",
-      "default-src 'self'; script-src 'self' https://checkout.razorpay.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.razorpay.com; connect-src 'self' https://*.razorpay.com; frame-src https://*.razorpay.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+      "default-src 'self'; script-src 'self' https://checkout.razorpay.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.razorpay.com https://tile.openstreetmap.org; connect-src 'self' https://*.razorpay.com https://nominatim.openstreetmap.org; frame-src https://*.razorpay.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
     );
     if (env.NODE_ENV === "production")
       res.setHeader("Strict-Transport-Security", "max-age=31536000");
@@ -168,9 +173,18 @@ export function createApp({
             ),
           );
         rateLimit(req, "api");
+        const mapRoute = path.match(/^\/api\/maps\/(search|reverse)$/);
+        if (mapRoute && req.method === "POST")
+          return send(
+            res,
+            200,
+            await geocoder.lookup(mapRoute[1], await body(req)),
+          );
         if (path === "/api/store" && req.method === "GET")
           return send(res, 200, {
             name: config.name,
+            mapsAvailable: true,
+            orderRequests: config.orderRequests,
             legalName: config.legalName,
             businessAddress: config.businessAddress,
             supportEmail: config.supportEmail,
@@ -227,6 +241,9 @@ export function createApp({
         "style.css",
         "script.js",
         "store-config.js",
+        "location.js",
+        "order-requests.js",
+        "location.css",
         "data/catalog.json",
       ];
       if (!allowed.includes(relative) && !relative.startsWith("assets/"))

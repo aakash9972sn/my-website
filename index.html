@@ -17,9 +17,14 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="style.css?v=20261118-2" />
-    <script src="store-config.js?v=20261118-2" defer></script>
-    <script src="script.js?v=20261118-2" defer></script>
+    <link rel="stylesheet" href="style.css?v=20261118-3" />
+    <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css?v=1.9.4" />
+    <link rel="stylesheet" href="location.css?v=20261118-1" />
+    <script src="store-config.js?v=20261118-3" defer></script>
+    <script src="assets/vendor/leaflet/leaflet.js?v=1.9.4" defer></script>
+    <script src="location.js?v=20261118-1" defer></script>
+    <script src="order-requests.js?v=20261118-1" defer></script>
+    <script src="script.js?v=20261118-4" defer></script>
   </head>
   <body>
     <svg
@@ -81,7 +86,7 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="announcement">
       <span><i></i> Little prices. A whole lot of everyday.</span
-      ><span id="store-status">OUR FIRST CHAPTER · OPENING SOON</span>
+      ><span id="store-status">LITTLE PRICES · EVERYDAY GOOD THINGS</span>
     </div>
     <header class="site-header">
       <div class="header-main wrap">
@@ -370,7 +375,7 @@
         <noscript
           ><div class="notice">
             Please enable JavaScript to browse products and use the basket. The
-            store is preparing to open.
+            store accepts requests through WhatsApp after you enable JavaScript.
           </div></noscript
         >
       </section>
@@ -448,8 +453,8 @@
           <div class="footer-signoff">
             <span class="mini-spark">✳</span>
             <p>A fresh start.<br />One basket at a time.</p>
-            <span>PAYMENT OPTIONS AT LAUNCH</span
-            ><b>Cash on Delivery <i>·</i> Online payments</b>
+            <span>ORDER &amp; PAYMENT</span
+            ><b>Cash on Delivery <i>·</i> Order on WhatsApp</b>
           </div>
         </div>
         <div class="footer-bottom">
@@ -496,41 +501,181 @@
       <div id="product-detail"></div>
     </dialog>
     <dialog
-      class="small-dialog"
+      class="location-dialog"
       id="delivery-dialog"
       aria-labelledby="delivery-title"
     >
       <div class="dialog-head">
         <div>
-          <p class="eyebrow">A LITTLE CLOSER TO YOU</p>
+          <p class="eyebrow">GOOD THINGS, AT YOUR DOOR</p>
           <h2 id="delivery-title">Where’s your basket going?</h2>
         </div>
         <button
           class="icon-button"
           data-close
-          aria-label="Close delivery checker"
+          aria-label="Close delivery location"
         >
           <svg class="icon"><use href="#i-close" /></svg>
         </button>
       </div>
-      <p>Enter your PIN code to check where we deliver.</p>
-      <form id="delivery-form">
-        <label for="delivery-pin">Delivery PIN code</label>
-        <div class="input-button">
-          <input
-            id="delivery-pin"
-            inputmode="numeric"
-            pattern="[1-9][0-9]{5}"
-            minlength="6"
-            maxlength="6"
-            placeholder="e.g. 110027"
-            required
-          /><button class="button button-dark" type="submit">
-            Check <svg class="icon"><use href="#i-arrow" /></svg>
-          </button>
+      <div class="location-layout">
+        <div class="location-map-column">
+          <form
+            id="location-search-form"
+            class="location-search-form"
+            role="search"
+            aria-label="Find delivery area"
+          >
+            <label class="sr-only" for="location-search"
+              >Search an area, landmark or PIN code</label
+            ><svg class="icon" aria-hidden="true"><use href="#i-search" /></svg
+            ><input
+              id="location-search"
+              type="search"
+              placeholder="Area, landmark or PIN code"
+              minlength="3"
+              maxlength="180"
+              autocomplete="off"
+              required
+            /><button
+              type="submit"
+              id="location-search-button"
+              aria-label="Search delivery areas"
+            >
+              <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg>
+            </button>
+          </form>
+          <ol
+            id="location-results"
+            class="location-results"
+            aria-label="Matching delivery areas"
+            hidden
+          ></ol>
+          <div class="location-map-shell">
+            <div
+              id="delivery-map"
+              aria-label="Delivery map. Use arrow keys to pan, plus and minus to zoom, then choose Use map centre."
+              tabindex="0"
+            ></div>
+            <span class="map-centre-crosshair" aria-hidden="true"></span>
+            <p id="map-unavailable" class="map-unavailable" hidden>
+              Map tiles couldn’t load. Search for an area or enter your address
+              below.
+            </p>
+          </div>
+          <div class="map-actions">
+            <button id="location-gps" type="button">
+              <svg class="icon" aria-hidden="true"><use href="#i-pin" /></svg>
+              Use my location</button
+            ><button id="location-centre" type="button">
+              <svg class="icon" aria-hidden="true"><use href="#i-plus" /></svg>
+              Use map centre
+            </button>
+          </div>
+          <p id="location-status" class="location-status" role="status">
+            Search for your area, use GPS, or tap the map to choose a point.
+          </p>
+          <p class="map-privacy">
+            Map searches and selected points are shared with OpenStreetMap
+            services. Your location is requested only when you tap “Use my
+            location”.
+          </p>
         </div>
-      </form>
-      <p id="delivery-result" role="status"></p>
+        <div class="location-address-column">
+          <div class="location-selected-heading">
+            <span class="location-pin-icon"
+              ><svg class="icon" aria-hidden="true"><use href="#i-pin" /></svg
+            ></span>
+            <div>
+              <span class="eyebrow">THE LAST LITTLE MILE</span>
+              <h3>Your delivery address</h3>
+            </div>
+          </div>
+          <p class="location-help">
+            Confirm the details below. A map pin helps with delivery; your house
+            or flat number is still important.
+          </p>
+          <p id="location-coordinates" class="location-coordinates" hidden></p>
+          <form id="delivery-form" class="location-address-form">
+            <div class="field field-wide">
+              <label for="location-address"
+                >House / flat, building & street</label
+              ><textarea
+                id="location-address"
+                name="address"
+                autocomplete="street-address"
+                maxlength="220"
+                minlength="8"
+                rows="2"
+                placeholder="House number, street and area"
+              ></textarea>
+            </div>
+            <div class="location-field-row">
+              <div class="field">
+                <label for="location-city">City</label
+                ><input
+                  id="location-city"
+                  name="city"
+                  autocomplete="address-level2"
+                  maxlength="80"
+                  placeholder="City"
+                />
+              </div>
+              <div class="field">
+                <label for="location-state">State</label
+                ><input
+                  id="location-state"
+                  name="state"
+                  autocomplete="address-level1"
+                  maxlength="80"
+                  placeholder="State"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="delivery-pin">Delivery PIN code</label>
+              <div class="location-pin-row">
+                <input
+                  id="delivery-pin"
+                  name="pincode"
+                  inputmode="numeric"
+                  pattern="[1-9][0-9]{5}"
+                  minlength="6"
+                  maxlength="6"
+                  autocomplete="postal-code"
+                  placeholder="6-digit PIN code"
+                  required
+                /><button id="location-check-pin" type="button">
+                  Check area
+                </button>
+              </div>
+            </div>
+            <p
+              id="delivery-result"
+              class="location-availability"
+              role="status"
+            ></p>
+            <div class="location-save-row">
+              <button
+                id="location-confirm"
+                class="button button-dark"
+                type="submit"
+              >
+                Use this address
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-arrow" />
+                </svg></button
+              ><button id="location-clear" class="text-button" type="button">
+                Clear location
+              </button>
+            </div>
+          </form>
+          <p class="location-session-note">
+            Your selected address stays in this tab. It is sent to the store
+            only when you place an order.
+          </p>
+        </div>
+      </div>
     </dialog>
     <dialog
       class="checkout-dialog"

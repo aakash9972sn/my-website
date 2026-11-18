@@ -5,10 +5,28 @@ product quick views, saved items and a persistent basket. The Node backend store
 orders and stock in SQLite, supports Cash on Delivery, and integrates Razorpay
 with server-side totals, payment signatures and signed webhooks.
 
-**Current public state: pre-launch.** Browsing, saved items, the basket and checkout
-review work on GitHub Pages. It cannot execute the order/payment backend. No real
-order or payment is accepted until a seller configures hosting, identity, stock,
-delivery areas and the store-open switch. There is no fake checkout success path.
+**Current public checkout: WhatsApp Cash on Delivery requests.** This works on
+GitHub Pages without a payment account or a hosted backend. Customers review a
+basket, enter their contact/address details, optionally choose a map pin, and open
+a prepared request addressed to the owner's WhatsApp number. They must press
+**Send in WhatsApp**; the site cannot send automatically or determine delivery of
+the message. The owner confirms stock, the final price and delivery in chat before
+accepting an order. Email draft and copy-message alternatives are available.
+
+Merchant contact is configured in `data/store.json` under `orderRequests`:
+WhatsApp `919910113972`, support/email fallback `sdhanpal778@gmail.com`, supplied by
+the owner. Opening a WhatsApp or email link shares the prepared data with that app;
+customer-facing notices explain this before proceeding. Requests are saved only
+in the current tab's session storage (maximum five), can be deleted, and do not
+clear the basket. Exact repeated reviews reuse the same request reference. These
+client-prepared estimates are **not server-verified orders or stock reservations**;
+the merchant must check them before agreeing to fulfilment.
+
+The optional Node order service supports inventory, private order lookup and
+verified Razorpay payments. It remains closed until the seller completes the
+configuration below. Online payments and automatic email/SMS/WhatsApp
+notifications require the owner's provider accounts and hosting; none have been
+purchased, configured or represented as live.
 
 ## Run locally
 
@@ -25,7 +43,7 @@ initialises each product/pack with **zero available stock**. It does not manufac
 inventory from a sample catalogue. `npm test` uses isolated databases and a fake
 payment-provider boundary; it never charges money or contacts a real customer.
 
-## Open for real COD orders
+## Enable the hosted order and inventory service
 
 1. Host this whole repository as one persistent Node application over HTTPS.
    `Dockerfile`, `compose.yaml` and a Render blueprint are provided. Use one app
@@ -66,8 +84,9 @@ npm run store -- deliver BL-ORDERREFERENCE
 
 Only mark a COD delivery complete after payment has been collected. Customers can
 cancel unfulfilled COD requests; stock is released once. Orders are visible using a
-random reference plus a private access code. The browser stores only these access
-credentials, the basket and saved item IDs—not address details. There is no pretend
+random reference plus a private access code. For hosted orders, the browser stores only these access
+credentials; full order details are fetched with the private access code. Optional
+delivery selections and WhatsApp drafts stay in tab session storage. There is no pretend
 login, automatic email, SMS, shipping integration, or hidden customer-facing admin.
 Merchant management is via the hosting shell; protect hosting access and the disk.
 
@@ -107,8 +126,40 @@ transaction cannot be verified without the owner's account and credentials.
 Serving the whole site from Node is the simplest deployment. If retaining the
 GitHub Pages URL, set `window.BLUNDER_API_ORIGIN` in `store-config.js` to the backend
 HTTPS origin, and `STOREFRONT_ORIGIN=https://aakash9972sn.github.io` on that backend.
-CORS accepts only configured exact origins. The storefront handles an unavailable
-API by staying in pre-launch mode, preserving the basket without accepting orders.
+CORS accepts only configured exact origins. If the API is unavailable, the
+storefront retains the basket and falls back to the explicitly configured WhatsApp
+request flow. It never displays a server order or payment confirmation in fallback
+mode. Disable `orderRequests.enabled` to disable this fallback.
+
+## Delivery maps and addresses
+
+The location dialog includes explicit area/landmark/PIN search, opt-in GPS,
+click/drag pin selection, keyboard pan with **Use map centre**, and manual address
+entry. Confirming a location fills checkout; changing the linked city/state/PIN
+removes the stale map point. No GPS call or map tile request happens before the
+customer opens the picker and chooses the relevant action. GPS needs HTTPS (or
+localhost) and browser permission. Addresses and points are kept only in the tab,
+with a visible clear control. The final point becomes a directions link in the
+WhatsApp/email request or private hosted order/receipt.
+
+Leaflet **1.9.4** is vendored in `assets/vendor/leaflet`; its BSD license is retained.
+OpenStreetMap tiles and Nominatim are low-traffic defaults with visible attribution.
+Configure `window.BLUNDER_MAPS` in `store-config.js` to switch browser providers.
+On Node, `POST /api/maps/search` and `/api/maps/reverse` use the shared geocoder
+proxy: explicit requests only, a 1.1-second queue, bounded one-hour cache, duplicate
+request sharing and timeouts. `GEOCODER_URL` selects an HTTPS Nominatim-compatible
+provider. Static GitHub Pages uses the configured browser provider directly, with
+per-tab throttling and caching. For higher traffic, use a licensed or self-hosted
+provider and update the server CSP for any new browser-facing tile/search origins.
+Respect [OSM tile usage](https://operations.osmfoundation.org/policies/tiles/) and
+[Nominatim usage](https://operations.osmfoundation.org/policies/nominatim/).
+
+Map failures, denied GPS permission and missing geocoding results leave manual
+address entry usable. The map does not prove delivery serviceability. WhatsApp
+requests require merchant confirmation; hosted orders still enforce configured
+PIN codes. Browser map tests use controlled provider/tile fixtures because the
+cloud review network blocks the public map provider; live-provider availability
+and GPS accuracy must be checked in the customer's browser.
 
 ## Product information and honest promotions
 
@@ -128,7 +179,9 @@ are included for review; delivery timing must match the seller's actual operatio
 `npm test` covers pricing, coupons, stock, COD idempotency/cancellation, delivery
 validation, gateway failure, signatures, amount/currency mismatch, captured-state
 checks, webhooks/refunds, expired/late payments, database persistence, launch gating
-and HTTP file/origin boundaries. Browser verification also covers the complete COD
+and HTTP file/origin boundaries. It also covers coordinate validation, geocoder
+queue/cache/error handling and WhatsApp/email request recipients, totals and data.
+Browser verification also covers the complete COD
 flow against isolated inventory, responsive layouts, keyboard dialogs, filtering,
 saved items, basket reload, order lookup and receipt download.
 
