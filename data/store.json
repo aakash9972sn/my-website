@@ -1,0 +1,23 @@
+{
+  "name": "BLUNDER",
+  "legalName": "",
+  "supportEmail": "",
+  "businessAddress": "",
+  "currency": "INR",
+  "catalogApproved": false,
+  "codEnabled": true,
+  "codMax": 200000,
+  "shipping": {
+    "standard": 2000,
+    "freeAbove": 19900,
+    "pincodes": [],
+    "estimate": "Delivery availability and timing are confirmed before ordering."
+  },
+  "coupons": [],
+  "policies": {
+    "shipping": "Delivery is available only to the PIN codes shown at checkout. Your delivery charge and estimated delivery window are shown before you place an order. A one-hour service is not currently promised. If we cannot fulfil an accepted order, we will contact you using the details you provide and arrange cancellation or a refund, as applicable.",
+    "returns": "Received a damaged, incorrect or missing item? Contact the store using your order reference and a photo where relevant, and we will review a replacement or refund. Please report issues with fresh or chilled food on delivery, and other items within 7 days. Do not send perishable items back without instructions. This policy does not restrict your rights under applicable consumer law.",
+    "privacy": "When you place an order, the store uses your name, contact information and delivery address to process and fulfil it. Online payment details are collected by the payment provider; this store does not store card numbers or UPI credentials. Your shopping bag and saved items are stored in your browser. A private access code lets you view your orders; keep it safe. Contact the store for questions about your personal data.",
+    "terms": "Orders can be placed only after the store opens for your delivery area. Prices are shown in Indian rupees. Product quantities and delivery charges are displayed before checkout. Images are representative; produce and packaging can vary. Orders are subject to confirmed stock. Cash on Delivery is payable to the delivery partner at delivery. A cancelled or unfulfilled prepaid order will be handled through the original payment method. No affiliation with product brands is implied."
+  }
+}

@@ -1,0 +1,13 @@
+services:
+  store:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env
+    environment:
+      DATABASE_PATH: /app/var/store.sqlite
+    volumes:
+      - store-data:/app/var
+    restart: unless-stopped
+volumes:
+  store-data:

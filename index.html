@@ -1,362 +1,587 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blunder Pro Max - Ultimate Shopping</title>
-    <style>
-        :root {
-            --primary: #ff3e6c;
-            --secondary: #ff6b6b;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --success: #10b981;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-        }
-        
-        /* Header Styles */
-        header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-        
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: #f1f5f9;
-            border-radius: 50px;
-            padding: 0.5rem 1rem;
-            width: 40%;
-        }
-        
-        .search-bar input {
-            border: none;
-            background: transparent;
-            width: 100%;
-            padding: 0.5rem;
-            outline: none;
-        }
-        
-        /* Hero Section */
-        .hero {
-            height: 500px;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 0 5%;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            max-width: 600px;
-        }
-        
-        .btn {
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #ff2b5c;
-            transform: translateY(-2px);
-        }
-        
-        /* Products Section */
-        .products {
-            max-width: 1400px;
-            margin: 3rem auto;
-            padding: 0 5%;
-        }
-        
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 50%;
-            height: 4px;
-            background: var(--primary);
-        }
-        
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-        
-        .product-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
-        
-        .product-img {
-            height: 250px;
-            width: 100%;
-            object-fit: cover;
-        }
-        
-        .product-info {
-            padding: 1.5rem;
-        }
-        
-        .product-title {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .product-price {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
-        .original-price {
-            text-decoration: line-through;
-            color: #64748b;
-            font-size: 0.9rem;
-            margin-left: 0.5rem;
-        }
-        
-        .discount-badge {
-            background: var(--success);
-            color: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 0.5rem;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
-            }
-            
-            .search-bar {
-                width: 100%;
-            }
-            
-            .nav-links {
-                gap: 1rem;
-            }
-            
-            .hero {
-                height: 400px;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Header/Navbar -->
-    <header>
-        <nav class="navbar">
-            <a href="#" class="logo">BLUNDER PRO MAX</a>
-            
-            <div class="search-bar">
-                <input type="text" placeholder="Search for products...">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-            </div>
-            
-            <div class="nav-links">
-                <a href="#">Home</a>
-                <a href="#">Categories</a>
-                <a href="#">Offers</a>
-                <a href="#">Cart</a>
-                <a href="#">Account</a>
-            </div>
-        </nav>
-    </header>
-    
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>India's Most Blunder Shopping Experience</h1>
-        <p>Get the best deals on fashion, electronics, home decor and more. Flat 70% off on first order!</p>
-        <button class="btn btn-primary">Shop Now</button>
-    </section>
-    
-    <!-- Products Section -->
-    <section class="products">
-        <h2 class="section-title">Trending Products</h2>
-        
-        <div class="product-grid">
-            <!-- Product 1 -->
-            <div class="product-card">
-                <img src="https://m.media-amazon.com/images/I/71WkDp--uqL._AC_UL480_FMwebp_QL65_.jpg" alt="Product" class="product-img">
-                <div class="product-info">
-                    <h3 class="product-title">Men's Cotton T-Shirt</h3>
-                    <div class="product-price">
-                        ₹299 <span class="original-price">₹999</span>
-                        <span class="discount-badge">70% OFF</span>
-                    </div>
-                    <button class="btn btn-primary">Add to Cart</button>
-                </div>
-            </div>
-            
-            <!-- Product 2 -->
-            <div class="product-card">
-                <img src="https://m.media-amazon.com/images/I/61-r9zOKBCL._AC_UL480_FMwebp_QL65_.jpg" alt="Product" class="product-img">
-                <div class="product-info">
-                    <h3 class="product-title">Wireless Headphones</h3>
-                    <div class="product-price">
-                        ₹1,299 <span class="original-price">₹3,999</span>
-                        <span class="discount-badge">67% OFF</span>
-                    </div>
-                    <button class="btn btn-primary">Add to Cart</button>
-                </div>
-            </div>
-            
-            <!-- Product 3 -->
-            <div class="product-card">
-                <img src="https://m.media-amazon.com/images/I/71Wr3NlWZEL._AC_UL480_FMwebp_QL65_.jpg" alt="Product" class="product-img">
-                <div class="product-info">
-                    <h3 class="product-title">Running Shoes</h3>
-                    <div class="product-price">
-                        ₹1,599 <span class="original-price">₹3,999</span>
-                        <span class="discount-badge">60% OFF</span>
-                    </div>
-                    <button class="btn btn-primary">Add to Cart</button>
-                </div>
-            </div>
-            
-            <!-- Product 4 -->
-            <div class="product-card">
-                <img src="https://m.media-amazon.com/images/I/61Bv0K5iZ0L._AC_UL480_FMwebp_QL65_.jpg" alt="Product" class="product-img">
-                <div class="product-info">
-                    <h3 class="product-title">Smart Watch</h3>
-                    <div class="product-price">
-                        ₹1,999 <span class="original-price">₹4,999</span>
-                        <span class="discount-badge">60% OFF</span>
-                    </div>
-                    <button class="btn btn-primary">Add to Cart</button>
-                </div>
-            </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#263d2b" />
+    <meta
+      name="description"
+      content="Meet Blunder: a fresh take on everyday groceries. Explore fruit, vegetables and pantry essentials, build your basket and check delivery availability."
+    />
+    <title>BLUNDER — Little prices. Big everyday.</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="assets/fonts/manrope-latin-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="style.css?v=20261118-2" />
+    <script src="store-config.js?v=20261118-2" defer></script>
+    <script src="script.js?v=20261118-2" defer></script>
+  </head>
+  <body>
+    <svg
+      class="icon-library"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <defs>
+        <symbol id="i-arrow" viewBox="0 0 24 24">
+          <path d="M4 12h15m-6-6 6 6-6 6" />
+        </symbol>
+        <symbol id="i-diagonal" viewBox="0 0 24 24">
+          <path d="M6 18 18 6M6 6h12v12" />
+        </symbol>
+        <symbol id="i-bag" viewBox="0 0 24 24">
+          <path d="M5 7h14l1 14H4L5 7Z" />
+          <path d="M8 9V6a4 4 0 0 1 8 0v3" />
+        </symbol>
+        <symbol id="i-search" viewBox="0 0 24 24">
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m16 16 5 5" />
+        </symbol>
+        <symbol id="i-heart" viewBox="0 0 24 24">
+          <path
+            d="M20.5 4.5a5 5 0 0 0-7 0L12 6l-1.5-1.5a5 5 0 0 0-7 7L12 20l8.5-8.5a5 5 0 0 0 0-7Z"
+          />
+        </symbol>
+        <symbol id="i-user" viewBox="0 0 24 24">
+          <circle cx="12" cy="7" r="4" />
+          <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
+        </symbol>
+        <symbol id="i-close" viewBox="0 0 24 24">
+          <path d="m6 6 12 12M6 18 18 6" />
+        </symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24">
+          <path d="M5 12h14M12 5v14" />
+        </symbol>
+        <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" /></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24">
+          <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" />
+          <circle cx="12" cy="10" r="2.5" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+          <path d="m5 12 4 4L20 5" />
+        </symbol>
+        <symbol id="i-box" viewBox="0 0 24 24">
+          <path
+            d="m12 2 10 5v10l-10 5-10-5V7L12 2Zm0 10 10-5M12 12 2 7m10 5v10M7 4.5l10 5V14"
+          />
+        </symbol>
+        <symbol id="i-leaf" viewBox="0 0 24 24">
+          <path d="M21 3C10 2 2 5 4 14c1 5 9 8 14 1 3-4 3-8 3-12ZM3 21 16 8" />
+        </symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24">
+          <path d="M4 8h16M4 16h16" />
+        </symbol>
+      </defs>
+    </svg>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="announcement">
+      <span><i></i> Little prices. A whole lot of everyday.</span
+      ><span id="store-status">OUR FIRST CHAPTER · OPENING SOON</span>
+    </div>
+    <header class="site-header">
+      <div class="header-main wrap">
+        <a class="wordmark" href="#home" aria-label="Blunder home"
+          >blunder<i></i
+        ></a>
+        <button class="delivery-button" data-action="delivery">
+          <svg class="icon"><use href="#i-pin" /></svg
+          ><span
+            ><small>GOOD THINGS, CLOSER</small
+            ><b id="delivery-label">Check your delivery area</b></span
+          >
+        </button>
+        <form class="search" role="search" id="search-form">
+          <svg class="icon"><use href="#i-search" /></svg
+          ><label class="sr-only" for="search">Search groceries</label
+          ><input
+            id="search"
+            type="search"
+            placeholder="Find your everyday essentials"
+            autocomplete="off"
+          /><button
+            class="search-clear"
+            type="button"
+            data-action="clear-search"
+            aria-label="Clear search"
+            hidden
+          >
+            <svg class="icon"><use href="#i-close" /></svg>
+          </button>
+        </form>
+        <div class="header-actions">
+          <button
+            class="icon-button saved-trigger"
+            data-action="saved"
+            aria-label="Saved items"
+          >
+            <svg class="icon"><use href="#i-heart" /></svg
+            ><span id="saved-count" hidden>0</span></button
+          ><button
+            class="icon-button"
+            data-action="orders"
+            aria-label="Your orders"
+          >
+            <svg class="icon"><use href="#i-user" /></svg></button
+          ><button
+            class="bag-trigger"
+            data-action="bag"
+            aria-label="Open basket, 0 items"
+          >
+            <svg class="icon"><use href="#i-bag" /></svg
+            ><span class="bag-label">Your basket</span><b id="bag-count">0</b>
+          </button>
         </div>
-    </section>
-    
-    <!-- JavaScript for Functionality -->
-    <script>
-        // Cart functionality
-        let cart = [];
-        
-        // Add to cart function
-        function addToCart(productName, price) {
-            cart.push({ name: productName, price: price });
-            updateCartCount();
-            alert(`${productName} added to cart!`);
-        }
-        
-        // Update cart count in navbar
-        function updateCartCount() {
-            const cartCount = document.querySelector('.cart-count');
-            if (cartCount) {
-                cartCount.textContent = cart.length;
-            }
-        }
-        
-        // Initialize add to cart buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            const buttons = document.querySelectorAll('.btn-primary');
-            buttons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const productCard = this.closest('.product-card');
-                    const productName = productCard.querySelector('.product-title').textContent;
-                    const productPrice = productCard.querySelector('.product-price').textContent.split(' ')[0];
-                    addToCart(productName, productPrice);
-                });
-            });
-        });
-    </script>
-</body>
+      </div>
+      <nav class="header-nav wrap" aria-label="Shop navigation">
+        <div>
+          <button class="nav-link" data-category="all">Shop everything</button
+          ><button class="nav-link" data-category="Vegetables">
+            Vegetables</button
+          ><button class="nav-link" data-category="Fruits">Fruit bowl</button
+          ><button class="nav-link" data-category="Dairy & bakery">
+            Dairy & bakery</button
+          ><button class="nav-link" data-category="Pantry">Pantry</button>
+        </div>
+        <button class="ten-link" data-action="ten">
+          The ₹10 club <svg class="icon"><use href="#i-diagonal" /></svg>
+        </button>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero wrap" id="home" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow hero-reveal">
+            <span class="mini-spark">✳</span> A FRESH TAKE ON THE EVERYDAY
+          </p>
+          <h1 id="hero-title">
+            <span class="headline-line">Little prices.</span
+            ><span class="headline-line">Big <em>everyday.</em></span>
+          </h1>
+          <p class="hero-description hero-reveal">
+            The fruit-bowl favourites. The pantry regulars.<br />Good little
+            things, at even littler prices.
+          </p>
+          <div class="hero-ctas hero-reveal">
+            <a class="button button-dark" href="#shop"
+              >Fill your basket
+              <svg class="icon"><use href="#i-arrow" /></svg></a
+            ><button class="text-button" data-action="ten">
+              Explore ₹10 picks
+              <svg class="icon"><use href="#i-diagonal" /></svg>
+            </button>
+          </div>
+          <div class="hero-note hero-reveal">
+            <span class="note-line"></span> ALL PRODUCT PRICES UNDER ₹50
+            <span class="dot">·</span> YES, REALLY.
+          </div>
+        </div>
+        <div
+          class="hero-scene"
+          aria-label="A colourful selection of everyday groceries"
+        >
+          <div class="scene-orbit orbit-one"></div>
+          <div class="scene-orbit orbit-two"></div>
+          <span class="scene-word" aria-hidden="true">fresh.</span>
+          <div class="grocery-bag" aria-hidden="true">
+            <div class="bag-handle"></div>
+            <div class="paper-fold"></div>
+            <b>b<span>•</span></b
+            ><span class="bag-caption">GOOD LITTLE THINGS.</span>
+          </div>
+          <img
+            class="scene-produce scene-bananas"
+            src="assets/products/banana.png"
+            alt="Bananas"
+            width="432"
+            height="432"
+            fetchpriority="high"
+          />
+          <img
+            class="scene-produce scene-spinach"
+            src="assets/products/spinach.png"
+            alt="Spinach"
+            width="432"
+            height="432"
+            fetchpriority="high"
+          />
+          <img
+            class="scene-produce scene-tomatoes"
+            src="assets/products/tomato.png"
+            alt="Fresh tomatoes"
+            width="432"
+            height="432"
+            fetchpriority="high"
+          />
+          <div class="hero-price">
+            <small>LITTLE WINS FROM</small><strong>₹5<span>only.</span></strong
+            ><svg class="icon"><use href="#i-diagonal" /></svg>
+          </div>
+          <span class="scene-spark spark-one" aria-hidden="true">✳</span
+          ><span class="scene-spark spark-two" aria-hidden="true">✳</span
+          ><span class="scene-caption">THE EVERYDAY EDIT / VOL. 01</span>
+          <button
+            class="scene-shop"
+            data-category="Fruits"
+            aria-label="Shop the fruit bowl"
+          >
+            <svg class="icon"><use href="#i-arrow" /></svg>
+          </button>
+        </div>
+      </section>
+      <div class="brand-ribbon" aria-hidden="true">
+        <div>
+          <span>SMALL PRICES</span><b>✳</b><span>BIG FLAVOUR</span><b>✳</b
+          ><span>EVERYDAY ESSENTIALS</span><b>✳</b
+          ><span>GOOD LITTLE THINGS</span><b>✳</b><span>SMALL PRICES</span>
+        </div>
+      </div>
+      <section class="categories wrap" aria-labelledby="category-heading">
+        <div class="section-intro">
+          <p class="eyebrow">01 / PICK YOUR AISLE</p>
+          <h2 id="category-heading">What’s on your list?</h2>
+          <p>Good things in every corner.</p>
+        </div>
+        <div class="category-grid">
+          <button class="category-card cat-green" data-category="Vegetables">
+            <span
+              ><small>THE KITCHEN REGULARS</small><strong>Veg out.</strong
+              ><b
+                >Shop vegetables
+                <svg class="icon"><use href="#i-arrow" /></svg></b></span
+            ><img
+              src="assets/vegetable-mix.png"
+              alt=""
+              width="336"
+              height="336"
+              loading="lazy"
+            />
+          </button>
+          <button class="category-card cat-peach" data-category="Fruits">
+            <span
+              ><small>NATURE’S LITTLE TREATS</small
+              ><strong>Fruitful days.</strong
+              ><b
+                >Shop fruit
+                <svg class="icon"><use href="#i-arrow" /></svg></b></span
+            ><img
+              src="assets/fruit-mix.png"
+              alt=""
+              width="336"
+              height="336"
+              loading="lazy"
+            />
+          </button>
+          <button class="category-card cat-blue" data-category="Dairy & bakery">
+            <span
+              ><small>START THE DAY RIGHT</small><strong>Rise & shine.</strong
+              ><b
+                >Dairy & bakery
+                <svg class="icon"><use href="#i-arrow" /></svg></b></span
+            ><img
+              src="assets/dairy-mix.png"
+              alt=""
+              width="336"
+              height="336"
+              loading="lazy"
+            />
+          </button>
+          <button class="category-card cat-sand" data-category="Pantry">
+            <span
+              ><small>ALWAYS GOOD TO HAVE</small><strong>Shelf love.</strong
+              ><b
+                >Shop the pantry
+                <svg class="icon"><use href="#i-arrow" /></svg></b></span
+            ><img
+              src="assets/pantry-mix.png"
+              alt=""
+              width="336"
+              height="336"
+              loading="lazy"
+            />
+          </button>
+        </div>
+      </section>
+      <section
+        class="shop-section wrap"
+        id="shop"
+        aria-labelledby="shop-heading"
+      >
+        <div class="shop-heading">
+          <div>
+            <p class="eyebrow">02 / A BASKET OF LITTLE WINS</p>
+            <h2 id="shop-heading">Everyday, <em>for less.</em></h2>
+          </div>
+          <p>The basics you reach for.<br />The prices you’ll come back for.</p>
+        </div>
+        <div class="shop-toolbar">
+          <div class="filter-chips" role="group" aria-label="Filter products">
+            <button data-filter="all" aria-pressed="true">
+              Everything <span>12</span></button
+            ><button data-filter="Vegetables" aria-pressed="false">
+              Vegetables</button
+            ><button data-filter="Fruits" aria-pressed="false">Fruits</button
+            ><button data-filter="Dairy & bakery" aria-pressed="false">
+              Dairy & bakery</button
+            ><button data-filter="Pantry" aria-pressed="false">Pantry</button>
+          </div>
+          <div class="sort-controls">
+            <label for="price-filter" class="sr-only">Maximum price</label
+            ><select id="price-filter">
+              <option value="50">All prices</option>
+              <option value="10">₹10 & under</option>
+              <option value="5">₹5 picks</option></select
+            ><label for="sort" class="sr-only">Sort products</label
+            ><select id="sort">
+              <option value="featured">Our picks</option>
+              <option value="low">Price: low to high</option>
+              <option value="high">Price: high to low</option>
+              <option value="name">A to Z</option>
+            </select>
+          </div>
+        </div>
+        <div class="results-line">
+          <p id="result-count" role="status">
+            Finding your everyday favourites…
+          </p>
+          <button
+            class="text-button"
+            id="reset-filters"
+            data-action="reset"
+            hidden
+          >
+            Clear filters
+            <svg class="icon"><use href="#i-close" /></svg></button
+          ><span>LAUNCH SELECTION</span>
+        </div>
+        <div class="product-grid" id="product-grid" aria-label="Products"></div>
+        <div class="empty-state" id="empty-products" hidden>
+          <svg class="icon"><use href="#i-search" /></svg>
+          <h3>No little finds this time.</h3>
+          <p>Try a different search or clear your filters.</p>
+          <button class="button button-dark" data-action="reset">
+            See everything <svg class="icon"><use href="#i-arrow" /></svg>
+          </button>
+        </div>
+        <noscript
+          ><div class="notice">
+            Please enable JavaScript to browse products and use the basket. The
+            store is preparing to open.
+          </div></noscript
+        >
+      </section>
+      <section class="everyday-story wrap" aria-labelledby="story-title">
+        <div class="story-copy">
+          <p class="eyebrow">LESS FUSS. MORE EVERYDAY.</p>
+          <h2 id="story-title">
+            A little basket.<br />A lot to <em>love.</em>
+          </h2>
+          <p>
+            From the first cup to the last bite, it’s the little things that
+            make a day. Let’s make room for more of them.
+          </p>
+          <a class="button button-lime" href="#shop"
+            >Find your little favourites
+            <svg class="icon"><use href="#i-arrow" /></svg
+          ></a>
+        </div>
+        <div class="story-visual">
+          <span class="story-type" aria-hidden="true">good<br />stuff.</span
+          ><img
+            src="assets/products/orange.png"
+            alt="Oranges"
+            width="432"
+            height="432"
+            loading="lazy"
+          /><span class="story-sticker"
+            >SMALL<br />IS A<br /><b>BIG DEAL.</b></span
+          >
+        </div>
+      </section>
+      <section class="service-strip wrap" aria-label="Shopping help">
+        <button data-action="delivery">
+          <svg class="icon"><use href="#i-pin" /></svg
+          ><span
+            ><strong>Your area, your basket.</strong
+            ><small>Check delivery availability</small></span
+          ><svg class="icon"><use href="#i-diagonal" /></svg></button
+        ><button data-policy="returns">
+          <svg class="icon"><use href="#i-leaf" /></svg
+          ><span
+            ><strong>Let’s make it right.</strong
+            ><small>Read our returns policy</small></span
+          ><svg class="icon"><use href="#i-diagonal" /></svg></button
+        ><button data-action="orders">
+          <svg class="icon"><use href="#i-box" /></svg
+          ><span
+            ><strong>Keep an eye on the good stuff.</strong
+            ><small>View your order status</small></span
+          ><svg class="icon"><use href="#i-diagonal" /></svg>
+        </button>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-top">
+          <div>
+            <a href="#home" class="wordmark">blunder<i></i></a>
+            <p>Good little things.<br />For your big everyday.</p>
+          </div>
+          <div class="footer-column">
+            <h3>Fill your basket</h3>
+            <button data-category="Vegetables">Vegetables</button
+            ><button data-category="Fruits">Fruit bowl</button
+            ><button data-category="Dairy & bakery">Dairy & bakery</button
+            ><button data-category="Pantry">Pantry essentials</button>
+          </div>
+          <div class="footer-column">
+            <h3>Here to help</h3>
+            <button data-action="orders">Your orders</button
+            ><button data-policy="shipping">Delivery & shipping</button
+            ><button data-policy="returns">Returns & replacements</button
+            ><button data-action="support">Contact the store</button>
+          </div>
+          <div class="footer-signoff">
+            <span class="mini-spark">✳</span>
+            <p>A fresh start.<br />One basket at a time.</p>
+            <span>PAYMENT OPTIONS AT LAUNCH</span
+            ><b>Cash on Delivery <i>·</i> Online payments</b>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span
+            >© <span id="year">2026</span> Blunder. Made for the everyday.</span
+          >
+          <div>
+            <button data-policy="privacy">Privacy</button
+            ><button data-policy="terms">Terms</button
+            ><a href="https://aakash9972sn.github.io/aakash-portfolio/"
+              >Built by Aakash <svg class="icon"><use href="#i-diagonal" /></svg
+            ></a>
+          </div>
+        </div>
+        <div class="footer-big" aria-hidden="true">
+          little things. big love.
+        </div>
+      </div>
+    </footer>
+    <dialog class="drawer" id="bag-dialog" aria-labelledby="bag-title">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">YOUR LITTLE FINDS</p>
+          <h2 id="bag-title">The good stuff.</h2>
+        </div>
+        <button class="icon-button" data-close aria-label="Close basket">
+          <svg class="icon"><use href="#i-close" /></svg>
+        </button>
+      </div>
+      <div id="bag-content" class="drawer-content"></div>
+    </dialog>
+    <dialog
+      class="product-dialog"
+      id="product-dialog"
+      aria-labelledby="detail-title"
+    >
+      <button
+        class="icon-button modal-close"
+        data-close
+        aria-label="Close product details"
+      >
+        <svg class="icon"><use href="#i-close" /></svg>
+      </button>
+      <div id="product-detail"></div>
+    </dialog>
+    <dialog
+      class="small-dialog"
+      id="delivery-dialog"
+      aria-labelledby="delivery-title"
+    >
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">A LITTLE CLOSER TO YOU</p>
+          <h2 id="delivery-title">Where’s your basket going?</h2>
+        </div>
+        <button
+          class="icon-button"
+          data-close
+          aria-label="Close delivery checker"
+        >
+          <svg class="icon"><use href="#i-close" /></svg>
+        </button>
+      </div>
+      <p>Enter your PIN code to check where we deliver.</p>
+      <form id="delivery-form">
+        <label for="delivery-pin">Delivery PIN code</label>
+        <div class="input-button">
+          <input
+            id="delivery-pin"
+            inputmode="numeric"
+            pattern="[1-9][0-9]{5}"
+            minlength="6"
+            maxlength="6"
+            placeholder="e.g. 110027"
+            required
+          /><button class="button button-dark" type="submit">
+            Check <svg class="icon"><use href="#i-arrow" /></svg>
+          </button>
+        </div>
+      </form>
+      <p id="delivery-result" role="status"></p>
+    </dialog>
+    <dialog
+      class="checkout-dialog"
+      id="checkout-dialog"
+      aria-labelledby="checkout-title"
+    >
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">THE LAST LITTLE STEP</p>
+          <h2 id="checkout-title">Make it yours.</h2>
+        </div>
+        <button class="icon-button" data-close aria-label="Close checkout">
+          <svg class="icon"><use href="#i-close" /></svg>
+        </button>
+      </div>
+      <div id="checkout-content"></div>
+    </dialog>
+    <dialog
+      class="orders-dialog"
+      id="orders-dialog"
+      aria-labelledby="orders-title"
+    >
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">FOLLOW THE GOOD STUFF</p>
+          <h2 id="orders-title">Your orders.</h2>
+        </div>
+        <button class="icon-button" data-close aria-label="Close orders">
+          <svg class="icon"><use href="#i-close" /></svg>
+        </button>
+      </div>
+      <div id="orders-content"></div>
+    </dialog>
+    <dialog
+      class="small-dialog policy-dialog"
+      id="policy-dialog"
+      aria-labelledby="policy-title"
+    >
+      <div class="dialog-head">
+        <h2 id="policy-title">Good to know.</h2>
+        <button class="icon-button" data-close aria-label="Close information">
+          <svg class="icon"><use href="#i-close" /></svg>
+        </button>
+      </div>
+      <div id="policy-content"></div>
+    </dialog>
+    <div class="toast" id="toast" role="status" hidden>
+      <svg class="icon"><use href="#i-check" /></svg><span></span
+      ><button data-action="bag">
+        View basket <svg class="icon"><use href="#i-arrow" /></svg>
+      </button>
+    </div>
+  </body>
 </html>

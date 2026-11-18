@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: blunder-store
+    runtime: node
+    plan: starter
+    buildCommand: npm ci --ignore-scripts
+    startCommand: npm start
+    healthCheckPath: /healthz
+    disk:
+      name: blunder-orders
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 24
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_PATH
+        value: /var/data/store.sqlite
+      - key: STORE_ENABLED
+        value: "false"
+      - key: ORDER_ACCESS_SECRET
+        generateValue: true
+      - key: PUBLIC_ORIGIN
+        sync: false
+      - key: TRUST_PROXY_HOPS
+        value: "1"

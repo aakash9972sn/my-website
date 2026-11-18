@@ -1,0 +1,314 @@
+[
+  {
+    "id": "banana",
+    "name": "Banana",
+    "category": "Fruits",
+    "pack": "1 piece",
+    "price": 500,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/banana.png",
+    "tone": "gold",
+    "label": "LAUNCH PICK",
+    "description": "A little sunshine for your fruit bowl.",
+    "details": [
+      "1 piece pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "1 piece"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 1
+  },
+  {
+    "id": "tomato",
+    "name": "Fresh Tomatoes",
+    "category": "Vegetables",
+    "pack": "250 g",
+    "price": 800,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/tomato.png",
+    "tone": "rose",
+    "label": "LAUNCH PICK",
+    "description": "For salads, sauces and your everyday cooking.",
+    "details": [
+      "250 g pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "250 g"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 2
+  },
+  {
+    "id": "potato",
+    "name": "Potatoes",
+    "category": "Vegetables",
+    "pack": "250 g",
+    "price": 800,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/potato.png",
+    "tone": "sand",
+    "label": "LAUNCH PICK",
+    "description": "The kitchen staple with a hundred possibilities.",
+    "details": [
+      "250 g pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "250 g"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 3
+  },
+  {
+    "id": "onion",
+    "name": "Red Onions",
+    "category": "Vegetables",
+    "pack": "250 g",
+    "price": 700,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/onion.png",
+    "tone": "lavender",
+    "label": "LAUNCH PICK",
+    "description": "A flavourful start to a home-cooked meal.",
+    "details": [
+      "250 g pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "250 g"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 4
+  },
+  {
+    "id": "spinach",
+    "name": "Spinach",
+    "category": "Vegetables",
+    "pack": "100 g",
+    "price": 500,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/spinach.png",
+    "tone": "sage",
+    "label": "LAUNCH PICK",
+    "description": "A green addition to your everyday plate.",
+    "details": [
+      "100 g pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "100 g"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 5
+  },
+  {
+    "id": "apple",
+    "name": "Red Apple",
+    "category": "Fruits",
+    "pack": "1 piece",
+    "price": 1000,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/apple.png",
+    "tone": "rose",
+    "label": "LAUNCH PICK",
+    "description": "A simple fruit-bowl favourite.",
+    "details": [
+      "1 piece pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "1 piece"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 6
+  },
+  {
+    "id": "orange",
+    "name": "Orange",
+    "category": "Fruits",
+    "pack": "1 piece",
+    "price": 800,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/orange.png",
+    "tone": "peach",
+    "label": "LAUNCH PICK",
+    "description": "A bright citrus break in your day.",
+    "details": [
+      "1 piece pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "1 piece"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 7
+  },
+  {
+    "id": "carrot",
+    "name": "Carrots",
+    "category": "Vegetables",
+    "pack": "250 g",
+    "price": 900,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/carrot.png",
+    "tone": "peach",
+    "label": "LAUNCH PICK",
+    "description": "Crunch into a classic kitchen essential.",
+    "details": [
+      "250 g pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "250 g"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 8
+  },
+  {
+    "id": "milk",
+    "name": "Amul Taaza Milk",
+    "category": "Dairy & bakery",
+    "pack": "500 ml",
+    "price": 1000,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/milk.png",
+    "tone": "blue",
+    "label": "LAUNCH PICK",
+    "description": "Toned milk for your daily cup, bowl or recipe.",
+    "details": [
+      "500 ml pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "500 ml"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 9
+  },
+  {
+    "id": "bread",
+    "name": "Brown Bread",
+    "category": "Dairy & bakery",
+    "pack": "400 g",
+    "price": 1000,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/bread.png",
+    "tone": "sand",
+    "label": "LAUNCH PICK",
+    "description": "Toast it, stack it, make it your own.",
+    "details": [
+      "400 g pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "400 g"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 10
+  },
+  {
+    "id": "rice",
+    "name": "Basmati Rice",
+    "category": "Pantry",
+    "pack": "1 kg",
+    "price": 2000,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/rice.png",
+    "tone": "sage",
+    "label": "LAUNCH PICK",
+    "description": "A pantry staple for the meals you love.",
+    "details": [
+      "1 kg pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "1 kg"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 11
+  },
+  {
+    "id": "flour",
+    "name": "Wheat Flour",
+    "category": "Pantry",
+    "pack": "1 kg",
+    "price": 1000,
+    "mrp": null,
+    "priceSource": null,
+    "image": "assets/products/flour.png",
+    "tone": "gold",
+    "label": "LAUNCH PICK",
+    "description": "Keep everyday cooking close to home.",
+    "details": [
+      "1 kg pack / quantity",
+      "Images are representative; packaging may vary.",
+      "Final availability is confirmed at checkout."
+    ],
+    "variants": [
+      {
+        "id": "standard",
+        "label": "1 kg"
+      }
+    ],
+    "optionLabel": "Pack",
+    "featured": 12
+  }
+]
