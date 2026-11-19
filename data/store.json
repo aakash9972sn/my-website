@@ -11,18 +11,19 @@
     "standard": 2000,
     "freeAbove": 19900,
     "pincodes": [],
-    "estimate": "Delivery area, availability and timing are confirmed by the store in WhatsApp before an order is accepted."
+    "estimate": "Delivery availability is checked using your PIN code. The store confirms the delivery window before dispatch."
   },
   "coupons": [],
   "policies": {
-    "shipping": "You can send a Cash on Delivery request through WhatsApp with your address and PIN code. Sending a request does not confirm stock or delivery availability. The store will confirm whether it can deliver to you, the delivery window and the final delivery charge in chat before accepting the order. Charges shown on the website are estimates until confirmed. A one-hour delivery service is not guaranteed. Please pay only for an order you have agreed with the store.",
+    "shipping": "Delivery is available only to PIN codes accepted at checkout. Review your address and the delivery charge before confirming. The store receives saved orders automatically and confirms the delivery window before dispatch. A one-hour delivery service is not guaranteed. Cash on Delivery is collected when an accepted order is delivered.",
     "returns": "Received a damaged, incorrect or missing item? Contact the store using your order reference and a photo where relevant, and we will review a replacement or refund. Please report issues with fresh or chilled food on delivery, and other items within 7 days. Do not send perishable items back without instructions. This policy does not restrict your rights under applicable consumer law.",
-    "privacy": "Your basket and saved product IDs are kept in your browser. A confirmed delivery address, optional map pin and prepared WhatsApp requests are kept only in this browser tab. Choosing Open WhatsApp shares the prepared request with WhatsApp; the store receives it after you press Send there. Choosing the email alternative opens a draft in your email app, which you must send yourself. These messages contain the products, quantities, estimated total, name, mobile number, email and delivery address you enter, plus your map pin if selected. You can clear the selected location and remove saved request drafts. If you open the map, tiles are loaded from OpenStreetMap; area searches and selected map points are sent to the configured geocoding service. GPS is requested only after you choose Use my location. For orders placed through the hosted order service, addresses and coordinates are protected by your private order access code. Contact sdhanpal778@gmail.com for questions about your personal data.",
-    "terms": "The WhatsApp checkout prepares an order request. It does not send a message automatically, confirm an order, reserve stock or collect payment. Press Send in WhatsApp and wait for the store to confirm product availability, pack sizes, price, delivery charge and delivery timing before agreeing to an order. Website prices are in Indian rupees and are subject to that confirmation. Product images are representative; packaging and produce may vary. Cash on Delivery is payable only when an accepted order is delivered. Online payments are not currently enabled on the public storefront. Contact sdhanpal778@gmail.com for order questions. No affiliation with product brands is implied."
+    "privacy": "Your basket and saved product IDs are kept in your browser. A selected delivery address and optional map pin are kept only in this tab. Submitted orders are stored by the order service and protected by a private access code. The seller receives products, quantities, totals, customer contact details and the delivery address through configured email, SMS or WhatsApp notification services to fulfil your order. Customers do not have to send those messages themselves. Map tiles come from the configured map provider, and area searches or selected points are sent to its geocoding service. GPS is requested only after you choose Use my location. You can clear your selected location. Contact sdhanpal778@gmail.com about your personal data. The optional AI shopping helper sends your question and public product information to Cloudflare Workers AI. It does not automatically include your contact details, address or private orders. Do not type private information into the AI chat.",
+    "terms": "Confirming checkout submits an order to the store. A saved COD order awaits store confirmation before dispatch and is payable on delivery. Online orders are paid only after payment verification by the server. Prices are in Indian rupees and delivery charges appear before confirmation. Product photos are representative; packaging and produce may vary. Seller notifications are handled automatically by the order service; customers do not need to open WhatsApp or email to send their order. If checkout is unavailable, no new order is created. Contact sdhanpal778@gmail.com for questions. No affiliation with product brands is implied."
   },
-  "orderRequests": {
-    "enabled": true,
-    "whatsapp": "919910113972",
-    "email": "sdhanpal778@gmail.com"
+  "supportPhone": "+919910113972",
+  "sellerNotifications": {
+    "email": "sdhanpal778@gmail.com",
+    "sms": "+919910113972",
+    "whatsapp": "+919910113972"
   }
 }

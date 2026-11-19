@@ -6,14 +6,22 @@ import { fileURLToPath } from "node:url";
 import { createCommerce, StoreError } from "./commerce.mjs";
 import { razorpayGateway } from "./gateway.mjs";
 import { createGeocoder } from "./geocoder.mjs";
+import {
+  createSellerNotifier,
+  notificationSettings,
+} from "./notifications.mjs";
+import { createNotificationWorker } from "./notification-outbox.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export function loadSettings(env = process.env) {
   const config = JSON.parse(readFileSync(resolve(root, "data/store.json")));
   const catalog = JSON.parse(readFileSync(resolve(root, "data/catalog.json")));
   const enabled = env.STORE_ENABLED === "true";
+  const notificationConfig = notificationSettings(env, config);
   if (enabled) {
     const missing = [];
+    if (!notificationConfig.channels.length)
+      missing.push("at least one seller notification channel");
     if (!config.catalogApproved) missing.push("approved product catalog");
     if (!config.legalName || !config.businessAddress)
       missing.push("seller identity/address");
@@ -52,6 +60,7 @@ export function createApp({
   settings = loadSettings(env),
   gateway = razorpayGateway(env),
   commerce,
+  notifier = createSellerNotifier(env, settings.config),
   geocoder = createGeocoder({
     baseURL: env.GEOCODER_URL,
     origin: env.PUBLIC_ORIGIN,
@@ -67,7 +76,15 @@ export function createApp({
       secret: env.ORDER_ACCESS_SECRET,
       enabled,
       gateway,
+      notificationChannels: notifier.channels,
     });
+  const notificationWorker = createNotificationWorker({
+    outbox: store.notifications,
+    notifier,
+    onError: (error) =>
+      console.error("Seller notification worker:", error.name),
+  });
+  notificationWorker.start();
   const publicOrigin =
     env.PUBLIC_ORIGIN || `http://localhost:${env.PORT || 3000}`;
   const origins = new Set(
@@ -138,7 +155,7 @@ export function createApp({
     );
     res.setHeader(
       "Content-Security-Policy",
-      "default-src 'self'; script-src 'self' https://checkout.razorpay.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.razorpay.com https://tile.openstreetmap.org; connect-src 'self' https://*.razorpay.com https://nominatim.openstreetmap.org; frame-src https://*.razorpay.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+      "default-src 'self'; script-src 'self' https://checkout.razorpay.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.razorpay.com https://tile.openstreetmap.org; connect-src 'self' https://*.razorpay.com https://nominatim.openstreetmap.org https://aakash-test-ai.aakashinfinity72.workers.dev; frame-src https://*.razorpay.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
     );
     if (env.NODE_ENV === "production")
       res.setHeader("Strict-Transport-Security", "max-age=31536000");
@@ -184,7 +201,8 @@ export function createApp({
           return send(res, 200, {
             name: config.name,
             mapsAvailable: true,
-            orderRequests: config.orderRequests,
+            sellerNotificationsEnabled: notifier.channels.length > 0,
+            supportPhone: config.supportPhone,
             legalName: config.legalName,
             businessAddress: config.businessAddress,
             supportEmail: config.supportEmail,
@@ -206,11 +224,16 @@ export function createApp({
           return send(res, 200, store.quote(await body(req)));
         if (path === "/api/orders" && req.method === "POST") {
           rateLimit(req, "order");
-          return send(
-            res,
-            201,
-            await store.place(await body(req), req.headers["idempotency-key"]),
+          const order = await store.place(
+            await body(req),
+            req.headers["idempotency-key"],
           );
+          notificationWorker
+            .run()
+            .catch((error) =>
+              console.error("Seller notification worker:", error.name),
+            );
+          return send(res, 201, order);
         }
         const match = path.match(
           /^\/api\/orders\/(BL-[A-F0-9]{14})(?:\/(verify|cancel))?$/,
@@ -242,8 +265,10 @@ export function createApp({
         "script.js",
         "store-config.js",
         "location.js",
-        "order-requests.js",
         "location.css",
+        "ai-config.js",
+        "ai-assistant.js",
+        "ai-assistant.css",
         "data/catalog.json",
       ];
       if (!allowed.includes(relative) && !relative.startsWith("assets/"))
@@ -293,8 +318,10 @@ export function createApp({
   return {
     handler,
     store,
-    close: () => {
+    notificationWorker,
+    close: async () => {
       clearInterval(timer);
+      await notificationWorker.close();
       store.close();
     },
   };
@@ -310,8 +337,8 @@ if (
   );
   for (const signal of ["SIGTERM", "SIGINT"])
     process.on(signal, () =>
-      server.close(() => {
-        app.close();
+      server.close(async () => {
+        await app.close();
         process.exit(0);
       }),
     );

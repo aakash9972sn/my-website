@@ -7,6 +7,7 @@ import {
 } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
+import { createNotificationOutbox } from "./notification-outbox.mjs";
 
 export class StoreError extends Error {
   constructor(message, status = 400, code) {
@@ -93,6 +94,7 @@ export function createCommerce({
   enabled = false,
   gateway = null,
   now = () => Date.now(),
+  notificationChannels = [],
 }) {
   if (database !== ":memory:")
     mkdirSync(dirname(database), { recursive: true, mode: 0o700 });
@@ -107,6 +109,11 @@ export function createCommerce({
       expires_at INTEGER NOT NULL, reserved INTEGER NOT NULL DEFAULT 1,
       fulfillment TEXT NOT NULL DEFAULT 'unfulfilled', tracking TEXT, updated_at INTEGER NOT NULL
     );`);
+  const notifications = createNotificationOutbox({
+    db,
+    channels: notificationChannels,
+    now,
+  });
   assert(
     Number.isSafeInteger(config.shipping.standard) &&
       config.shipping.standard >= 0 &&
@@ -190,6 +197,8 @@ export function createCommerce({
         db.prepare(
           "UPDATE orders SET status='expired', updated_at=? WHERE id=?",
         ).run(now(), row.id);
+        if (row.method === "cod")
+          notifications.enqueue(publicOrder(find(row.id)), "order.expired");
       }
     });
   }
@@ -331,6 +340,10 @@ export function createCommerce({
         now(),
         row.id,
       );
+      notifications.enqueue(
+        publicOrder(find(row.id)),
+        available ? "order.received" : "order.review",
+      );
       return publicOrder(find(row.id));
     });
   }
@@ -424,7 +437,9 @@ export function createCommerce({
         now() + (method === "cod" ? 86400000 : 1200000),
         now(),
       );
-      return find(id);
+      const created = find(id);
+      if (method === "cod") notifications.enqueue(publicOrder(created));
+      return created;
     });
     if (method === "razorpay") {
       let remote;
@@ -541,6 +556,7 @@ export function createCommerce({
           db.prepare(
             "UPDATE orders SET status='refunded', updated_at=? WHERE id=?",
           ).run(now(), row.id);
+          notifications.enqueue(publicOrder(find(row.id)), "order.refunded");
         });
     }
     return { received: true };
@@ -559,11 +575,13 @@ export function createCommerce({
       db.prepare(
         "UPDATE orders SET status='cancelled', updated_at=? WHERE id=?",
       ).run(now(), id);
+      notifications.enqueue(publicOrder(find(id)), "order.cancelled");
       return publicOrder(find(id));
     });
   }
   return {
     db,
+    notifications,
     quote,
     place,
     getOrder,

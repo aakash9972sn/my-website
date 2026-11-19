@@ -6,7 +6,42 @@ const db = new DatabaseSync(
 db.exec("PRAGMA busy_timeout=5000");
 const [command, id, value] = process.argv.slice(2);
 try {
-  if (command === "inventory")
+  if (command === "notifications")
+    console.table(
+      db
+        .prepare(
+          "SELECT id,order_id,event,channel,status,attempts,error_code,provider_id FROM seller_notifications ORDER BY id DESC LIMIT 100",
+        )
+        .all(),
+    );
+  else if (command === "retry-notification") {
+    if (!/^\d+$/.test(id || ""))
+      throw new Error("Use: npm run store -- retry-notification JOB_ID");
+    const job = db
+      .prepare(
+        "SELECT n.*,o.status AS order_status FROM seller_notifications n JOIN orders o ON o.id=n.order_id WHERE n.id=?",
+      )
+      .get(Number(id));
+    if (!job || !["failed", "review"].includes(job.status))
+      throw new Error(
+        "Only failed or review jobs can be retried. Accepted messages cannot be resent here.",
+      );
+    if (
+      ["order.received", "order.review"].includes(job.event) &&
+      !["paid", "paid_review", "cod_pending", "cod_confirmed"].includes(
+        job.order_status,
+      )
+    )
+      throw new Error(
+        "This order is no longer active. Do not retry an outdated packing alert.",
+      );
+    db.prepare(
+      "UPDATE seller_notifications SET status='queued', attempts=0, next_attempt=?,locked_at=NULL,error_code=NULL WHERE id=? AND status IN ('failed','review')",
+    ).run(Date.now(), Number(id));
+    console.log(
+      "Notification queued. For review jobs, check the provider first to avoid sending a duplicate.",
+    );
+  } else if (command === "inventory")
     console.table(db.prepare("SELECT * FROM inventory ORDER BY sku").all());
   else if (command === "stock") {
     if (!/^\d+$/.test(value || "") || Number(value) > 100000)
@@ -79,7 +114,7 @@ try {
     console.log("Delivery and payment recorded.");
   } else
     console.log(
-      "Commands: inventory | stock SKU QUANTITY | orders | order ORDER_ID | confirm-cod ORDER_ID | dispatch ORDER_ID [HTTPS_TRACKING_URL] | deliver ORDER_ID",
+      "Commands: inventory | stock SKU QUANTITY | orders | order ORDER_ID | notifications | retry-notification JOB_ID | confirm-cod ORDER_ID | dispatch ORDER_ID [HTTPS_TRACKING_URL] | deliver ORDER_ID",
     );
 } catch (error) {
   console.error(error.message);

@@ -5,34 +5,22 @@ product quick views, saved items and a persistent basket. The Node backend store
 orders and stock in SQLite, supports Cash on Delivery, and integrates Razorpay
 with server-side totals, payment signatures and signed webhooks.
 
-**Current public checkout: WhatsApp Cash on Delivery requests.** This works on
-GitHub Pages without a payment account or a hosted backend. Customers review a
-basket, enter their contact/address details, optionally choose a map pin, and open
-a prepared request addressed to the owner's WhatsApp number. They must press
-**Send in WhatsApp**; the site cannot send automatically or determine delivery of
-the message. The owner confirms stock, the final price and delivery in chat before
-accepting an order. Email draft and copy-message alternatives are available.
+**Checkout uses the hosted order service and automatic seller alerts.** The customer confirms an order on the website. The backend stores it and queues the product list, totals, customer details and delivery location for the seller's email/SMS/WhatsApp providers. The customer does not send a WhatsApp message or email draft.
 
-Merchant contact is configured in `data/store.json` under `orderRequests`:
-WhatsApp `919910113972`, support/email fallback `sdhanpal778@gmail.com`, supplied by
-the owner. Opening a WhatsApp or email link shares the prepared data with that app;
-customer-facing notices explain this before proceeding. Requests are saved only
-in the current tab's session storage (maximum five), can be deleted, and do not
-clear the basket. Exact repeated reviews reuse the same request reference. These
-client-prepared estimates are **not server-verified orders or stock reservations**;
-the merchant must check them before agreeing to fulfilment.
+The seller destinations are `sdhanpal778@gmail.com` and `+919910113972` in `data/store.json`. Read [SELLER-NOTIFICATIONS.md](SELLER-NOTIFICATIONS.md) for the exact setup, trigger rules and recovery commands. Provider credentials belong in hosting secrets. The public static site preserves browsing and baskets while checkout is unavailable; it never invents a saved order or a notification receipt.
 
-The optional Node order service supports inventory, private order lookup and
-verified Razorpay payments. It remains closed until the seller completes the
-configuration below. Online payments and automatic email/SMS/WhatsApp
-notifications require the owner's provider accounts and hosting; none have been
-purchased, configured or represented as live.
+**Live setup is still required:** persistent backend hosting, actual inventory and delivery configuration, and at least one notification provider. Online payments separately require the owner's Razorpay account. These services have not been activated or represented as live by this change.
+
+## AI shopping helper
+
+The shared Cloudflare endpoint in `ai-config.js` powers catalogue questions, pack comparisons and budget suggestions. Product quick views include an Ask AI action. Only public catalogue/policy context is supplied; customer addresses, contact details and private orders are excluded. AI cannot place orders, override totals, verify payment or guarantee stock. The Worker in `aakash9972sn/newTest/worker/src/index.js` must be deployed with the new `assistant` action. A configured URL alone does not prove that deployment is live. AI failures leave core shopping available.
 
 ## Run locally
 
-Node **24 or later** is required; there are no runtime dependencies.
+Node **24 or later** is required; run `npm ci` before starting (Nodemailer provides SMTP delivery).
 
 ```sh
+npm ci
 npm start
 # http://localhost:3000
 npm test
@@ -66,7 +54,7 @@ payment-provider boundary; it never charges money or contacts a real customer.
    npm run store -- stock tomato:standard 40
    ```
 
-5. Set `STORE_ENABLED=true` and restart. Startup rejects missing seller, delivery or
+5. Configure automatic seller alerts using [SELLER-NOTIFICATIONS.md](SELLER-NOTIFICATIONS.md), then set `STORE_ENABLED=true` and restart. Startup rejects missing seller, delivery or
    secret configuration. COD can work without Razorpay. Do a real owner-controlled
    fulfilment check before advertising the store.
 
@@ -86,8 +74,8 @@ Only mark a COD delivery complete after payment has been collected. Customers ca
 cancel unfulfilled COD requests; stock is released once. Orders are visible using a
 random reference plus a private access code. For hosted orders, the browser stores only these access
 credentials; full order details are fetched with the private access code. Optional
-delivery selections and WhatsApp drafts stay in tab session storage. There is no pretend
-login, automatic email, SMS, shipping integration, or hidden customer-facing admin.
+delivery selections stay in tab session storage. Automatic seller notifications use
+the configured providers; there is no pretend login or customer-facing admin.
 Merchant management is via the hosting shell; protect hosting access and the disk.
 
 ## Enable online payments
@@ -126,10 +114,9 @@ transaction cannot be verified without the owner's account and credentials.
 Serving the whole site from Node is the simplest deployment. If retaining the
 GitHub Pages URL, set `window.BLUNDER_API_ORIGIN` in `store-config.js` to the backend
 HTTPS origin, and `STOREFRONT_ORIGIN=https://aakash9972sn.github.io` on that backend.
-CORS accepts only configured exact origins. If the API is unavailable, the
-storefront retains the basket and falls back to the explicitly configured WhatsApp
-request flow. It never displays a server order or payment confirmation in fallback
-mode. Disable `orderRequests.enabled` to disable this fallback.
+CORS accepts only configured exact origins. If the API is unavailable, browsing and
+baskets remain available but order submission is disabled. No third-party chat
+handoff or fake order confirmation is used as an ordering fallback.
 
 ## Delivery maps and addresses
 
@@ -140,7 +127,7 @@ removes the stale map point. No GPS call or map tile request happens before the
 customer opens the picker and chooses the relevant action. GPS needs HTTPS (or
 localhost) and browser permission. Addresses and points are kept only in the tab,
 with a visible clear control. The final point becomes a directions link in the
-WhatsApp/email request or private hosted order/receipt.
+seller notification or private hosted order/receipt.
 
 Leaflet **1.9.4** is vendored in `assets/vendor/leaflet`; its BSD license is retained.
 OpenStreetMap tiles and Nominatim are low-traffic defaults with visible attribution.
@@ -155,9 +142,7 @@ Respect [OSM tile usage](https://operations.osmfoundation.org/policies/tiles/) a
 [Nominatim usage](https://operations.osmfoundation.org/policies/nominatim/).
 
 Map failures, denied GPS permission and missing geocoding results leave manual
-address entry usable. The map does not prove delivery serviceability. WhatsApp
-requests require merchant confirmation; hosted orders still enforce configured
-PIN codes. Browser map tests use controlled provider/tile fixtures because the
+address entry usable. The map does not prove delivery serviceability. Hosted orders enforce configured PIN codes; a selected point alone does not establish serviceability. Browser map tests use controlled provider/tile fixtures because the
 cloud review network blocks the public map provider; live-provider availability
 and GPS accuracy must be checked in the customer's browser.
 
@@ -180,7 +165,7 @@ are included for review; delivery timing must match the seller's actual operatio
 validation, gateway failure, signatures, amount/currency mismatch, captured-state
 checks, webhooks/refunds, expired/late payments, database persistence, launch gating
 and HTTP file/origin boundaries. It also covers coordinate validation, geocoder
-queue/cache/error handling and WhatsApp/email request recipients, totals and data.
+queue/cache/error handling and automatic seller notification routing, complete delivery details, duplicate events, retry persistence and failures.
 Browser verification also covers the complete COD
 flow against isolated inventory, responsive layouts, keyboard dialogs, filtering,
 saved items, basket reload, order lookup and receipt download.
