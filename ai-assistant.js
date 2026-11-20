@@ -19,7 +19,7 @@
   $(".welcome p").textContent = config.intro || "Ask about this page.";
   $(".privacy").textContent =
     config.privacy ||
-    "Your question and public page context are sent to Cloudflare AI when you ask. Do not include private details.";
+    "Your question and public page context are sent to Google Gemini when you ask. Do not include private details.";
   let history = [],
     busy = false,
     controller,
@@ -103,7 +103,7 @@
     lastQuestion = question;
     input.value = "";
     try {
-      const response = await fetch(config.endpoint, {
+      const response = await window.HostedAI.transport(config.endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

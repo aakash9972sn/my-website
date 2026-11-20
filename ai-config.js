@@ -1,5 +1,5 @@
 window.AAKASH_AI = {
-  endpoint: "https://aakash-test-ai.aakashinfinity72.workers.dev",
+  endpoint: "https://ais-pre-wdyrf6yb4psuwizvqpn4hw-374223411049.asia-northeast1.run.app",
   app: "shop",
   title: "Blunder shopping helper",
   intro:
@@ -10,6 +10,6 @@ window.AAKASH_AI = {
     "How does Cash on Delivery work?",
   ],
   privacy:
-    "Your question and public catalogue are sent to Cloudflare AI when you ask. Your address, phone, email and private orders are not included.",
+    "Your question and public catalogue are sent to Google Gemini when you ask. Your address, phone, email and private orders are not included.",
   context: () => window.BlunderAIContext?.() || null,
 };

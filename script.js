@@ -632,6 +632,7 @@
       ? stored.filter((id) => typeof id === "string")
       : [];
     if (cleared.includes(order.id)) return;
+    window.AakashAccount?.save('orders', order.id, {id:order.id,status:order.status,items:order.items.map(i=>({name:i.name,quantity:i.quantity})),createdAt:order.createdAt});
     state.cart = state.cart
       .map((item) => ({
         ...item,
@@ -1273,6 +1274,7 @@
         };
       }
       state.products = state.config.products;
+      window.BlunderAICart = () => state.cart.map(i => ({productId:i.productId, variantId:i.variantId, quantity:i.quantity}));
       window.BlunderAIContext = () => ({
         checkoutEnabled: state.config.checkoutEnabled,
         currency: "INR",

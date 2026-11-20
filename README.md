@@ -13,7 +13,7 @@ The seller destinations are `sdhanpal778@gmail.com` and `+919910113972` in `data
 
 ## AI shopping helper
 
-The shared Cloudflare endpoint in `ai-config.js` powers catalogue questions, pack comparisons and budget suggestions. Product quick views include an Ask AI action. Only public catalogue/policy context is supplied; customer addresses, contact details and private orders are excluded. AI cannot place orders, override totals, verify payment or guarantee stock. The Worker in `aakash9972sn/newTest/worker/src/index.js` must be deployed with the new `assistant` action. A configured URL alone does not prove that deployment is live. AI failures leave core shopping available.
+The hosted Google Gemini service powers catalogue questions and basket suggestions. See [HOSTED-BACKEND.md](HOSTED-BACKEND.md) for backend and Firebase configuration. AI cannot place orders or verify payment.
 
 ## Run locally
 
