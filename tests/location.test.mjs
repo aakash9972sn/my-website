@@ -339,9 +339,12 @@ test("search 429 and GPS reverse lookup errors keep manual address and checkout 
   assert.equal(h.$("#location-address").value,"Flat 7A, Old Market");
   assert.equal(h.$("#location-confirm").disabled,false);
   h.$("#location-gps").listeners.get("click")();
-  // choosePoint is async after geolocation success; allow its rejected
-  // reverse request to settle and reset form controls.
-  await new Promise(resolve => setTimeout(resolve, 15));
+  // Nominatim is deliberately rate-limited to one request per ~1.1s.
+  // Wait for the queued failed reverse-geocode to finish, rather than
+  // incorrectly testing form availability while the request is in flight.
+  const deadline = Date.now() + 4000;
+  while (h.$("#location-confirm").disabled && Date.now() < deadline)
+    await new Promise(resolve => setTimeout(resolve, 50));
   assert.equal(h.$("#location-address").value,"Flat 7A, Old Market");
   assert.equal(h.$("#delivery-pin").value,"110042");
   assert.equal(h.$("#location-confirm").disabled,false);
