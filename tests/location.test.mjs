@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { createServer } from "node:http";
+import { runInNewContext } from "node:vm";
 import { createCommerce, validateCustomer } from "../server/commerce.mjs";
 import { createApp, loadSettings } from "../server/index.mjs";
 import { createGeocoder } from "../server/geocoder.mjs";
@@ -222,4 +223,129 @@ test("map HTTP endpoints and browser permissions allow location without weakenin
     ).status,
     403,
   );
+});
+
+
+/* Run the original vanilla browser module against a controlled DOM fixture.
+   This tests field behavior, not just the existence of code strings. */
+function locationFixture(onRequest) {
+  const nodes = new Map();
+  function node() {
+    const listeners = new Map();
+    const attrs = new Map();
+    return {
+      listeners, children: [], dataset: {}, value: "", textContent: "",
+      hidden: false, disabled: false, open: true,
+      addEventListener(type, callback) { listeners.set(type, callback); },
+      append(...elements) { this.children.push(...elements); },
+      replaceChildren(...elements) { this.children = elements; },
+      getAttribute(name) { return attrs.get(name) ?? null; },
+      setAttribute(name, value) { attrs.set(name, String(value)); },
+      reportValidity() { return true; },
+      focus() {},
+    };
+  }
+  const $ = (selector) => {
+    if (!nodes.has(selector)) nodes.set(selector, node());
+    return nodes.get(selector);
+  };
+  const storage = new Map();
+  const window = { BLUNDER_MAPS: {}, isSecureContext: true };
+  const ctx = {
+    window, document: { querySelector: $, querySelectorAll: () => [], createElement: node },
+    sessionStorage: {
+      getItem: key => storage.get(key) ?? null,
+      setItem: (key, value) => storage.set(key, value),
+      removeItem: key => storage.delete(key)
+    },
+    AbortController, AbortSignal, DOMException, URL, Promise, Date,
+    setTimeout, clearTimeout, encodeURIComponent,
+    navigator: { geolocation: {
+      getCurrentPosition(success) {
+        success({coords: {latitude: 28.743, longitude: 77.109}});
+      }
+    } },
+    console
+  };
+  runInNewContext(readFileSync(new URL("../location.js", import.meta.url), "utf8"), ctx);
+  let selected = null;
+  window.BlunderLocation.configure({
+    readPin: () => "",
+    checkAvailability: pincode => ({valid:true,available:true,text:"Check complete: "+pincode}),
+    onSelect: value => { selected = value; },
+    request: onRequest
+  });
+  window.BlunderLocation.open();
+  return { $, window, getSelected: () => selected };
+}
+
+test("selected address preserves only user-entered flat/room prefix and avoids duplication", () => {
+  const { window } = locationFixture(async () => []);
+  const merge = window.BlunderLocation.mergeHouseDetails;
+  assert.equal(
+    merge("Room 204, Aryabhatta Hostel", "Example Road, Rohini", ""),
+    "Room 204, Aryabhatta Hostel, Example Road, Rohini"
+  );
+  assert.equal(
+    merge("Flat 12B, Example Road", "New Street", "Example Road"),
+    "Flat 12B, New Street"
+  );
+  assert.equal(
+    merge("Example Road, Rohini", "New Street", "Example Road, Rohini"),
+    "New Street"
+  );
+  assert.equal(merge("Room 204", "", ""), "Room 204");
+  assert.equal(merge("Room 204, Example Road", "Example Road", "Example Road"),
+    "Room 204, Example Road");
+  assert.ok(merge("Room 204", "X".repeat(220), "").length <= 220);
+});
+
+test("search selection preserves typed hostel room and fills city, state and PIN", async () => {
+  const place = {
+    lat: "28.743", lon: "77.109", display_name: "Rohini Sector 16",
+    address: { road:"Example Road", city:"New Delhi", state:"Delhi",
+      postcode:"110042", country_code:"in" }
+  };
+  const h = locationFixture(async kind => {
+    assert.equal(kind, "search");
+    return [place];
+  });
+  h.$("#location-address").value = "Room 204, Aryabhatta Hostel";
+  h.$("#location-search").value = "Rohini Sector 16";
+  await h.$("#location-search-form").listeners.get("submit")({preventDefault(){}});
+  const button = h.$("#location-results").children[0].children[0];
+  button.listeners.get("click")();
+  assert.equal(h.$("#location-address").value,
+    "Room 204, Aryabhatta Hostel, Example Road");
+  assert.equal(h.$("#location-city").value, "New Delhi");
+  assert.equal(h.$("#location-state").value, "Delhi");
+  assert.equal(h.$("#delivery-pin").value, "110042");
+  h.$("#delivery-form").listeners.get("submit")({preventDefault(){}});
+  assert.equal(h.getSelected().address, "Room 204, Aryabhatta Hostel, Example Road");
+  assert.equal(h.getSelected().pincode, "110042");
+});
+
+test("search 429 and GPS reverse lookup errors keep manual address and checkout enabled", async () => {
+  const h = locationFixture(async () => {
+    throw new Error("Address search is busy (429). Enter your address manually.");
+  });
+  h.$("#location-address").value = "Flat 7A, Old Market";
+  h.$("#location-city").value = "New Delhi";
+  h.$("#location-state").value = "Delhi";
+  h.$("#delivery-pin").value = "110042";
+  h.$("#location-search").value = "DTU Hostel";
+  await h.$("#location-search-form").listeners.get("submit")({preventDefault(){}});
+  assert.match(h.$("#location-status").textContent,/429|busy|manually/i);
+  assert.equal(h.$("#location-address").value,"Flat 7A, Old Market");
+  assert.equal(h.$("#location-confirm").disabled,false);
+  h.$("#location-gps").listeners.get("click")();
+  // choosePoint is async after geolocation success; allow its rejected
+  // reverse request to settle and reset form controls.
+  await new Promise(resolve => setTimeout(resolve, 15));
+  assert.equal(h.$("#location-address").value,"Flat 7A, Old Market");
+  assert.equal(h.$("#delivery-pin").value,"110042");
+  assert.equal(h.$("#location-confirm").disabled,false);
+  h.$("#delivery-form").listeners.get("submit")({preventDefault(){}});
+  assert.equal(h.getSelected().address,"Flat 7A, Old Market");
+  assert.equal(h.getSelected().pincode,"110042");
 });
