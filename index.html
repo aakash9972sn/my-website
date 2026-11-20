@@ -18,11 +18,9 @@
       crossorigin
     />
     <link rel="stylesheet" href="style.css?v=20261118-3" />
-    <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css?v=1.9.4" />
-    <link rel="stylesheet" href="location.css?v=20261118-1" />
+    <link rel="stylesheet" href="location.css?v=20261120-google1" />
     <script src="store-config.js?v=20261118-3" defer></script>
-    <script src="assets/vendor/leaflet/leaflet.js?v=1.9.4" defer></script>
-    <script src="location.js?v=20261118-1" defer></script>
+    <script src="location.js?v=20261120-google1" defer></script>
     <script src="script.js?v=20261120-hosted1" defer></script>
   </head>
   <body>
@@ -544,6 +542,12 @@
               <svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg>
             </button>
           </form>
+          <div class="location-presets" aria-label="Popular delivery area searches">
+            <span>Quick locations</span>
+            <button type="button" data-location-preset="Delhi Technological University Main Gate, Shahbad Daulatpur, Delhi, India">DTU Main Gate</button>
+            <button type="button" data-location-preset="DTU Boys Hostel Complex, Delhi Technological University, Delhi, India">DTU Boys Hostels</button>
+            <button type="button" data-location-preset="Rohini Sector 16, Delhi, India">Rohini Sec-16</button>
+          </div>
           <ol
             id="location-results"
             class="location-results"
@@ -551,33 +555,47 @@
             hidden
           ></ol>
           <div class="location-map-shell">
-            <div
+            <iframe
               id="delivery-map"
-              aria-label="Delivery map. Use arrow keys to pan, plus and minus to zoom, then choose Use map centre."
-              tabindex="0"
-            ></div>
-            <span class="map-centre-crosshair" aria-hidden="true"></span>
+              title="Google Maps delivery area preview"
+              aria-label="Interactive Google Maps preview. Choose a search result or use GPS to set your delivery address; moving this map does not update checkout."
+              referrerpolicy="strict-origin-when-cross-origin"
+              loading="lazy"
+              src="about:blank"
+            ></iframe>
             <p id="map-unavailable" class="map-unavailable" hidden>
-              Map tiles couldn’t load. Search for an area or enter your address
-              below.
+              Google Maps couldn't load. Search for an address or enter your
+              details manually below.
             </p>
           </div>
           <div class="map-actions">
             <button id="location-gps" type="button">
               <svg class="icon" aria-hidden="true"><use href="#i-pin" /></svg>
               Use my location</button
-            ><button id="location-centre" type="button">
-              <svg class="icon" aria-hidden="true"><use href="#i-plus" /></svg>
-              Use map centre
-            </button>
+            ><a
+              id="location-centre"
+              class="map-external-link"
+              href="https://www.google.com/maps/search/?api=1&amp;query=Delhi%20Technological%20University"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Full interactive Google Maps ↗</a>
+            <a
+              id="location-route"
+              class="map-external-link"
+              href="https://www.google.com/maps/dir/?api=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              hidden
+            >Route in Google Maps ↗</a>
           </div>
           <p id="location-status" class="location-status" role="status">
-            Search for your area, use GPS, or tap the map to choose a point.
+            Search a location or use GPS. Select an address result to fill the form.
           </p>
           <p class="map-privacy">
-            Map searches and selected points are shared with OpenStreetMap
-            services. Your location is requested only when you tap “Use my
-            location”.
+            Google displays the map preview. Address suggestions still use an
+            OpenStreetMap-based lookup. Your location is requested only if you
+            tap “Use my location”. Tapping the Google map cannot automatically
+            fill your delivery form.
           </p>
         </div>
         <div class="location-address-column">
@@ -591,8 +609,8 @@
             </div>
           </div>
           <p class="location-help">
-            Confirm the details below. A map pin helps with delivery; your house
-            or flat number is still important.
+            Confirm the address below. The Google map shows the selected area;
+            your house or flat number and PIN code are still required.
           </p>
           <p id="location-coordinates" class="location-coordinates" hidden></p>
           <form id="delivery-form" class="location-address-form">
