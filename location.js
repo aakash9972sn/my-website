@@ -8,13 +8,10 @@
     state: "location-state",
     pincode: "delivery-pin",
   };
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const settings = window.BLUNDER_MAPS || {};
   const cache = new Map();
-  let map,
-    marker,
-    tiles,
-    tileTimer,
+  let mapLoaded = false,
+    previewQuery = "Delhi Technological University, Delhi, India",
     point = null,
     selected = null;
   let boundArea = {},
@@ -78,7 +75,6 @@
   function busy(value) {
     $("#location-search-button").disabled = value;
     $("#location-gps").disabled = value;
-    $("#location-centre").disabled = value || !map;
     $("#location-confirm").disabled = value;
     $("#location-search-form").setAttribute("aria-busy", String(value));
   }
@@ -106,6 +102,30 @@
       $("#" + id).value = value[name] || "";
     $("#delivery-result").textContent = "";
   }
+  // Keyless Google Maps share-style iframe. It is VIEW-ONLY for our checkout:
+  // cross-origin iframe interaction cannot supply a selected point or Places data.
+  function googleMapUrl(query, zoom = 14) {
+    return "https://maps.google.com/maps?q=" +
+      encodeURIComponent(String(query || "Delhi Technological University, Delhi, India").slice(0, 180)) +
+      "&z=" + (zoom === 16 ? "16" : "14") + "&hl=en&output=embed";
+  }
+  function googleSearchUrl(query) {
+    return "https://www.google.com/maps/search/?api=1&query=" +
+      encodeURIComponent(String(query || "Delhi Technological University, Delhi, India").slice(0, 180));
+  }
+  function googleRouteUrl(location) {
+    return "https://www.google.com/maps/dir/?api=1&destination=" +
+      encodeURIComponent(location.latitude.toFixed(6) + "," + location.longitude.toFixed(6));
+  }
+  function showPreview(query, zoom = 14) {
+    previewQuery = String(query || "Delhi Technological University, Delhi, India").slice(0, 180);
+    const frame = $("#delivery-map");
+    if (!mapLoaded) return;
+    const nextUrl = googleMapUrl(previewQuery, zoom);
+    if (frame.getAttribute("src") !== nextUrl) frame.setAttribute("src", nextUrl);
+    $("#location-centre").href = googleSearchUrl(previewQuery);
+    $("#map-unavailable").hidden = true;
+  }
   function updatePoint(next, move = true) {
     point = validPoint(next)
       ? {
@@ -115,90 +135,19 @@
       : null;
     $("#location-coordinates").hidden = !point;
     $("#location-coordinates").textContent = point
-      ? `Delivery pin · ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}`
+      ? "Selected delivery point · " + point.latitude.toFixed(5) + ", " + point.longitude.toFixed(5)
       : "";
-    if (!map) return;
-    if (!point) {
-      if (marker) map.removeLayer(marker);
-      marker = null;
-      return;
+    const route = $("#location-route");
+    route.hidden = !point;
+    if (point) {
+      route.href = googleRouteUrl(point);
+      if (move) showPreview(point.latitude + "," + point.longitude, 16);
     }
-    const latlng = [point.latitude, point.longitude];
-    if (!marker) {
-      marker = L.marker(latlng, {
-        draggable: true,
-        keyboard: true,
-        autoPan: true,
-        title:
-          "Selected delivery point. Drag to adjust, or pan the map and use map centre.",
-        icon: L.divIcon({
-          className: "delivery-marker",
-          html: '<span aria-hidden="true"></span>',
-          iconSize: [38, 42],
-          iconAnchor: [19, 39],
-        }),
-      }).addTo(map);
-      marker.on("dragend", () => {
-        const position = marker.getLatLng();
-        choosePoint({ latitude: position.lat, longitude: position.lng });
-      });
-    } else marker.setLatLng(latlng);
-    if (move)
-      map.setView(latlng, Math.max(map.getZoom(), 16), {
-        animate: !reduced.matches,
-      });
   }
   function ensureMap() {
-    if (map) {
-      map.invalidateSize({ animate: false });
-      return;
-    }
-    if (!window.L) {
-      $("#map-unavailable").hidden = false;
-      $("#location-centre").disabled = true;
-      status(
-        "The map is unavailable. You can still search for an area or type your address.",
-      );
-      return;
-    }
-    map = L.map("delivery-map", {
-      center: [22.6, 79],
-      zoom: 5,
-      maxZoom: 19,
-      minZoom: 3,
-      scrollWheelZoom: false,
-      zoomAnimation: !reduced.matches,
-      fadeAnimation: !reduced.matches,
-      markerZoomAnimation: !reduced.matches,
-      worldCopyJump: true,
-    });
-    tiles = L.tileLayer(
-      settings.tileUrl || "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-      {
-        maxZoom: 19,
-        attribution:
-          settings.attribution ||
-          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
-        updateWhenIdle: true,
-        keepBuffer: 1,
-      },
-    ).addTo(map);
-    let loaded = false;
-    tiles.on("tileload", () => {
-      loaded = true;
-      clearTimeout(tileTimer);
-      $("#map-unavailable").hidden = true;
-    });
-    tiles.on("tileerror", () => {
-      if (!loaded) $("#map-unavailable").hidden = false;
-    });
-    tileTimer = setTimeout(() => {
-      if (!loaded) $("#map-unavailable").hidden = false;
-    }, 9000);
-    map.on("click", (event) =>
-      choosePoint({ latitude: event.latlng.lat, longitude: event.latlng.lng }),
-    );
-    $("#location-centre").disabled = false;
+    if (mapLoaded) return;
+    mapLoaded = true;
+    showPreview(previewQuery);
   }
   function normalise(raw) {
     if (!raw || raw.lat === "" || raw.lon === "") return null;
@@ -366,7 +315,8 @@
     const results = $("#location-results");
     results.replaceChildren();
     results.hidden = true;
-    status("Looking for your area…");
+    showPreview(query);
+    status("Showing the area in Google Maps and looking up matching addresses…");
     try {
       const response = await request("search", { query }, operation.signal);
       if (operation.id !== sequence || !dialog.open) return;
@@ -398,7 +348,7 @@
           setFields(match);
           results.hidden = true;
           status(
-            "Area selected. Move the pin if needed, and confirm your house or flat number below.",
+            "Area selected. Google Maps previews this point; confirm your house / flat number below.",
           );
           if (match.pincode) showAvailability();
           $("#location-address").focus({ preventScroll: true });
@@ -406,7 +356,7 @@
       }
       results.hidden = false;
       status(
-        `${matches.length} matching area${matches.length === 1 ? "" : "s"}. Choose one to place your delivery pin.`,
+        `${matches.length} matching area${matches.length === 1 ? "" : "s"}. Select a result to fill your delivery address.`,
       );
     } catch (error) {
       if (operation.id === sequence && dialog.open)
@@ -447,7 +397,7 @@
             ? "Location access was denied. You can allow it in browser settings, search for your area, or enter your address manually."
             : error.code === 3
               ? "Your location took too long to arrive. Try again or search for your area."
-              : "Your current location is unavailable. Search for your area or select a point on the map.",
+              : "Your current location is unavailable. Search for your area or type your address.",
         );
       },
       { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 },
@@ -460,14 +410,12 @@
     setFields(initial);
     $("#location-search").value = "";
     $("#location-results").hidden = true;
-    status("Search for your area, use GPS, or tap the map to choose a point.");
+    status("Search and select an address, use GPS or enter delivery details manually. The Google Maps preview does not fill the address when tapped.");
     ensureMap();
     updatePoint(initial.point || null);
-    requestAnimationFrame(() => {
-      map?.invalidateSize({ animate: false });
-      if (point)
-        map?.setView([point.latitude, point.longitude], 16, { animate: false });
-    });
+    if (point) showPreview(point.latitude + "," + point.longitude, 16);
+    else if (initial.city || initial.address) showPreview([initial.address, initial.city, initial.state].filter(Boolean).join(", "));
+    else showPreview("Delhi Technological University, Delhi, India");
     if (initial.pincode) showAvailability();
   }
   function confirm(event) {
@@ -496,15 +444,20 @@
     } catch {
       /* No persisted choice. */
     }
-    status("Location cleared. Choose another point or enter an address.");
+    showPreview("Delhi Technological University, Delhi, India");
+    status("Location cleared. Search a place or enter your address.");
     callbacks.onSelect?.(null, "clear");
   }
   $("#location-search-form").addEventListener("submit", search);
   $("#delivery-form").addEventListener("submit", confirm);
   $("#location-gps").addEventListener("click", locate);
-  $("#location-centre").addEventListener("click", () => {
-    const centre = map?.getCenter();
-    if (centre) choosePoint({ latitude: centre.lat, longitude: centre.lng });
+  document.querySelectorAll("[data-location-preset]").forEach(button => {
+    button.addEventListener("click", () => {
+      const query = button.dataset.locationPreset;
+      $("#location-search").value = query;
+      showPreview(query);
+      search({ preventDefault() {} });
+    });
   });
   $("#location-check-pin").addEventListener("click", showAvailability);
   $("#location-clear").addEventListener("click", clear);
