@@ -155,7 +155,7 @@ export function createApp({
     );
     res.setHeader(
       "Content-Security-Policy",
-      "default-src 'self'; script-src 'self' https://checkout.razorpay.com https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.razorpay.com https://tile.openstreetmap.org; connect-src 'self' https://*.razorpay.com https://nominatim.openstreetmap.org https://ais-pre-wdyrf6yb4psuwizvqpn4hw-374223411049.asia-northeast1.run.app https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://firebaseinstallations.googleapis.com https://gen-lang-client-0580718541.firebaseapp.com; frame-src https://*.razorpay.com https://gen-lang-client-0580718541.firebaseapp.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+      "default-src 'self'; script-src 'self' https://checkout.razorpay.com https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.razorpay.com https://tile.openstreetmap.org; connect-src 'self' https://*.razorpay.com https://nominatim.openstreetmap.org https://ais-pre-wdyrf6yb4psuwizvqpn4hw-374223411049.asia-northeast1.run.app https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://firebaseinstallations.googleapis.com https://gen-lang-client-0580718541.firebaseapp.com; frame-src https://*.razorpay.com https://gen-lang-client-0580718541.firebaseapp.com https://maps.google.com https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
     );
     if (env.NODE_ENV === "production")
       res.setHeader("Strict-Transport-Security", "max-age=31536000");
