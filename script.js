@@ -453,7 +453,7 @@
     const container = $("#checkout-location");
     if (!container) return;
     const point = state.checkoutLocation?.point;
-    container.innerHTML = `<div>${icon("pin")}<strong>${point ? "Delivery point selected" : "Pin your delivery address"}</strong><button type="button" data-action="checkout-location">${point ? "Change location" : "Choose on map"}</button></div><p>${point ? `Pin at ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Check the house / flat details below.` : "Search your area or use your current location. You can also enter your address manually."}</p>${point ? `<a href="${directions(point)}" target="_blank" rel="noopener">Open directions ↗</a>` : ""}`;
+    container.innerHTML = `<div>${icon("pin")}<strong>${point ? "Delivery point selected" : "Pin your delivery address"}</strong><button type="button" data-action="checkout-location">${point ? "Change location" : "Choose on map"}</button></div><p>${point ? `Pin at ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Check the house / flat details below.` : "Search your area or use your current location. You can also enter your address manually."}</p>${point ? `<a href="${directions(point)}" target="_blank" rel="noopener">Route in Google Maps ↗</a>` : ""}`;
   }
   function applyDeliverySelection(selection, preserveHouse = false) {
     state.checkoutLocation = selection;
