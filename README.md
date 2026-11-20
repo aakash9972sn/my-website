@@ -120,31 +120,36 @@ handoff or fake order confirmation is used as an ordering fallback.
 
 ## Delivery maps and addresses
 
-The location dialog includes explicit area/landmark/PIN search, opt-in GPS,
-click/drag pin selection, keyboard pan with **Use map centre**, and manual address
-entry. Confirming a location fills checkout; changing the linked city/state/PIN
-removes the stale map point. No GPS call or map tile request happens before the
-customer opens the picker and chooses the relevant action. GPS needs HTTPS (or
-localhost) and browser permission. Addresses and points are kept only in the tab,
-with a visible clear control. The final point becomes a directions link in the
-seller notification or private hosted order/receipt.
+The Blunder delivery dialog now shows a **Google Maps preview** inside an iframe
+(`maps.google.com/maps?...&output=embed`). It opens on Delhi Technological University
+and updates the preview when the user searches or chooses an address result.
+Quick searches cover DTU Main Gate, DTU Boys Hostel Complex, and Rohini Sector 16.
+The **Full interactive Google Maps** link opens the selected location in Google Maps;
+a **Route in Google Maps** link appears when a coordinate-based delivery point
+has been selected. Checkout's existing address, city, state and 6-digit PIN
+checks are unchanged.
 
-Leaflet **1.9.4** is vendored in `assets/vendor/leaflet`; its BSD license is retained.
-OpenStreetMap tiles and Nominatim are low-traffic defaults with visible attribution.
-Configure `window.BLUNDER_MAPS` in `store-config.js` to switch browser providers.
-On Node, `POST /api/maps/search` and `/api/maps/reverse` use the shared geocoder
-proxy: explicit requests only, a 1.1-second queue, bounded one-hour cache, duplicate
-request sharing and timeouts. `GEOCODER_URL` selects an HTTPS Nominatim-compatible
-provider. Static GitHub Pages uses the configured browser provider directly, with
-per-tab throttling and caching. For higher traffic, use a licensed or self-hosted
-provider and update the server CSP for any new browser-facing tile/search origins.
-Respect [OSM tile usage](https://operations.osmfoundation.org/policies/tiles/) and
-[Nominatim usage](https://operations.osmfoundation.org/policies/nominatim/).
+**Important limitation:** a cross-origin Google Maps iframe cannot pass pin clicks,
+drags, live routes, ETAs or place predictions back to Blunder. Address suggestions
+and reverse geocoding therefore still use Nominatim (via the existing server proxy
+or the configured direct fallback), and the user must choose a listed result or
+type the address manually. The serviceable PIN and actual delivery promise are
+enforced by the store; looking at a point on Google Maps does not establish
+serviceability. GPS is explicitly opt-in; the selected address is kept in the
+browser tab until checkout.
 
-Map failures, denied GPS permission and missing geocoding results leave manual
-address entry usable. The map does not prove delivery serviceability. Hosted orders enforce configured PIN codes; a selected point alone does not establish serviceability. Browser map tests use controlled provider/tile fixtures because the
-cloud review network blocks the public map provider; live-provider availability
-and GPS accuracy must be checked in the customer's browser.
+This keyless web-map embed is distinct from the official
+[Google Maps Embed API](https://developers.google.com/maps/documentation/embed/overview),
+which requires an API key even though Embed API usage is free. Full Google Places
+(New) autocomplete, route distance and live ETA require Google Maps Platform
+configuration and may incur costs; they are **not** silently enabled.
+The iframe loads only when the user opens the delivery dialog. Hosted
+`Content-Security-Policy` allows the Google iframe origins without allowing
+unrelated third-party scripts. If Google blocks iframe display, the Google Maps
+link and manual address entry remain available.
+
+Existing map vendor files are retained in the repository for historical
+reference but are no longer loaded on the storefront.
 
 ## Product information and honest promotions
 

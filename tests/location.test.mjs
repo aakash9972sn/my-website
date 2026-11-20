@@ -195,7 +195,7 @@ test("map HTTP endpoints and browser permissions allow location without weakenin
   assert.match(response.headers.get("permissions-policy"), /camera=\(\)/);
   assert.match(
     response.headers.get("content-security-policy"),
-    /https:\/\/tile.openstreetmap.org/,
+    /frame-src[^;]*https:\/\/maps.google.com/,
   );
   for (const path of [
     "/location.js",

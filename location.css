@@ -111,98 +111,14 @@
   font-family: var(--font);
   background: #e5eddf;
 }
-#delivery-map:focus-visible {
-  outline-offset: -4px;
-}
-.map-centre-crosshair {
-  position: absolute;
-  z-index: 450;
-  left: 50%;
-  top: 50%;
-  width: 12px;
-  height: 12px;
-  margin: -6px;
-  pointer-events: none;
-  opacity: 0.55;
-  background:
-    linear-gradient(var(--ink), var(--ink)) center/1px 12px no-repeat,
-    linear-gradient(var(--ink), var(--ink)) center/12px 1px no-repeat;
-}
-.leaflet-container .leaflet-control-attribution {
-  font: 9px/1.5 var(--font);
-  color: #34462c;
-  background: #fffff4ee;
-  padding: 3px 5px;
-}
-.leaflet-control-attribution a {
-  color: #31522a;
-  text-decoration: underline;
-}
-.leaflet-bar {
-  border-color: #cad4bd !important;
-  box-shadow: 0 3px 12px #263d2b12 !important;
-}
-.leaflet-bar a {
-  color: var(--ink);
-  background: #fffff5;
-}
-.leaflet-control-zoom-in,
-.leaflet-control-zoom-out {
-  width: 32px !important;
-  height: 32px !important;
-  line-height: 32px !important;
-}
-.delivery-marker {
-  background: none;
-  border: none;
-}
-.delivery-marker > span {
-  display: block;
-  width: 31px;
-  height: 31px;
-  background: var(--ink);
-  border: 3px solid #fffef6;
-  box-shadow: 0 4px 13px #132a2940;
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-  position: relative;
-  margin: 0 0 0 3px;
-}
-.delivery-marker > span:after {
-  content: "";
-  position: absolute;
-  left: 8px;
-  top: 8px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--lime);
-}
-.delivery-marker:focus-visible {
-  outline: 3px solid #5a7416 !important;
-  outline-offset: 7px;
-}
-.map-unavailable {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 29px;
-  background: #fffef6f2;
-  color: #49593f;
-  font-size: 11px;
-  line-height: 1.6;
-  padding: 11px;
-  border: 1px solid #d3dcc5;
-  border-radius: 4px;
-  z-index: 500;
-  pointer-events: none;
-}
 .map-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 12px;
 }
-.map-actions > button {
+.map-actions > button,
+.map-actions > .map-external-link {
   flex: 1;
   display: flex;
   align-items: center;
@@ -214,7 +130,8 @@
   padding: 12px 7px;
   background: #ecf2e1;
 }
-.map-actions > button:hover {
+.map-actions > button:hover,
+.map-actions > .map-external-link:hover {
   background: #ddebcb;
 }
 .map-actions .icon {
@@ -451,7 +368,8 @@
   .location-search-form input {
     font-size: 12px;
   }
-  .map-actions > button {
+  .map-actions > button,
+  .map-actions > .map-external-link {
     font-size: 10px;
     padding-block: 13px;
   }
@@ -531,9 +449,63 @@
     font-size: 9px;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .leaflet-pan-anim .leaflet-tile-pane,
-  .leaflet-zoom-animated {
-    transition: none !important;
+
+
+/* Google Maps keyless preview — iframe remains within the delivery dialog. */
+.location-map-shell {
+  border-radius: 13px;
+  border: 1px solid #cad7bf;
+  overflow: hidden;
+  background: #eef3e5;
+}
+#delivery-map {
+  border: 0;
+  display: block;
+  width: 100%;
+  height: 310px;
+  background: #eef3e5;
+}
+.map-actions > .map-external-link {
+  text-decoration: none;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.4;
+  min-width: 122px;
+}
+.map-actions > .map-external-link[hidden] { display: none; }
+.location-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 12px;
+}
+.location-presets > span {
+  color: #52644b;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 2px;
+}
+.location-presets > button {
+  background: #e9f0dd;
+  color: #2e4731;
+  border: 1px solid #c8d6b5;
+  border-radius: 100px;
+  padding: 8px 11px;
+  line-height: 1.2;
+  font-size: 11px;
+  font-weight: 650;
+}
+.location-presets > button:hover,
+.location-presets > button:focus-visible {
+  background: #dcebc9;
+  border-color: #789a6f;
+}
+@media (max-width: 640px) {
+  .location-presets { gap: 6px; }
+  .location-presets > button { padding: 7px 9px; font-size: 10px; }
+  #delivery-map { height: 240px; }
+  .map-actions > button,.map-actions > .map-external-link {
+    min-width: calc(50% - 8px);
   }
 }
