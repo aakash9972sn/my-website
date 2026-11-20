@@ -59,7 +59,7 @@ try{
   await page.locator('#location-results button').first().waitFor({timeout:15000});
   await page.locator('#location-results button').first().click();
   assert.equal(await page.locator('#location-address').inputValue(),
-    'Room 204, Aryabhatta Hostel, Example Road');
+    'Room 204, Aryabhatta Hostel, Example Road, Rohini Sector 16');
   assert.equal(await page.locator('#location-city').inputValue(),'New Delhi');
   assert.equal(await page.locator('#location-state').inputValue(),'Delhi');
   assert.equal(await page.locator('#delivery-pin').inputValue(),'110001');
@@ -70,7 +70,7 @@ try{
   const selected=await page.evaluate(()=>window.BlunderLocation.getSelection());
   assert.equal(selected.pincode,'110001');
   assert.equal(selected.city,'New Delhi');
-  assert.equal(selected.address,'Room 204, Aryabhatta Hostel, Example Road');
+  assert.equal(selected.address,'Room 204, Aryabhatta Hostel, Example Road, Rohini Sector 16');
   assert.ok(selected.point);
 
   // Mock an upstream 429 after reopening the picker. The customer must still
