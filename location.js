@@ -142,6 +142,10 @@
     if (point) {
       route.href = googleRouteUrl(point);
       if (move) showPreview(point.latitude + "," + point.longitude, 16);
+    } else if (move) {
+      showPreview([$("#location-address").value,$("#location-city").value,
+        $("#location-state").value,$("#delivery-pin").value].filter(Boolean).join(", ") ||
+        "Delhi Technological University, Delhi, India");
     }
   }
   function ensureMap() {
