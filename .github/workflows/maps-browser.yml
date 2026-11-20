@@ -1,0 +1,39 @@
+name: Blunder Google Maps browser test
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "location.js"
+      - "location.css"
+      - "index.html"
+      - "scripts/google-maps-browser.mjs"
+      - ".github/workflows/maps-browser.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  google-map-checkout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci
+      - name: Install headless Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright
+          npx playwright install chromium --with-deps
+      - name: Verify Google Map and address selection
+        run: node scripts/google-maps-browser.mjs
+      - name: Upload debug screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blunder-google-map-preview
+          path: google-map-preview.png
+          retention-days: 1
