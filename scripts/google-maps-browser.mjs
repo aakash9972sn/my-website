@@ -51,11 +51,15 @@ try{
   let url=new URL(await iframe.getAttribute('src'));
   assert.equal(url.hostname,'maps.google.com');
   assert.match(url.searchParams.get('q'),/Delhi Technological University/);
+  // Regression: already typed hostel room survives a provider-based address pick.
+  await page.locator('#location-address').fill('Room 204, Aryabhatta Hostel');
   await page.getByRole('button',{name:'Rohini Sec-16'}).click();
   url=new URL(await iframe.getAttribute('src'));
   assert.match(url.searchParams.get('q'),/Rohini Sector 16/);
   await page.locator('#location-results button').first().waitFor({timeout:15000});
   await page.locator('#location-results button').first().click();
+  assert.equal(await page.locator('#location-address').inputValue(),
+    'Room 204, Aryabhatta Hostel, Example Road');
   assert.equal(await page.locator('#location-city').inputValue(),'New Delhi');
   assert.equal(await page.locator('#location-state').inputValue(),'Delhi');
   assert.equal(await page.locator('#delivery-pin').inputValue(),'110001');
@@ -66,8 +70,34 @@ try{
   const selected=await page.evaluate(()=>window.BlunderLocation.getSelection());
   assert.equal(selected.pincode,'110001');
   assert.equal(selected.city,'New Delhi');
+  assert.equal(selected.address,'Room 204, Aryabhatta Hostel, Example Road');
   assert.ok(selected.point);
-  console.log('PASS: Blunder Google Maps iframe, Rohini preset, address lookup, route link and checkout selection.');
+
+  // Mock an upstream 429 after reopening the picker. The customer must still
+  // be able to enter a valid manual address and confirm without provider access.
+  await page.route('https://nominatim.openstreetmap.org/search**',
+    r=>r.fulfill({status:429,body:'Rate limited'}));
+  await page.locator('.delivery-button').first().click();
+  await page.locator('#delivery-dialog[open]').waitFor({timeout:8000});
+  await page.locator('#location-address').fill('Flat 17, Market Street');
+  await page.locator('#location-city').fill('New Delhi');
+  await page.locator('#location-state').fill('Delhi');
+  await page.locator('#delivery-pin').fill('110042');
+  await page.locator('#location-search').fill('Rohini market');
+  await page.locator('#location-search-button').click();
+  await page.waitForFunction(()=>
+    /unavailable|busy|manually|address/i.test(document.querySelector('#location-status').textContent)
+    && !document.querySelector('#location-search-button').disabled,
+    null,{timeout:20000});
+  assert.equal(await page.locator('#location-address').inputValue(),'Flat 17, Market Street');
+  assert.equal(await page.locator('#delivery-pin').inputValue(),'110042');
+  assert.equal(await page.locator('#location-confirm').isEnabled(),true);
+  await page.locator('#location-confirm').click();
+  await page.waitForFunction(()=>!document.querySelector('#delivery-dialog').open);
+  const manual = await page.evaluate(()=>window.BlunderLocation.getSelection());
+  assert.equal(manual.address,'Flat 17, Market Street');
+  assert.equal(manual.pincode,'110042');
+  console.log('PASS: Google Maps location selection preserves hostel room; provider 429 still allows manual address and checkout confirmation.');
   if(errors.length)console.log('Page console errors:',JSON.stringify(errors.slice(0,8)));
 }finally{
   try{await page.screenshot({path:'google-map-preview.png',fullPage:true})}catch(_){}
