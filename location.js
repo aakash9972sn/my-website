@@ -92,14 +92,55 @@
       ]),
     );
   }
-  function setFields(value = {}) {
+  // Track only the provider-suggested street; do not treat it as the
+  // customer's flat/hostel room. Those details are not reliably geocoded.
+  let lastSuggestedAddress = "";
+  function mergeHouseDetails(typedAddress, suggestedAddress, previousSuggestion = "") {
+    const existing = String(typedAddress || "").trim().replace(/\s+/g, " ");
+    const street = String(suggestedAddress || "").trim().replace(/\s+/g, " ");
+    if (!street) return existing.slice(0, 220);
+    if (!existing) return street.slice(0, 220);
+    let manual = existing;
+    const previous = String(previousSuggestion || "").trim().replace(/\s+/g, " ");
+    if (previous && manual.toLowerCase() === previous.toLowerCase())
+      return street.slice(0, 220);
+    if (previous && manual.toLowerCase().endsWith(previous.toLowerCase()))
+      manual = manual.slice(0, manual.length - previous.length).replace(/[,\s]+$/, "");
+    const parts = manual.split(/\s*,\s*|\n/).map(x => x.trim()).filter(Boolean);
+    const first = parts[0] || "";
+    // Preserve a recognizable house/flat/room identifier, not an old
+    // provider-generated street or arbitrary unrelated address.
+    const unitPattern = /^(?:flat\b|room\b|rm\b|hostel\b|h(?:ouse)?\.?\s*no\.?|house\b|plot\b|unit\b|apt\b|apartment\b|building\b|floor\b|door\b|suite\b|quarter\b|block\b|shop\b|[A-Z]{1,3}[-/ ]?\d{1,5}[A-Z]?\b|\d{1,5}[a-z]?(?:[/\-]\d{1,5})?(?:\s|$)|[^,]{1,60}\bhostel\b)/i;
+    if (!unitPattern.test(first)) return street.slice(0, 220);
+    const prefixParts = [first];
+    for (const part of parts.slice(1, 3)) {
+      if (!/\b(?:hostel|building|block|tower|wing|apartment|residency|society|complex|flat|room)\b/i.test(part))
+        break;
+      prefixParts.push(part);
+    }
+    const prefix = prefixParts.join(", ");
+    if (street.toLowerCase().includes(prefix.toLowerCase()))
+      return street.slice(0, 220);
+    const available = 220 - prefix.length - 2;
+    if (available < 12) return prefix.slice(0, 220);
+    return prefix + ", " + street.slice(0, available);
+  }
+  function setFields(value = {}, { preserveHouse = false } = {}) {
+    const previousSuggestion = lastSuggestedAddress;
+    const typed = $("#location-address").value;
+    const suggested = String(value.address || "");
     boundArea = {
       city: value.city || "",
       state: value.state || "",
       pincode: value.pincode || "",
     };
-    for (const [name, id] of Object.entries(fieldIds))
-      $("#" + id).value = value[name] || "";
+    for (const [name, id] of Object.entries(fieldIds)) {
+      if (name === "address" && preserveHouse)
+        $("#" + id).value = mergeHouseDetails(typed, suggested, previousSuggestion);
+      else
+        $("#" + id).value = value[name] || "";
+    }
+    lastSuggestedAddress = suggested;
     $("#delivery-result").textContent = "";
   }
   // Keyless Google Maps share-style iframe. It is VIEW-ONLY for our checkout:
@@ -274,7 +315,9 @@
     if (!validPoint(next) || !dialog.open) return;
     const operation = beginRequest();
     updatePoint(next);
-    setFields();
+    // Keep typed house/hostel details while reverse geocoding is pending.
+    // On lookup failure manual address + PIN can still be confirmed.
+    $("#delivery-result").textContent = "";
     $("#location-results").hidden = true;
     status("Finding the address for your delivery pin…");
     busy(true);
@@ -284,7 +327,7 @@
       );
       if (operation.id !== sequence || !dialog.open) return;
       if (result) {
-        setFields(result);
+        setFields(result, { preserveHouse: true });
         status(
           result.pincode
             ? "Pin selected. Check the address and add your house or flat number."
@@ -301,7 +344,7 @@
         error.name !== "AbortError"
       )
         status(
-          "Your pin is selected. Address lookup is unavailable; please enter the address and PIN manually.",
+          "Your pin is selected. Address lookup is unavailable; check your existing address and PIN, or enter them manually.",
         );
     } finally {
       if (operation.id === sequence) {
@@ -349,7 +392,7 @@
         button.addEventListener("click", () => {
           cancelPending();
           updatePoint(match.point);
-          setFields(match);
+          setFields(match, { preserveHouse: true });
           results.hidden = true;
           status(
             "Area selected. Google Maps previews this point; confirm your house / flat number below.",
@@ -490,5 +533,7 @@
     },
     open,
     getSelection,
+    // Pure address-composition helper for validation and regression checks.
+    mergeHouseDetails,
   };
 })();
