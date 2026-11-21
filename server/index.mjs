@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { createCommerce, StoreError } from "./commerce.mjs";
 import { razorpayGateway } from "./gateway.mjs";
 import { createGeocoder } from "./geocoder.mjs";
+import { createAIService, AIServiceError } from "./ai.mjs";
 import {
   createSellerNotifier,
   notificationSettings,
@@ -65,6 +66,7 @@ export function createApp({
     baseURL: env.GEOCODER_URL,
     origin: env.PUBLIC_ORIGIN,
   }),
+  aiService = createAIService({ env }),
 } = {}) {
   const { config, catalog, enabled } = settings;
   const store =
@@ -105,7 +107,7 @@ export function createApp({
     const client = chain[Math.max(0, chain.length - 1 - hops)];
     const key = `${client}:${type}`;
     const period = type === "order" ? 3600000 : 60000;
-    const max = type === "order" ? 12 : 120;
+    const max = type === "order" ? 12 : type === "ai" ? 6 : 120;
     let bucket = limits.get(key);
     if (!bucket || bucket.until < Date.now()) {
       bucket = { count: 0, until: Date.now() + period };
@@ -190,6 +192,28 @@ export function createApp({
             ),
           );
         rateLimit(req, "api");
+        if (path === "/api/ai/health" && req.method === "GET")
+          return send(res, 200, aiService.health());
+        if (path === "/api/ai/chat/stream" && req.method === "POST") {
+          rateLimit(req, "ai");
+          const requestData = await body(req);
+          // Keep JSON and text/event-stream behavior aligned with the uploaded
+          // working portfolio. Generate first, then send a complete SSE pair,
+          // so API failures remain proper HTTP errors instead of partial HTML.
+          const result = await aiService.answer(requestData);
+          res.writeHead(200, {
+            "Content-Type": "text/event-stream; charset=utf-8",
+            "Cache-Control": "no-store, no-transform",
+            "X-Accel-Buffering": "no"
+          });
+          res.write("data: " + JSON.stringify({ text: result.answer }) + "\n\n");
+          res.end("data: " + JSON.stringify({ done: true }) + "\n\n");
+          return;
+        }
+        if (path === "/api/ai/chat" && req.method === "POST") {
+          rateLimit(req, "ai");
+          return send(res, 200, await aiService.answer(await body(req)));
+        }
         const mapRoute = path.match(/^\/api\/maps\/(search|reverse)$/);
         if (mapRoute && req.method === "POST")
           return send(
@@ -267,6 +291,7 @@ export function createApp({
         "location.js",
         "location.css",
         "ai-config.js",
+        "hosted-ai.js",
         "ai-assistant.js",
         "ai-assistant.css",
         "data/catalog.json",
@@ -300,12 +325,12 @@ export function createApp({
       });
       res.end(req.method === "HEAD" ? undefined : data);
     } catch (error) {
-      if (!(error instanceof StoreError))
+      if (!(error instanceof StoreError) && !(error instanceof AIServiceError))
         console.error("Store request failed:", error.name);
       if (!res.headersSent)
         send(res, error.status || 500, {
           error:
-            error instanceof StoreError
+            error instanceof StoreError || error instanceof AIServiceError
               ? error.message
               : "Something went wrong. Please try again.",
           code: error instanceof StoreError ? error.code : undefined,
