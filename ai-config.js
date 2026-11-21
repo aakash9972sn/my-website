@@ -1,7 +1,7 @@
 window.AAKASH_AI = {
-  endpoint: "https://ais-pre-wdyrf6yb4psuwizvqpn4hw-374223411049.asia-northeast1.run.app",
+  endpoint: "/api/ai/chat/stream",
   app: "shop",
-  title: "Blunder shopping helper",
+  title: "Blunder AI · Gemini",
   intro:
     "Find everyday essentials, compare packs or plan a small basket using this shop’s catalogue.",
   suggestions: [
