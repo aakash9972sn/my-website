@@ -187,3 +187,60 @@ for the Render blueprint; use it only behind a trusted proxy that appends or
 overwrites X-Forwarded-For and prevents direct app access. Configure an edge
 rate limiter for public traffic as well. An unauthenticated
 visitor cannot read orders, modify inventory or choose their own payable amount.
+
+
+## Why the old Blunder AI did not answer
+
+The uploaded `aakash-portfolio.zip` uses an Express server with a private
+`GEMINI_API_KEY` and the `/api/ai/chat/stream` route. Blunder previously
+sent its shopping questions to a shared `*.run.app` address using
+`/api/ai/shop-assistant`. A live public probe on 21 November 2026 found
+**HTTP 200 with HTML** (not JSON or SSE) for `/api/health`,
+`/api/ai/shop-assistant` and `/api/ai/chat/stream` at that address.
+Those are not usable Gemini API responses. Status code 200 alone does
+not mean the chatbot works.
+
+Blunder now implements its **own optional Node-hosted Gemini API** in
+`server/ai.mjs`. The existing shop, maps, payment and Firebase behavior
+are unchanged. The API key is only read from `process.env.GEMINI_API_KEY`;
+it is never written to browser code, GitHub Pages, health responses or errors.
+
+### Enable the chatbot on the Node site
+
+1. Create an eligible **Gemini Developer API free-tier key** in Google AI
+   Studio; **do not enable billing**.
+2. Deploy the EXISTING Node server (`npm ci && npm start`) to a host
+   supporting Node 24 and private environment variables. Set `GEMINI_API_KEY`
+   there, not in the repository. The default model is
+   `gemini-3.1-flash-lite`, matching the supplied portfolio ZIP;
+   `GEMINI_MODEL` can override it if model availability changes.
+3. If your frontend also runs on that Node server, it automatically
+   uses the same-origin `/api/ai/chat/stream` endpoint.
+4. If your public frontend is **GitHub Pages**,
+   `https://aakash9972sn.github.io/my-website/`, it CANNOT run Node itself.
+   Set the publicly accessible **HTTPS origin of your deployed Node server**
+   as `window.BLUNDER_AI_API_ORIGIN` in `store-config.js` (an origin, not
+   `/api` and NOT a secret). Set the Node server environment variable
+   `STOREFRONT_ORIGIN=https://aakash9972sn.github.io` to permit its CORS
+   requests.
+5. Check `GET <your-node-origin>/api/ai/health`. It must return JSON
+   with `{"ok":true,"configured":true,"mode":"server-side-gemini"}`.
+   This is only a configuration check; send a real question to confirm
+   model access. The public frontend gives clear guidance if no backend
+   is configured, and rejects HTML masquerading as an API response.
+6. Do not put the Gemini key in `store-config.js`, Firebase's web config,
+   `ai-config.js`, or any JavaScript delivered to the browser.
+
+### Cost and operational limitations
+
+This feature **does not enable billing** or provision a server.
+It relies on an eligible free-tier Gemini key and a separately deployed
+Node server. Hosting costs may apply depending on provider; no paid
+service is activated by this repository. The default `AI_DAILY_LIMIT=30`
+is an in-memory request cap per Node process; it **is not** a guaranteed
+financial spending cap. Gemini and hosting quotas vary. A rate limit of
+six AI requests per client IP per minute reduces accidental usage spikes.
+
+No claim is made that the GitHub Pages chat works before the backend is
+actually deployed and `BLUNDER_AI_API_ORIGIN` is configured. Static
+shop/catalogue/checkout interactions remain usable without Gemini.
