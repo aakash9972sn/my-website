@@ -44,6 +44,24 @@ await page.route('https://nominatim.openstreetmap.org/reverse**',r=>r.fulfill({
 try{
   await page.goto('http://127.0.0.1:'+http.address().port+'/',{waitUntil:'domcontentloaded',timeout:30000});
   await page.locator('#product-grid .product-card').first().waitFor({timeout:20000});
+
+  // Browser-level AI integration check with a MOCKED Node SSE answer.
+  // This tests UI wiring and streaming, not live Gemini credentials/quota.
+  await page.route('**/api/ai/chat/stream', route => route.fulfill({
+    status:200,
+    contentType:'text/event-stream',
+    body:'data: {"text":"Blunder Gemini "}\n\ndata: {"text":"is connected in this fixture."}\n\ndata: {"done":true}\n\n'
+  }));
+  await page.locator('aakash-assistant .launcher').waitFor({timeout:8000});
+  await page.locator('aakash-assistant .launcher').click();
+  await page.locator('aakash-assistant textarea').fill('What groceries do you sell?');
+  await page.locator('aakash-assistant .send').click();
+  await page.locator('aakash-assistant .message.assistant').last().waitFor({timeout:10000});
+  const aiAnswer=await page.locator('aakash-assistant .message.assistant p').last().textContent();
+  assert.equal(aiAnswer,'Blunder Gemini is connected in this fixture.');
+  await page.locator('aakash-assistant .close').click();
+  console.log('PASS: Blunder Gemini shopping UI renders server-style streamed responses (mocked Node route).');
+
   await page.locator('.delivery-button').first().click();
   await page.locator('#delivery-dialog[open]').waitFor({timeout:8000});
   const iframe=page.locator('iframe#delivery-map');
