@@ -31,9 +31,10 @@
     return "AI server returned HTTP " + status + ". Try again later.";
   }
   async function post(path, payload, signal) {
+    const target = endpoint(path);
     let response;
     try {
-      response = await fetch(endpoint(path), {
+      response = await fetch(target, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
